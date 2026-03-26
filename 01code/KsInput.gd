@@ -114,8 +114,8 @@ func _TryExecSkillB() -> bool:
 	return RefPlayer.TryCastSkill(1002)
 #---------------------------------------------------------------------------------------------------
 func _TryExecSkillC() -> bool:
-	# TODO: C类技能施放条件（CD判断等）
-	return false
+	# 御风术（1004）：无需借力目标，只判断CD
+	return RefPlayer.TryCastSkill(1004)
 #---------------------------------------------------------------------------------------------------
 # 写入缓冲（覆盖同类旧指令，刷新到期时间）
 func _WriteBuffer(CmdType: ECmdType) -> void:

@@ -42,6 +42,10 @@ func _InitInput() -> void:
 	var SkillBBtn = get_tree().root.find_child("SkillBButton", true, false)
 	if SkillBBtn != null:
 		SkillBBtn.pressed.connect(func(): CompInput.OnCmdPressed(KsInput.ECmdType.SkillB))
+	# 连接御风术按钮
+	var SkillCBtn = get_tree().root.find_child("SkillCButton", true, false)
+	if SkillCBtn != null:
+		SkillCBtn.pressed.connect(func(): CompInput.OnCmdPressed(KsInput.ECmdType.SkillC))
 	# 连接HUD debug Label
 	var DebugLabel = get_tree().root.find_child("DebugLabel", true, false)
 	if DebugLabel != null:
