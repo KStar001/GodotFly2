@@ -32,9 +32,6 @@ position = Vector3(100.0, 0.0, 0.0)
 [node name="CollisionShape3D" type="CollisionShape3D" parent="Platforms/Ground"]
 shape = SubResource("Shape_ground")
 
-[node name="Visual" type="MeshInstance3D" parent="Platforms/Ground"]
-mesh = BoxMesh
-
 [node name="UI" type="CanvasLayer" parent="."]
 
 [node name="JumpButton" type="Button" parent="UI"]
