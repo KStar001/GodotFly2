@@ -1,18 +1,27 @@
 ; Engine configuration file.
 ; It's best edited using the editor UI and not directly,
-; but the file format is well documented and performing such edits is fine too.
+; since the parameters that go here are not all obvious.
 ;
-; [configuration] section is the mandatory section
-
-[configuration]
+; Format:
+;   [section] ; section goes between []
+;   param=value ; assign values to parameters
 
 config_version=5
 
 [application]
 
 config/name="GodotFly2"
+run/main_scene="uid://gf2stage001"
 config/features=PackedStringArray("4.4", "Mobile")
 config/icon="res://icon.svg"
+
+[autoload]
+
+KsWorld="*res://01code/KsWorld.gd"
+
+[configuration]
+
+config_version=5
 
 [display]
 
@@ -20,7 +29,3 @@ window/size/viewport_width=1280
 window/size/viewport_height=720
 window/stretch/mode="canvas_items"
 window/stretch/aspect="expand"
-
-[rendering]
-
-renderer/rendering_method="forward_plus"

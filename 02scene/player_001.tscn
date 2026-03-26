@@ -1,6 +1,6 @@
 [gd_scene load_steps=3 format=3 uid="uid://gf2player001"]
 
-[ext_resource type="Script" path="res://01code/KsPlayer.gd" id="1_player"]
+[ext_resource type="Script" uid="uid://blewumheei0mv" path="res://01code/KsPlayer.gd" id="1_player"]
 
 [sub_resource type="CapsuleShape3D" id="Shape_player"]
 radius = 0.4
@@ -10,7 +10,7 @@ height = 1.8
 script = ExtResource("1_player")
 
 [node name="CollisionShape3D" type="CollisionShape3D" parent="."]
-position = Vector3(0.0, 0.9, 0.0)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.9, 0)
 shape = SubResource("Shape_player")
 
 [node name="AnimationPlayer" type="AnimationPlayer" parent="."]

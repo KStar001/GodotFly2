@@ -1,33 +1,30 @@
-[gd_scene load_steps=4 format=3 uid="uid://gf2stage001"]
+[gd_scene load_steps=5 format=3 uid="uid://gf2stage001"]
 
-[ext_resource type="Script" path="res://01code/KsWorld.gd" id="1_world"]
-[ext_resource type="Script" path="res://01code/KsCamera.gd" id="2_camera"]
-[ext_resource type="PackedScene" path="res://02scene/player_001.tscn" id="3_player"]
+[ext_resource type="Script" uid="uid://cxtlpxj6pnler" path="res://01code/KsWorld.gd" id="1_world"]
+[ext_resource type="Script" uid="uid://da3cs2dxwj1a6" path="res://01code/KsCamera.gd" id="2_camera"]
+[ext_resource type="PackedScene" uid="uid://gf2player001" path="res://02scene/player_001.tscn" id="3_player"]
 
 [sub_resource type="BoxShape3D" id="Shape_ground"]
-size = Vector3(400.0, 1.0, 10.0)
+size = Vector3(400, 1, 10)
 
 [node name="Stage001" type="Node3D"]
 script = ExtResource("1_world")
 
 [node name="MainPlayer" parent="." instance=ExtResource("3_player")]
-position = Vector3(2.0, 2.0, 0.0)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 2, 2, 0)
 
 [node name="MainCamera" type="Camera3D" parent="."]
 script = ExtResource("2_camera")
 
-[node name="WorldEnvironment" type="WorldEnvironment" parent="."]
-
 [node name="DirectionalLight" type="DirectionalLight3D" parent="."]
-position = Vector3(0.0, 10.0, 5.0)
-rotation_degrees = Vector3(-45.0, 0.0, 0.0)
+transform = Transform3D(1, 0, 0, 0, 0.707107, 0.707107, 0, -0.707107, 0.707107, 0, 10, 5)
 light_energy = 1.2
 shadow_enabled = true
 
 [node name="Platforms" type="Node3D" parent="."]
 
 [node name="Ground" type="StaticBody3D" parent="Platforms"]
-position = Vector3(100.0, 0.0, 0.0)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 100, 0, 0)
 
 [node name="CollisionShape3D" type="CollisionShape3D" parent="Platforms/Ground"]
 shape = SubResource("Shape_ground")
@@ -49,9 +46,7 @@ text = "跳跃"
 [node name="DebugLabel" type="Label" parent="UI"]
 anchors_preset = 1
 anchor_left = 1.0
-anchor_top = 0.0
 anchor_right = 1.0
-anchor_bottom = 0.0
 offset_left = -220.0
 offset_top = 10.0
 offset_right = -10.0
