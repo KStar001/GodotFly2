@@ -30,5 +30,5 @@ func _UpdateFollow(delta: float) -> void:
 	)
 	global_position = global_position.lerp(DestPos, ConfigFollowSpeed * delta)
 	# 看向玩家躯干位置
-	look_at(Vector3(PlayerPos.x, PlayerPos.y + ConfigLookAtOffsetY, PlayerPos.z), Vector3.UP)
+	look_at(Vector3(PlayerPos.x + ConfigOffsetX, PlayerPos.y + ConfigLookAtOffsetY, PlayerPos.z), Vector3.UP)
 #---------------------------------------------------------------------------------------------------

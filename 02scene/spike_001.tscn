@@ -39,7 +39,6 @@ transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.1, 0)
 amount = 16
 lifetime = 0.8
 process_material = SubResource("ParticleMat_warn")
-draw_passes = 1
 draw_pass_1 = SubResource("SphereMesh_particle")
 
 [connection signal="body_entered" from="HitBox" to="." method="_on_HitBox_body_entered"]
