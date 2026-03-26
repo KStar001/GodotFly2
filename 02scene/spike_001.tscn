@@ -1,6 +1,9 @@
-[gd_scene load_steps=4 format=3 uid="uid://gf2spike001"]
+[gd_scene load_steps=5 format=3 uid="uid://gf2spike001"]
 
 [ext_resource type="Script" uid="uid://ckc3haktg0j2p" path="res://01code/KsSpike.gd" id="1_spike"]
+
+[sub_resource type="BoxMesh" id="BoxMesh_l8cv8"]
+size = Vector3(0.44, 0.84, 0.44)
 
 [sub_resource type="BoxShape3D" id="Shape_hitbox"]
 size = Vector3(0.44, 0.84, 0.44)
@@ -18,7 +21,8 @@ color = Color(1, 0.6, 0.1, 1)
 script = ExtResource("1_spike")
 
 [node name="Visual" type="MeshInstance3D" parent="."]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.4, 0)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.42, 0)
+mesh = SubResource("BoxMesh_l8cv8")
 
 [node name="HitBox" type="Area3D" parent="."]
 

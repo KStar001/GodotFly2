@@ -8,42 +8,42 @@
 [sub_resource type="BoxShape3D" id="Shape_ground"]
 size = Vector3(400, 0.4, 4)
 
-[sub_resource type="BoxShape3D" id="Shape_plat_wide"]
-size = Vector3(3, 0.2, 4)
-
-[sub_resource type="BoxShape3D" id="Shape_plat_mid"]
-size = Vector3(2, 0.2, 4)
-
-[sub_resource type="BoxShape3D" id="Shape_plat_narrow"]
-size = Vector3(1.2, 0.2, 4)
-
 [sub_resource type="StandardMaterial3D" id="Mat_ground"]
 albedo_color = Color(0.45, 0.45, 0.45, 1)
 
 [sub_resource type="BoxMesh" id="Mesh_ground"]
-size = Vector3(400, 0.4, 4)
 material = SubResource("Mat_ground")
+size = Vector3(400, 0.4, 4)
+
+[sub_resource type="BoxShape3D" id="Shape_plat_wide"]
+size = Vector3(3, 0.2, 4)
 
 [sub_resource type="StandardMaterial3D" id="Mat_plat_wide"]
 albedo_color = Color(0.3, 0.65, 0.3, 1)
 
 [sub_resource type="BoxMesh" id="Mesh_plat_wide"]
-size = Vector3(3.0, 0.2, 4)
 material = SubResource("Mat_plat_wide")
+size = Vector3(3, 0.2, 4)
+
+[sub_resource type="BoxShape3D" id="Shape_plat_mid"]
+size = Vector3(2, 0.2, 4)
 
 [sub_resource type="StandardMaterial3D" id="Mat_plat_mid"]
 albedo_color = Color(0.3, 0.65, 0.3, 1)
 
 [sub_resource type="BoxMesh" id="Mesh_plat_mid"]
-size = Vector3(2.0, 0.2, 4)
 material = SubResource("Mat_plat_mid")
+size = Vector3(2, 0.2, 4)
+
+[sub_resource type="BoxShape3D" id="Shape_plat_narrow"]
+size = Vector3(1.2, 0.2, 4)
 
 [sub_resource type="StandardMaterial3D" id="Mat_plat_narrow"]
 albedo_color = Color(0.3, 0.65, 0.3, 1)
 
 [sub_resource type="BoxMesh" id="Mesh_plat_narrow"]
-size = Vector3(1.2, 0.2, 4)
 material = SubResource("Mat_plat_narrow")
+size = Vector3(1.2, 0.2, 4)
 
 [node name="Stage001" type="Node3D"]
 script = ExtResource("1_world")

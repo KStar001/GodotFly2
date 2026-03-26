@@ -5,14 +5,14 @@
 class_name KsSkillLogic_Base
 #---------------------------------------------------------------------------------------------------
 # 技能开始时调用（执行技能效果）
-func OnSkillBegin(Player: KsPlayer, SkillData: KsSkillData) -> void:
+func OnSkillBegin(Player: KsPlayer, SkillData: KsTableSkill.SkillItem) -> void:
 	pass
 #---------------------------------------------------------------------------------------------------
 # 技能持续期间每帧调用
-func OnSkillUpdate(Player: KsPlayer, SkillData: KsSkillData, Delta: float) -> void:
+func OnSkillUpdate(Player: KsPlayer, SkillData: KsTableSkill.SkillItem, Delta: float) -> void:
 	pass
 #---------------------------------------------------------------------------------------------------
 # 技能结束时调用（清理效果）
-func OnSkillEnd(Player: KsPlayer, SkillData: KsSkillData) -> void:
+func OnSkillEnd(Player: KsPlayer, SkillData: KsTableSkill.SkillItem) -> void:
 	pass
 #---------------------------------------------------------------------------------------------------

@@ -4,16 +4,16 @@
 extends KsSkillLogic_Base
 class_name KsSkillLogic_Jcty
 #---------------------------------------------------------------------------------------------------
-func OnSkillBegin(Player: KsPlayer, SkillData: KsSkillData) -> void:
+func OnSkillBegin(Player: KsPlayer, SkillData: KsTableSkill.SkillItem) -> void:
 	# 关闭受击碰撞层，进入无敌帧
 	# TODO: 确认受击碰撞层编号后填入
 	# Player.set_collision_mask_value(2, false)
 	pass
 #---------------------------------------------------------------------------------------------------
-func OnSkillUpdate(Player: KsPlayer, SkillData: KsSkillData, Delta: float) -> void:
+func OnSkillUpdate(Player: KsPlayer, SkillData: KsTableSkill.SkillItem, Delta: float) -> void:
 	pass
 #---------------------------------------------------------------------------------------------------
-func OnSkillEnd(Player: KsPlayer, SkillData: KsSkillData) -> void:
+func OnSkillEnd(Player: KsPlayer, SkillData: KsTableSkill.SkillItem) -> void:
 	# 恢复受击碰撞层
 	# Player.set_collision_mask_value(2, true)
 	pass

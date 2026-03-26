@@ -4,14 +4,14 @@
 extends KsSkillLogic_Base
 class_name KsSkillLogic_Qtds
 #---------------------------------------------------------------------------------------------------
-func OnSkillBegin(Player: KsPlayer, SkillData: KsSkillData) -> void:
+func OnSkillBegin(Player: KsPlayer, SkillData: KsTableSkill.SkillItem) -> void:
 	# 叠加向上速度
 	Player.CurVerticalSpeed = SkillData.VelocityY
 	# TODO: 销毁被踩中的飞行道具（由 Player 的脚底检测区域传入目标引用）
 #---------------------------------------------------------------------------------------------------
-func OnSkillUpdate(Player: KsPlayer, SkillData: KsSkillData, Delta: float) -> void:
+func OnSkillUpdate(Player: KsPlayer, SkillData: KsTableSkill.SkillItem, Delta: float) -> void:
 	pass
 #---------------------------------------------------------------------------------------------------
-func OnSkillEnd(Player: KsPlayer, SkillData: KsSkillData) -> void:
+func OnSkillEnd(Player: KsPlayer, SkillData: KsTableSkill.SkillItem) -> void:
 	pass
 #---------------------------------------------------------------------------------------------------

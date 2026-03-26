@@ -19,9 +19,13 @@ var CompInput: KsInput = null
 #---------------------------------------------------------------------------------------------------
 func _ready() -> void:
 	randomize()
+	_LoadAllTable()
 	_InitInput()
 	await get_tree().create_timer(0.5).timeout
 	ChangeGameStep(EGameStep.StepGaming)
+#---------------------------------------------------------------------------------------------------
+func _LoadAllTable() -> void:
+	KsTableSkill.LoadDataFile()
 #---------------------------------------------------------------------------------------------------
 func _InitInput() -> void:
 	CompInput = KsInput.new()
@@ -45,10 +49,6 @@ func _InitInput() -> void:
 		CompInput.set_meta("DebugLabel", DebugLabel)
 #---------------------------------------------------------------------------------------------------
 func _process(_delta: float) -> void:
-	# 键盘空格键跳跃（调试用）
-	if Input.is_action_just_pressed("ui_accept"):
-		if CompInput != null:
-			CompInput.OnCmdPressed(KsInput.ECmdType.Jump)
 	_UpdateDebugLabel()
 #---------------------------------------------------------------------------------------------------
 func _UpdateDebugLabel() -> void:

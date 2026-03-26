@@ -9,7 +9,7 @@ var CurCdA: float = 0.0   # A类技能CD
 var CurCdB: float = 0.0   # B类技能CD
 var CurCdC: float = 0.0   # C类技能CD
 # 当前正在执行的技能数据（null = 无技能在执行）
-var CurSkillData: KsSkillData = null
+var CurSkillData: KsTableSkill.SkillItem = null
 # 当前技能已执行时长
 var CurSkillTimer: float = 0.0
 # 玩家引用（由 KsPlayer 在 _ready 中赋值）
@@ -41,7 +41,7 @@ func _UpdateSkill(delta: float) -> void:
 		_EndSkill()
 #---------------------------------------------------------------------------------------------------
 # 尝试施放技能，返回是否成功
-func TryCastSkill(SkillData: KsSkillData) -> bool:
+func TryCastSkill(SkillData: KsTableSkill.SkillItem) -> bool:
 	if SkillData == null:
 		return false
 	# 判断对应CD是否冷却完毕
@@ -64,7 +64,7 @@ func TryCastSkill(SkillData: KsSkillData) -> bool:
 func _EndSkill() -> void:
 	if CurSkillData == null:
 		return
-	var EndData: KsSkillData = CurSkillData
+	var EndData: KsTableSkill.SkillItem = CurSkillData
 	CurSkillData = null
 	CurSkillTimer = 0.0
 	# 回调 KsPlayer 清理技能效果
@@ -72,7 +72,7 @@ func _EndSkill() -> void:
 		RefPlayer.OnSkillEnd(EndData)
 #---------------------------------------------------------------------------------------------------
 # 写入CD
-func _ApplyCd(SkillData: KsSkillData) -> void:
+func _ApplyCd(SkillData: KsTableSkill.SkillItem) -> void:
 	match SkillData.SkillType:
 		0: CurCdA = SkillData.CdDuration
 		1: CurCdB = SkillData.CdDuration

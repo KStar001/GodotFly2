@@ -5,7 +5,7 @@ class_name KsPlayer
 # 配置参数
 const ConfigMoveSpeed: float = 5.0         # 向前速度（米/秒）
 const ConfigJumpSpeed: float = 8.0         # 跳跃初速度
-const ConfigGravity: float = 20.0          # 重力加速度
+const ConfigGravity: float = 10.0          # 重力加速度
 const ConfigBounceSpeed: float = 5.0       # 被动落地弹起速度
 const ConfigSpikeJumpSpeed: float = 12.0   # 突木桩击中后强制弹起速度
 #---------------------------------------------------------------------------------------------------
@@ -123,13 +123,13 @@ func DoSpikeJump() -> void:
 func TryCastSkill(SkillId: int) -> bool:
 	if CompSkill == null:
 		return false
-	var SkillData: KsSkillData = KsTableSkill.GetSkillById(SkillId)
+	var SkillData: KsTableSkill.SkillItem = KsTableSkill.GetSkillById(SkillId)
 	if SkillData == null:
 		return false
 	return CompSkill.TryCastSkill(SkillData)
 #---------------------------------------------------------------------------------------------------
 # 技能开始回调（由 KsActorCompSkill 调用）
-func OnSkillBegin(SkillData: KsSkillData) -> void:
+func OnSkillBegin(SkillData: KsTableSkill.SkillItem) -> void:
 	ChangeActorState(EActorState.ActorState_CastSkill, SkillData.SkillId)
 	# 根据技能类型执行通用效果
 	match SkillData.SkillType:
@@ -138,11 +138,11 @@ func OnSkillBegin(SkillData: KsSkillData) -> void:
 		2: _ExecSkillC(SkillData)
 #---------------------------------------------------------------------------------------------------
 # 技能每帧更新回调（由 KsActorCompSkill 调用）
-func OnSkillUpdate(SkillData: KsSkillData, Delta: float) -> void:
+func OnSkillUpdate(SkillData: KsTableSkill.SkillItem, Delta: float) -> void:
 	pass
 #---------------------------------------------------------------------------------------------------
 # 技能结束回调（由 KsActorCompSkill 调用）
-func OnSkillEnd(SkillData: KsSkillData) -> void:
+func OnSkillEnd(SkillData: KsTableSkill.SkillItem) -> void:
 	CurSkillId = -1
 	CurSkillVelocityX = 0.0
 	CurSkillVelocityY = 0.0
@@ -151,21 +151,21 @@ func OnSkillEnd(SkillData: KsSkillData) -> void:
 	ChangeActorState(EActorState.ActorState_Run)
 #---------------------------------------------------------------------------------------------------
 # A类技能通用逻辑（闪避无敌帧）
-func _ExecSkillA(SkillData: KsSkillData) -> void:
+func _ExecSkillA(SkillData: KsTableSkill.SkillItem) -> void:
 	CurSkillVelocityX = SkillData.VelocityX
 	CurSkillVelocityY = SkillData.VelocityY
 	CurSkillAntiGravity = SkillData.AntiGravity
 	# TODO: 关闭受击碰撞层（无敌帧）
 #---------------------------------------------------------------------------------------------------
 # B类技能通用逻辑（跳跃借力）
-func _ExecSkillB(SkillData: KsSkillData) -> void:
+func _ExecSkillB(SkillData: KsTableSkill.SkillItem) -> void:
 	CurSkillVelocityX = SkillData.VelocityX
 	CurSkillVelocityY = SkillData.VelocityY
 	CurSkillAntiGravity = SkillData.AntiGravity
 	CurCanJump = false
 #---------------------------------------------------------------------------------------------------
 # C类技能通用逻辑（功法BUFF）
-func _ExecSkillC(SkillData: KsSkillData) -> void:
+func _ExecSkillC(SkillData: KsTableSkill.SkillItem) -> void:
 	CurSkillVelocityX = SkillData.VelocityX
 	CurSkillVelocityY = SkillData.VelocityY
 	CurSkillAntiGravity = SkillData.AntiGravity
