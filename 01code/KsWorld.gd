@@ -16,12 +16,19 @@ var CurPlayer: KsPlayer = null
 var CurCamera: KsCamera = null
 # 输入缓冲模块
 var CompInput: KsInput = null
+# 技能配置表
+var TableSkill: KsTableSkill = null
 #---------------------------------------------------------------------------------------------------
 func _ready() -> void:
 	randomize()
+	_InitTable()
 	_InitInput()
 	await get_tree().create_timer(0.5).timeout
 	ChangeGameStep(EGameStep.StepGaming)
+#---------------------------------------------------------------------------------------------------
+func _InitTable() -> void:
+	TableSkill = KsTableSkill.new()
+	add_child(TableSkill)
 #---------------------------------------------------------------------------------------------------
 func _InitInput() -> void:
 	CompInput = KsInput.new()
@@ -49,8 +56,12 @@ func _UpdateDebugLabel() -> void:
 	if not CompInput.has_meta("DebugLabel"):
 		return
 	var DebugLabel = CompInput.get_meta("DebugLabel")
-	if is_instance_valid(DebugLabel):
-		DebugLabel.text = CompInput.GetDebugText()
+	if not is_instance_valid(DebugLabel):
+		return
+	var Text: String = CompInput.GetDebugText()
+	if CurPlayer != null and CurPlayer.CompSkill != null:
+		Text += "\n" + CurPlayer.CompSkill.GetDebugText()
+	DebugLabel.text = Text
 #---------------------------------------------------------------------------------------------------
 func ChangeGameStep(NewStep: EGameStep) -> void:
 	if CurGameStep == NewStep:
