@@ -14,6 +14,8 @@ var CurGameStep: EGameStep = EGameStep.StepNone
 var CurPlayer: KsPlayer = null
 # 当前摄像机
 var CurCamera: KsCamera = null
+# 当前HUD
+var CurUIHud: KsUIHud = null
 # 输入缓冲模块
 var CompInput: KsInput = null
 #---------------------------------------------------------------------------------------------------
@@ -31,38 +33,23 @@ func _InitInput() -> void:
 	CompInput = KsInput.new()
 	add_child(CompInput)
 	await get_tree().process_frame
-	# 连接跳跃按钮
-	var JumpBtn = get_tree().root.find_child("JumpButton", true, false)
-	if JumpBtn != null:
-		JumpBtn.pressed.connect(func(): CompInput.OnCmdPressed(KsInput.ECmdType.Jump))
-	# 连接梯云纵按钮
-	var SkillBBtn = get_tree().root.find_child("SkillBButton", true, false)
-	if SkillBBtn != null:
-		SkillBBtn.pressed.connect(func(): CompInput.OnCmdPressed(KsInput.ECmdType.SkillB))
-	# 连接御风术按钮
-	var SkillCBtn = get_tree().root.find_child("SkillCButton", true, false)
-	if SkillCBtn != null:
-		SkillCBtn.pressed.connect(func(): CompInput.OnCmdPressed(KsInput.ECmdType.SkillC))
-	# 连接HUD debug Label
-	var DebugLabel = get_tree().root.find_child("DebugLabel", true, false)
-	if DebugLabel != null:
-		CompInput.set_meta("DebugLabel", DebugLabel)
+	if CurUIHud == null:
+		return
+	# 直接通过 KsUIHud 的节点引用连接按钮，不再 find_child 搜索
+	CurUIHud.NodeJumpButton.pressed.connect(func(): CompInput.OnCmdPressed(KsInput.ECmdType.Jump))
+	CurUIHud.NodeSkillBButton.pressed.connect(func(): CompInput.OnCmdPressed(KsInput.ECmdType.SkillB))
+	CurUIHud.NodeSkillCButton.pressed.connect(func(): CompInput.OnCmdPressed(KsInput.ECmdType.SkillC))
 #---------------------------------------------------------------------------------------------------
 func _process(_delta: float) -> void:
 	_UpdateDebugLabel()
 #---------------------------------------------------------------------------------------------------
 func _UpdateDebugLabel() -> void:
-	if CompInput == null:
-		return
-	if not CompInput.has_meta("DebugLabel"):
-		return
-	var DebugLabel = CompInput.get_meta("DebugLabel")
-	if not is_instance_valid(DebugLabel):
+	if CurUIHud == null or CompInput == null:
 		return
 	var Text: String = CompInput.GetDebugText()
 	if CurPlayer != null and CurPlayer.CompSkill != null:
 		Text += "\n" + CurPlayer.CompSkill.GetDebugText()
-	DebugLabel.text = Text
+	CurUIHud.UpdateDebugText(Text)
 #---------------------------------------------------------------------------------------------------
 func ChangeGameStep(NewStep: EGameStep) -> void:
 	if CurGameStep == NewStep:
@@ -88,4 +75,7 @@ func SetMainPlayer(Player: KsPlayer) -> void:
 #---------------------------------------------------------------------------------------------------
 func SetMainCamera(Camera: KsCamera) -> void:
 	CurCamera = Camera
+#---------------------------------------------------------------------------------------------------
+func SetMainUIHud(UIHud: KsUIHud) -> void:
+	CurUIHud = UIHud
 #---------------------------------------------------------------------------------------------------
