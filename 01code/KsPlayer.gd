@@ -30,6 +30,10 @@ var CurVerticalSpeed: float = 0.0
 var CurCanJump: bool = false
 # 技能叠加垂直速度（与基础速度分层）
 var CurSkillVelocityY: float = 0.0
+# 技能叠加水平速度
+var CurSkillVelocityX: float = 0.0
+# 当前技能是否无视重力
+var CurSkillAntiGravity: bool = false
 #---------------------------------------------------------------------------------------------------
 # 子组件
 var CompSkill: KsActorCompSkill = null
@@ -53,12 +57,15 @@ func _physics_process(delta: float) -> void:
 #---------------------------------------------------------------------------------------------------
 # 更新重力
 func _UpdateGravity(delta: float) -> void:
+	# 技能期间无视重力时跳过
+	if CurSkillAntiGravity:
+		return
 	if not is_on_floor():
 		CurVerticalSpeed -= ConfigGravity * delta
 #---------------------------------------------------------------------------------------------------
 # 更新移动（X轴前进，Y轴垂直，Z轴锁死为0）
 func _UpdateMove(delta: float) -> void:
-	velocity = Vector3(ConfigMoveSpeed, CurVerticalSpeed + CurSkillVelocityY, 0.0)
+	velocity = Vector3(ConfigMoveSpeed + CurSkillVelocityX, CurVerticalSpeed + CurSkillVelocityY, 0.0)
 	move_and_slide()
 	if is_on_floor():
 		CurVerticalSpeed = 0.0
@@ -137,23 +144,30 @@ func OnSkillUpdate(SkillData: KsSkillData, Delta: float) -> void:
 # 技能结束回调（由 KsActorCompSkill 调用）
 func OnSkillEnd(SkillData: KsSkillData) -> void:
 	CurSkillId = -1
+	CurSkillVelocityX = 0.0
 	CurSkillVelocityY = 0.0
+	CurSkillAntiGravity = false
 	# 恢复到物理驱动状态（_UpdateActorState 下一帧会自动接管）
 	ChangeActorState(EActorState.ActorState_Run)
 #---------------------------------------------------------------------------------------------------
 # A类技能通用逻辑（闪避无敌帧）
 func _ExecSkillA(SkillData: KsSkillData) -> void:
+	CurSkillVelocityX = SkillData.VelocityX
+	CurSkillVelocityY = SkillData.VelocityY
+	CurSkillAntiGravity = SkillData.AntiGravity
 	# TODO: 关闭受击碰撞层（无敌帧）
-	pass
 #---------------------------------------------------------------------------------------------------
 # B类技能通用逻辑（跳跃借力）
 func _ExecSkillB(SkillData: KsSkillData) -> void:
-	# 叠加垂直速度
+	CurSkillVelocityX = SkillData.VelocityX
 	CurSkillVelocityY = SkillData.VelocityY
+	CurSkillAntiGravity = SkillData.AntiGravity
 	CurCanJump = false
 #---------------------------------------------------------------------------------------------------
 # C类技能通用逻辑（功法BUFF）
 func _ExecSkillC(SkillData: KsSkillData) -> void:
+	CurSkillVelocityX = SkillData.VelocityX
+	CurSkillVelocityY = SkillData.VelocityY
+	CurSkillAntiGravity = SkillData.AntiGravity
 	# TODO: 根据 SkillData.BuffType 添加对应BUFF
-	pass
 #---------------------------------------------------------------------------------------------------

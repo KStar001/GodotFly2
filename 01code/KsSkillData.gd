@@ -11,9 +11,12 @@ var AnimName: String         # 动画名称（表现层，可为空）
 # A类专用
 var InvincibleTime: float    # 无敌帧时长
 # B类专用
+var VelocityX: float         # 施放后叠加的水平速度（正值=向前加速，如突进）
 var VelocityY: float         # 施放后叠加的垂直速度
 var NeedTarget: bool         # 是否需要借力目标（如蜻蜓点水）
 # C类专用
 var BuffType: int            # BUFF类型（0=无 1=御风 ...）
 var BuffDuration: float      # BUFF持续时长
+# 通用
+var AntiGravity: bool        # 技能期间是否无视重力（true=不受重力影响）
 #---------------------------------------------------------------------------------------------------

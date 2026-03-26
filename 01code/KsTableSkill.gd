@@ -34,7 +34,7 @@ func _LoadTable() -> void:
 # 解析一行CSV，返回 KsSkillData
 func _ParseLine(Line: String) -> KsSkillData:
 	var Parts: Array = Line.split(",")
-	if Parts.size() < 12:
+	if Parts.size() < 13:
 		push_warning("KsTableSkill: 行格式不正确，跳过：" + Line)
 		return null
 	var Data: KsSkillData = KsSkillData.new()
@@ -44,11 +44,13 @@ func _ParseLine(Line: String) -> KsSkillData:
 	Data.Duration       = float(Parts[3])
 	Data.CdDuration     = float(Parts[4])
 	Data.AnimName       = Parts[5].strip_edges()
-	Data.VelocityY      = float(Parts[6])
-	Data.NeedTarget     = Parts[7].strip_edges().to_lower() == "true"
-	Data.InvincibleTime = float(Parts[8])
-	Data.BuffType       = int(Parts[9])
-	Data.BuffDuration   = float(Parts[10])
+	Data.VelocityX      = float(Parts[6])
+	Data.VelocityY      = float(Parts[7])
+	Data.NeedTarget     = Parts[8].strip_edges().to_lower() == "true"
+	Data.InvincibleTime = float(Parts[9])
+	Data.BuffType       = int(Parts[10])
+	Data.BuffDuration   = float(Parts[11])
+	Data.AntiGravity    = Parts[12].strip_edges().to_lower() == "true"
 	return Data
 #---------------------------------------------------------------------------------------------------
 # 根据 SkillId 获取技能数据，不存在返回 null
