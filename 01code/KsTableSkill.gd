@@ -1,5 +1,6 @@
 #---------------------------------------------------------------------------------------------------
 extends Node
+class_name KsTableSkill
 # 技能配置表读取模块
 # 读取 10table/skill.csv，解析为 KsSkillData 字典，供全局查询
 # 用法：KsTableSkill.GetSkillById(1001)

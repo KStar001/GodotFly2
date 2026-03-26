@@ -1,187 +1,184 @@
-[gd_scene load_steps=6 format=3 uid="uid://gf2stage001"]
+[gd_scene load_steps=9 format=3 uid="uid://gf2stage001"]
 
-[ext_resource type="Script" path="res://01code/KsWorld.gd" id="1_world"]
-[ext_resource type="Script" path="res://01code/KsCamera.gd" id="2_camera"]
-[ext_resource type="PackedScene" path="res://02scene/player_001.tscn" id="3_player"]
-[ext_resource type="PackedScene" path="res://02scene/spike_001.tscn" id="4_spike"]
+[ext_resource type="Script" uid="uid://cxtlpxj6pnler" path="res://01code/KsWorld.gd" id="1_world"]
+[ext_resource type="Script" uid="uid://da3cs2dxwj1a6" path="res://01code/KsCamera.gd" id="2_camera"]
+[ext_resource type="PackedScene" uid="uid://gf2player001" path="res://02scene/player_001.tscn" id="3_player"]
+[ext_resource type="PackedScene" uid="uid://gf2spike001" path="res://02scene/spike_001.tscn" id="4_spike"]
 
 [sub_resource type="BoxShape3D" id="Shape_ground"]
-size = Vector3(400.0, 0.4, 4.0)
+size = Vector3(400, 0.4, 4)
 
 [sub_resource type="BoxShape3D" id="Shape_plat_wide"]
-size = Vector3(3.0, 0.2, 4.0)
+size = Vector3(3, 0.2, 4)
 
 [sub_resource type="BoxShape3D" id="Shape_plat_mid"]
-size = Vector3(2.0, 0.2, 4.0)
+size = Vector3(2, 0.2, 4)
 
 [sub_resource type="BoxShape3D" id="Shape_plat_narrow"]
-size = Vector3(1.2, 0.2, 4.0)
+size = Vector3(1.2, 0.2, 4)
 
 [node name="Stage001" type="Node3D"]
 script = ExtResource("1_world")
 
 [node name="MainPlayer" parent="." instance=ExtResource("3_player")]
-position = Vector3(1.0, 2.0, 0.0)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 1, 2, 0)
 
 [node name="MainCamera" type="Camera3D" parent="."]
 script = ExtResource("2_camera")
 
-[node name="WorldEnvironment" type="WorldEnvironment" parent="."]
-
 [node name="DirectionalLight" type="DirectionalLight3D" parent="."]
-position = Vector3(0.0, 10.0, 5.0)
-rotation_degrees = Vector3(-45.0, 0.0, 0.0)
+transform = Transform3D(1, 0, 0, 0, 0.707107, 0.707107, 0, -0.707107, 0.707107, 0, 10, 5)
 light_energy = 1.2
 shadow_enabled = true
 
 [node name="Platforms" type="Node3D" parent="."]
 
 [node name="Ground" type="StaticBody3D" parent="Platforms"]
-position = Vector3(100.0, -0.2, 0.0)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 100, -0.2, 0)
 
 [node name="CollisionShape3D" type="CollisionShape3D" parent="Platforms/Ground"]
 shape = SubResource("Shape_ground")
 
 [node name="Platform01" type="StaticBody3D" parent="Platforms"]
-position = Vector3(4.0, 1.2, 0.0)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 4, 1.2, 0)
 
 [node name="CollisionShape3D" type="CollisionShape3D" parent="Platforms/Platform01"]
 shape = SubResource("Shape_plat_wide")
 
 [node name="Platform02" type="StaticBody3D" parent="Platforms"]
-position = Vector3(7.5, 2.5, 0.0)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 7.5, 2.5, 0)
 
 [node name="CollisionShape3D" type="CollisionShape3D" parent="Platforms/Platform02"]
 shape = SubResource("Shape_plat_mid")
 
 [node name="Platform03" type="StaticBody3D" parent="Platforms"]
-position = Vector3(10.5, 1.3, 0.0)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 10.5, 1.3, 0)
 
 [node name="CollisionShape3D" type="CollisionShape3D" parent="Platforms/Platform03"]
 shape = SubResource("Shape_plat_narrow")
 
 [node name="Platform04" type="StaticBody3D" parent="Platforms"]
-position = Vector3(13.2, 3.0, 0.0)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 13.2, 3, 0)
 
 [node name="CollisionShape3D" type="CollisionShape3D" parent="Platforms/Platform04"]
 shape = SubResource("Shape_plat_mid")
 
 [node name="Platform05" type="StaticBody3D" parent="Platforms"]
-position = Vector3(16.0, 4.0, 0.0)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 16, 4, 0)
 
 [node name="CollisionShape3D" type="CollisionShape3D" parent="Platforms/Platform05"]
 shape = SubResource("Shape_plat_narrow")
 
 [node name="Platform06" type="StaticBody3D" parent="Platforms"]
-position = Vector3(18.8, 2.2, 0.0)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 18.8, 2.2, 0)
 
 [node name="CollisionShape3D" type="CollisionShape3D" parent="Platforms/Platform06"]
 shape = SubResource("Shape_plat_wide")
 
 [node name="Platform07" type="StaticBody3D" parent="Platforms"]
-position = Vector3(22.0, 1.4, 0.0)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 22, 1.4, 0)
 
 [node name="CollisionShape3D" type="CollisionShape3D" parent="Platforms/Platform07"]
 shape = SubResource("Shape_plat_mid")
 
 [node name="Platform08" type="StaticBody3D" parent="Platforms"]
-position = Vector3(25.0, 3.2, 0.0)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 25, 3.2, 0)
 
 [node name="CollisionShape3D" type="CollisionShape3D" parent="Platforms/Platform08"]
 shape = SubResource("Shape_plat_narrow")
 
 [node name="Platform09" type="StaticBody3D" parent="Platforms"]
-position = Vector3(27.8, 1.8, 0.0)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 27.8, 1.8, 0)
 
 [node name="CollisionShape3D" type="CollisionShape3D" parent="Platforms/Platform09"]
 shape = SubResource("Shape_plat_mid")
 
 [node name="Platform10" type="StaticBody3D" parent="Platforms"]
-position = Vector3(30.8, 2.8, 0.0)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 30.8, 2.8, 0)
 
 [node name="CollisionShape3D" type="CollisionShape3D" parent="Platforms/Platform10"]
 shape = SubResource("Shape_plat_wide")
 
 [node name="Platform11" type="StaticBody3D" parent="Platforms"]
-position = Vector3(34.2, 4.2, 0.0)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 34.2, 4.2, 0)
 
 [node name="CollisionShape3D" type="CollisionShape3D" parent="Platforms/Platform11"]
 shape = SubResource("Shape_plat_narrow")
 
 [node name="Platform12" type="StaticBody3D" parent="Platforms"]
-position = Vector3(37.0, 2.2, 0.0)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 37, 2.2, 0)
 
 [node name="CollisionShape3D" type="CollisionShape3D" parent="Platforms/Platform12"]
 shape = SubResource("Shape_plat_mid")
 
 [node name="Platform13" type="StaticBody3D" parent="Platforms"]
-position = Vector3(39.8, 1.0, 0.0)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 39.8, 1, 0)
 
 [node name="CollisionShape3D" type="CollisionShape3D" parent="Platforms/Platform13"]
 shape = SubResource("Shape_plat_wide")
 
 [node name="Platform14" type="StaticBody3D" parent="Platforms"]
-position = Vector3(43.2, 2.6, 0.0)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 43.2, 2.6, 0)
 
 [node name="CollisionShape3D" type="CollisionShape3D" parent="Platforms/Platform14"]
 shape = SubResource("Shape_plat_narrow")
 
 [node name="Platform15" type="StaticBody3D" parent="Platforms"]
-position = Vector3(46.0, 3.8, 0.0)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 46, 3.8, 0)
 
 [node name="CollisionShape3D" type="CollisionShape3D" parent="Platforms/Platform15"]
 shape = SubResource("Shape_plat_mid")
 
 [node name="Platform16" type="StaticBody3D" parent="Platforms"]
-position = Vector3(49.0, 2.0, 0.0)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 49, 2, 0)
 
 [node name="CollisionShape3D" type="CollisionShape3D" parent="Platforms/Platform16"]
 shape = SubResource("Shape_plat_wide")
 
 [node name="Platform17" type="StaticBody3D" parent="Platforms"]
-position = Vector3(52.5, 3.4, 0.0)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 52.5, 3.4, 0)
 
 [node name="CollisionShape3D" type="CollisionShape3D" parent="Platforms/Platform17"]
 shape = SubResource("Shape_plat_narrow")
 
 [node name="Platform18" type="StaticBody3D" parent="Platforms"]
-position = Vector3(55.5, 1.4, 0.0)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 55.5, 1.4, 0)
 
 [node name="CollisionShape3D" type="CollisionShape3D" parent="Platforms/Platform18"]
 shape = SubResource("Shape_plat_mid")
 
 [node name="Platform19" type="StaticBody3D" parent="Platforms"]
-position = Vector3(58.5, 3.0, 0.0)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 58.5, 3, 0)
 
 [node name="CollisionShape3D" type="CollisionShape3D" parent="Platforms/Platform19"]
 shape = SubResource("Shape_plat_wide")
 
 [node name="Platform20" type="StaticBody3D" parent="Platforms"]
-position = Vector3(62.0, 1.8, 0.0)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 62, 1.8, 0)
 
 [node name="CollisionShape3D" type="CollisionShape3D" parent="Platforms/Platform20"]
 shape = SubResource("Shape_plat_mid")
 
 [node name="Platform21" type="StaticBody3D" parent="Platforms"]
-position = Vector3(65.2, 4.0, 0.0)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 65.2, 4, 0)
 
 [node name="CollisionShape3D" type="CollisionShape3D" parent="Platforms/Platform21"]
 shape = SubResource("Shape_plat_narrow")
 
 [node name="Platform22" type="StaticBody3D" parent="Platforms"]
-position = Vector3(68.2, 2.4, 0.0)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 68.2, 2.4, 0)
 
 [node name="CollisionShape3D" type="CollisionShape3D" parent="Platforms/Platform22"]
 shape = SubResource("Shape_plat_wide")
 
 [node name="Platform23" type="StaticBody3D" parent="Platforms"]
-position = Vector3(71.8, 1.2, 0.0)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 71.8, 1.2, 0)
 
 [node name="CollisionShape3D" type="CollisionShape3D" parent="Platforms/Platform23"]
 shape = SubResource("Shape_plat_narrow")
 
 [node name="Platform24" type="StaticBody3D" parent="Platforms"]
-position = Vector3(74.8, 2.8, 0.0)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 74.8, 2.8, 0)
 
 [node name="CollisionShape3D" type="CollisionShape3D" parent="Platforms/Platform24"]
 shape = SubResource("Shape_plat_mid")
@@ -189,16 +186,16 @@ shape = SubResource("Shape_plat_mid")
 [node name="Spikes" type="Node3D" parent="."]
 
 [node name="Spike01" parent="Spikes" instance=ExtResource("4_spike")]
-position = Vector3(5.8, 0.0, 0.0)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 5.8, 0, 0)
 
 [node name="Spike02" parent="Spikes" instance=ExtResource("4_spike")]
-position = Vector3(11.5, 0.0, 0.0)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 11.5, 0, 0)
 
 [node name="Spike03" parent="Spikes" instance=ExtResource("4_spike")]
-position = Vector3(23.5, 0.0, 0.0)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 23.5, 0, 0)
 
 [node name="Spike04" parent="Spikes" instance=ExtResource("4_spike")]
-position = Vector3(36.0, 0.0, 0.0)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 36, 0, 0)
 
 [node name="UI" type="CanvasLayer" parent="."]
 
@@ -241,9 +238,7 @@ text = "御风术"
 [node name="DebugLabel" type="Label" parent="UI"]
 anchors_preset = 1
 anchor_left = 1.0
-anchor_top = 0.0
 anchor_right = 1.0
-anchor_bottom = 0.0
 offset_left = -220.0
 offset_top = 10.0
 offset_right = -10.0
