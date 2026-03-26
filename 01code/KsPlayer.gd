@@ -123,7 +123,7 @@ func DoSpikeJump() -> void:
 func TryCastSkill(SkillId: int) -> bool:
 	if CompSkill == null:
 		return false
-	var SkillData: KsSkillData = KsWorld.TableSkill.GetSkillById(SkillId)
+	var SkillData: KsSkillData = KsTableSkill.GetSkillById(SkillId)
 	if SkillData == null:
 		return false
 	return CompSkill.TryCastSkill(SkillData)
