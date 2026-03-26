@@ -5,6 +5,7 @@ class_name KsCamera
 # 配置参数
 # 透视摄像机拉远+小FOV，视觉上接近正交但保留轻微纵深感
 const ConfigFov: float = 20.0             # FOV越小越接近正交（默认75，这里用20）
+const ConfigOffsetX: float = 3.5          # 摄像机在X轴超前玩家的距离（让玩家位于屏幕左侧1/3处）
 const ConfigOffsetY: float = 3.0          # 摄像机相对玩家Y偏移（稍微偏上）
 const ConfigOffsetZ: float = 30.0         # 摄像机距离玩家Z距离（拉远配合小FOV）
 const ConfigFollowSpeed: float = 5.0      # 摄像机跟随平滑速度
@@ -21,9 +22,9 @@ func _process(delta: float) -> void:
 #---------------------------------------------------------------------------------------------------
 func _UpdateFollow(delta: float) -> void:
 	var PlayerPos: Vector3 = KsWorld.CurPlayer.global_position
-	# 只跟随X轴（横向前进），Y和Z保持固定偏移
+	# X轴超前玩家一段距离，使玩家位于屏幕左侧1/3处
 	var DestPos: Vector3 = Vector3(
-		PlayerPos.x,
+		PlayerPos.x + ConfigOffsetX,
 		PlayerPos.y + ConfigOffsetY,
 		PlayerPos.z + ConfigOffsetZ
 	)

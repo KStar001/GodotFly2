@@ -1,4 +1,4 @@
-[gd_scene load_steps=5 format=3 uid="uid://gf2spike001"]
+[gd_scene load_steps=6 format=3 uid="uid://gf2spike001"]
 
 [ext_resource type="Script" uid="uid://ckc3haktg0j2p" path="res://01code/KsSpike.gd" id="1_spike"]
 
@@ -16,6 +16,10 @@ initial_velocity_max = 1.4
 scale_min = 0.05
 scale_max = 0.1
 color = Color(1, 0.6, 0.1, 1)
+
+[sub_resource type="SphereMesh" id="SphereMesh_particle"]
+radius = 0.05
+height = 0.1
 
 [node name="Spike001" type="Node3D"]
 script = ExtResource("1_spike")
@@ -35,5 +39,7 @@ transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.1, 0)
 amount = 16
 lifetime = 0.8
 process_material = SubResource("ParticleMat_warn")
+draw_passes = 1
+draw_pass_1 = SubResource("SphereMesh_particle")
 
 [connection signal="body_entered" from="HitBox" to="." method="_on_HitBox_body_entered"]
