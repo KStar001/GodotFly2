@@ -3,12 +3,15 @@ extends Camera3D
 class_name KsCamera
 #---------------------------------------------------------------------------------------------------
 # 配置参数
-const ConfigOffsetX: float = 0.0      # 摄像机相对玩家X偏移（横板游戏通常跟随X）
-const ConfigOffsetY: float = 2.0      # 摄像机相对玩家Y偏移（稍微偏上）
-const ConfigOffsetZ: float = 12.0     # 摄像机距离玩家的Z距离（拉远看侧视图）
-const ConfigFollowSpeed: float = 5.0  # 摄像机跟随平滑速度
+# 透视摄像机拉远+小FOV，视觉上接近正交但保留轻微纵深感
+const ConfigFov: float = 20.0             # FOV越小越接近正交（默认75，这里用20）
+const ConfigOffsetY: float = 3.0          # 摄像机相对玩家Y偏移（稍微偏上）
+const ConfigOffsetZ: float = 30.0         # 摄像机距离玩家Z距离（拉远配合小FOV）
+const ConfigFollowSpeed: float = 5.0      # 摄像机跟随平滑速度
+const ConfigLookAtOffsetY: float = 1.5    # 看向玩家时的Y偏移（看向躯干而非脚底）
 #---------------------------------------------------------------------------------------------------
 func _ready() -> void:
+	fov = ConfigFov
 	KsWorld.SetMainCamera(self)
 #---------------------------------------------------------------------------------------------------
 func _process(delta: float) -> void:
@@ -18,13 +21,13 @@ func _process(delta: float) -> void:
 #---------------------------------------------------------------------------------------------------
 func _UpdateFollow(delta: float) -> void:
 	var PlayerPos: Vector3 = KsWorld.CurPlayer.global_position
-	# 只跟随X轴（横向前进），Y和Z固定偏移
+	# 只跟随X轴（横向前进），Y和Z保持固定偏移
 	var DestPos: Vector3 = Vector3(
-		PlayerPos.x + ConfigOffsetX,
+		PlayerPos.x,
 		PlayerPos.y + ConfigOffsetY,
 		PlayerPos.z + ConfigOffsetZ
 	)
 	global_position = global_position.lerp(DestPos, ConfigFollowSpeed * delta)
-	# 始终看向玩家
-	look_at(Vector3(PlayerPos.x, PlayerPos.y + 1.0, PlayerPos.z), Vector3.UP)
+	# 看向玩家躯干位置
+	look_at(Vector3(PlayerPos.x, PlayerPos.y + ConfigLookAtOffsetY, PlayerPos.z), Vector3.UP)
 #---------------------------------------------------------------------------------------------------
