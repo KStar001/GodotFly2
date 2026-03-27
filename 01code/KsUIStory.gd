@@ -40,17 +40,23 @@ func _UpdateTyping(delta: float) -> void:
 	if _CurCharIndex >= _FullText.length():
 		_IsTyping = false
 #---------------------------------------------------------------------------------------------------
-# 点击屏幕任意位置
+# 点击屏幕任意位置（兼容触屏和鼠标）
 func _input(event: InputEvent) -> void:
 	if not visible:
 		return
+	var IsClick: bool = false
 	if event is InputEventScreenTouch and event.pressed:
-		# 如果文字还没打完，先跳过逐字直接显示全文
-		if _IsTyping:
-			_FinishTyping()
-		else:
-			KsWorld.StoryManager.TrySkipStep()
-		get_viewport().set_input_as_handled()
+		IsClick = true
+	elif event is InputEventMouseButton and event.pressed and event.button_index == MOUSE_BUTTON_LEFT:
+		IsClick = true
+	if not IsClick:
+		return
+	# 如果文字还没打完，先跳过逐字直接显示全文
+	if _IsTyping:
+		_FinishTyping()
+	else:
+		KsWorld.StoryManager.TrySkipStep()
+	get_viewport().set_input_as_handled()
 #---------------------------------------------------------------------------------------------------
 # 显示当前步骤（由 KsStoryManager 调用）
 func ShowStep(Step: KsTableStory.StoryItem) -> void:
