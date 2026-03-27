@@ -134,6 +134,9 @@ func OnSkillBegin(SkillData: KsTableSkill.SkillItem) -> void:
 	# AntiGravity 技能：施放瞬间清零 Y 轴速度，避免惯性影响
 	if SkillData.AntiGravity:
 		CurVerticalSpeed = 0.0
+	# VelocityY > 0 技能：施放瞬间清零 Y 轴速度，确保向上速度干净叠加
+	if SkillData.VelocityY > 0.0:
+		CurVerticalSpeed = 0.0
 	# 根据技能类型执行通用效果
 	match SkillData.SkillType:
 		0: _ExecSkillA(SkillData)
