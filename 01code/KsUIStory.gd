@@ -64,7 +64,7 @@ func ShowStep(Step: KsTableStory.StoryItem) -> void:
 # 显示静态图
 func _ShowImage(Step: KsTableStory.StoryItem) -> void:
 	# 加载图片
-	var ImgPath: String = "res://21otherres/story/" + Step.Image
+	var ImgPath: String = "res://21otherres/story/" + Step.ImageRes
 	var Tex = load(ImgPath) as Texture2D
 	if Tex != null:
 		NodeImage.texture = Tex
@@ -87,8 +87,8 @@ func _ShowImage(Step: KsTableStory.StoryItem) -> void:
 # 显示过场对话框
 func _ShowDialog(Step: KsTableStory.StoryItem) -> void:
 	# 立绘：有 image 字段时加载，放左侧（后续可按 speaker 决定左右）
-	if not Step.Image.is_empty():
-		var PortraitPath: String = "res://21otherres/portrait/" + Step.Image + ".png"
+	if not Step.ImageRes.is_empty():
+		var PortraitPath: String = "res://21otherres/portrait/" + Step.ImageRes + ".png"
 		var Tex = load(PortraitPath) as Texture2D
 		if Tex != null:
 			NodePortraitLeft.texture = Tex

@@ -1,0 +1,17 @@
+[remap]
+
+importer="csv_translation"
+type="Translation"
+uid="uid://dmnllbwjj4rn"
+
+[deps]
+
+files=["res://10table/story.step.translation", "res://10table/story.type.translation", "res://10table/story.image.translation", "res://10table/story.text.translation", "res://10table/story.speaker.translation", "res://10table/story.min.translation", "res://10table/story.max.translation"]
+
+source_file="res://10table/story.csv"
+dest_files=["res://10table/story.step.translation", "res://10table/story.type.translation", "res://10table/story.image.translation", "res://10table/story.text.translation", "res://10table/story.speaker.translation", "res://10table/story.min.translation", "res://10table/story.max.translation"]
+
+[params]
+
+compress=true
+delimiter=0

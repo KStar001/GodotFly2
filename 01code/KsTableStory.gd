@@ -7,7 +7,7 @@ class StoryItem:
 	var StoryId: int        # 剧情段落ID（同一段落连续播放）
 	var Step: int           # 段落内顺序
 	var Type: String        # 步骤类型：image=静态图全屏 / dialog=过场对话框
-	var Image: String       # image类型：图片文件名；dialog类型：立绘资源名
+	var ImageRes: String       # image类型：图片文件名；dialog类型：立绘资源名
 	var Text: String        # 显示文字（image类型可留空）
 	var Speaker: String     # 说话人名字（image类型留空）
 	var MinTime: float      # 最少停留时长（秒），未到时长前不允许跳过；0=无限制
@@ -20,7 +20,7 @@ class StoryItem:
 			Data.StoryId  = int(Parts[0])
 			Data.Step     = int(Parts[1])
 			Data.Type     = Parts[2].strip_edges()
-			Data.Image    = Parts[3].strip_edges()
+			Data.ImageRes = Parts[3].strip_edges()
 			Data.Text     = Parts[4].strip_edges()
 			Data.Speaker  = Parts[5].strip_edges()
 			Data.MinTime  = float(Parts[6])

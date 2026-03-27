@@ -87,7 +87,7 @@ func _ShowStep(Step: KsTableStory.StoryItem) -> void:
 	else:
 		# 占位输出，KsUIStory 完成后移除
 		print("KsStoryManager._ShowStep | type=%s image=%s speaker=%s text=%s" % [
-			Step.Type, Step.Image, Step.Speaker, Step.Text
+			Step.Type, Step.ImageRes, Step.Speaker, Step.Text
 		])
 #---------------------------------------------------------------------------------------------------
 # 剧情结束，清理状态并执行回调
