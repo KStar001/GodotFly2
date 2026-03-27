@@ -3,7 +3,7 @@ extends CanvasLayer
 class_name KsUIStory
 # 剧情显示层
 # 职责：根据 KsStoryManager 的指令显示静态图或过场对话框
-# 点击屏幕任意位置触发 TrySkipStep
+# 可跳过时显示"下一步"按钮，由玩家主动点击推进
 #---------------------------------------------------------------------------------------------------
 # 节点引用
 @onready var NodeBg: ColorRect              = $NodeBg
@@ -13,6 +13,7 @@ class_name KsUIStory
 @onready var NodeText: Label                = $NodeDialogBox/NodeText
 @onready var NodePortraitLeft: TextureRect  = $NodePortraitLeft
 @onready var NodePortraitRight: TextureRect = $NodePortraitRight
+@onready var NodeNextButton: Button         = $NextButton
 #---------------------------------------------------------------------------------------------------
 # 逐字显示相关
 const ConfigTextSpeed: float = 0.04        # 每个字的显示间隔（秒）
@@ -24,6 +25,8 @@ var _IsTyping: bool = false               # 是否正在逐字播放
 func _ready() -> void:
 	# 默认隐藏
 	visible = false
+	NodeNextButton.visible = false
+	NodeNextButton.pressed.connect(_OnNextButtonPressed)
 	KsWorld.SetMainUIStory(self)
 #---------------------------------------------------------------------------------------------------
 func _process(delta: float) -> void:
@@ -39,37 +42,33 @@ func _UpdateTyping(delta: float) -> void:
 		NodeText.text = _FullText.left(_CurCharIndex)
 	if _CurCharIndex >= _FullText.length():
 		_IsTyping = false
+		# 文字打完，如果此时已允许跳过，显示"下一步"按钮
+		_RefreshNextButton()
 #---------------------------------------------------------------------------------------------------
-# 点击屏幕任意位置（兼容触屏和鼠标）
-func _input(event: InputEvent) -> void:
-	if not visible:
-		return
-	var IsClick: bool = false
-	if event is InputEventScreenTouch and event.pressed:
-		IsClick = true
-	elif event is InputEventMouseButton and event.pressed and event.button_index == MOUSE_BUTTON_LEFT:
-		IsClick = true
-	if not IsClick:
-		return
-	# 如果文字还没打完，先跳过逐字直接显示全文
-	if _IsTyping:
-		_FinishTyping()
-	else:
-		KsWorld.StoryManager.TrySkipStep()
-	get_viewport().set_input_as_handled()
+# "下一步"按钮点击
+func _OnNextButtonPressed() -> void:
+	KsWorld.StoryManager.TrySkipStep()
 #---------------------------------------------------------------------------------------------------
 # 显示当前步骤（由 KsStoryManager 调用）
 func ShowStep(Step: KsTableStory.StoryItem) -> void:
 	visible = true
+	NodeNextButton.visible = false
 	match Step.Type:
 		"image":
 			_ShowImage(Step)
 		"dialog":
 			_ShowDialog(Step)
 #---------------------------------------------------------------------------------------------------
+# 由 KsStoryManager 通知：当前步骤已过 MinTime，可以跳过了
+func OnStepCanSkip() -> void:
+	_RefreshNextButton()
+#---------------------------------------------------------------------------------------------------
+# 刷新"下一步"按钮可见性：文字打完 且 可跳过 才显示
+func _RefreshNextButton() -> void:
+	NodeNextButton.visible = (not _IsTyping) and KsWorld.StoryManager.IsCurStepCanSkip()
+#---------------------------------------------------------------------------------------------------
 # 显示静态图
 func _ShowImage(Step: KsTableStory.StoryItem) -> void:
-	# 加载图片
 	var ImgPath: String = "res://21otherres/story/" + Step.ImageRes
 	var Tex = load(ImgPath) as Texture2D
 	if Tex != null:
@@ -92,7 +91,7 @@ func _ShowImage(Step: KsTableStory.StoryItem) -> void:
 #---------------------------------------------------------------------------------------------------
 # 显示过场对话框
 func _ShowDialog(Step: KsTableStory.StoryItem) -> void:
-	# 立绘：有 image 字段时加载，放左侧（后续可按 speaker 决定左右）
+	# 立绘：有 image 字段时加载，放左侧
 	if not Step.ImageRes.is_empty():
 		var PortraitPath: String = "res://21otherres/portrait/" + Step.ImageRes + ".png"
 		var Tex = load(PortraitPath) as Texture2D
@@ -123,11 +122,13 @@ func _FinishTyping() -> void:
 	_IsTyping     = false
 	_CurCharIndex = _FullText.length()
 	NodeText.text = _FullText
+	_RefreshNextButton()
 #---------------------------------------------------------------------------------------------------
 # 隐藏整个剧情界面（由 KsStoryManager 在剧情结束时调用）
 func HideStory() -> void:
 	visible = false
-	NodeImage.texture       = null
+	NodeNextButton.visible    = false
+	NodeImage.texture         = null
 	NodePortraitLeft.texture  = null
 	NodePortraitRight.texture = null
 	NodeText.text    = ""

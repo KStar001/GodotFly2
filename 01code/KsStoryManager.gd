@@ -31,10 +31,12 @@ func _UpdateStepTimer(delta: float) -> void:
 	if CurStep == null:
 		return
 	_CurStepTimer += delta
-	# MinTime 到了，允许跳过
+	# MinTime 到了，允许跳过，并通知 KsUIStory 显示"下一步"按钮
 	if not _CurStepCanSkip and CurStep.MinTime > 0.0:
 		if _CurStepTimer >= CurStep.MinTime:
 			_CurStepCanSkip = true
+			if RefUIStory != null and RefUIStory.has_method("OnStepCanSkip"):
+				RefUIStory.OnStepCanSkip()
 	# MaxTime 到了，自动跳下一步
 	if CurStep.MaxTime > 0.0 and _CurStepTimer >= CurStep.MaxTime:
 		_NextStep()
@@ -113,4 +115,8 @@ func _GetCurStep() -> KsTableStory.StoryItem:
 # 是否正在播放剧情
 func IsPlaying() -> bool:
 	return _IsPlaying
+#---------------------------------------------------------------------------------------------------
+# 当前步骤是否允许跳过（供 KsUIStory 查询）
+func IsCurStepCanSkip() -> bool:
+	return _CurStepCanSkip
 #---------------------------------------------------------------------------------------------------
