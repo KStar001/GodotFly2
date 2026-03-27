@@ -1,10 +1,11 @@
-[gd_scene load_steps=18 format=3 uid="uid://gf2stage001"]
+[gd_scene load_steps=19 format=3 uid="uid://gf2stage001"]
 
 [ext_resource type="Script" uid="uid://cxtlpxj6pnler" path="res://01code/KsWorld.gd" id="1_world"]
 [ext_resource type="Script" uid="uid://da3cs2dxwj1a6" path="res://01code/KsCamera.gd" id="2_camera"]
 [ext_resource type="PackedScene" uid="uid://gf2player001" path="res://02scene/player_001.tscn" id="3_player"]
 [ext_resource type="PackedScene" uid="uid://gf2spike001" path="res://02scene/spike_001.tscn" id="4_spike"]
 [ext_resource type="PackedScene" uid="uid://gf2uihud" path="res://06ui/ui_hud.tscn" id="5_uihud"]
+[ext_resource type="PackedScene" uid="uid://gf2uistory" path="res://06ui/ui_story.tscn" id="6_uistory"]
 
 [sub_resource type="BoxShape3D" id="Shape_ground"]
 size = Vector3(400, 0.4, 4)
@@ -302,3 +303,5 @@ transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 23.5, 0, 0)
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 36, 0, 0)
 
 [node name="UIHud" parent="." instance=ExtResource("5_uihud")]
+
+[node name="UIStory" parent="." instance=ExtResource("6_uistory")]

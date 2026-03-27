@@ -8,13 +8,15 @@ const LabelSkillB: String  = "梯云纵"
 const LabelSkillC: String  = "御风术"
 #---------------------------------------------------------------------------------------------------
 # 节点引用
-@onready var NodeJumpButton: Button   = $JumpButton
-@onready var NodeSkillBButton: Button = $SkillBButton
-@onready var NodeSkillCButton: Button = $SkillCButton
-@onready var NodeDebugLabel: Label    = $DebugLabel
+@onready var NodeJumpButton: Button       = $JumpButton
+@onready var NodeSkillBButton: Button     = $SkillBButton
+@onready var NodeSkillCButton: Button     = $SkillCButton
+@onready var NodeDebugLabel: Label        = $DebugLabel
+@onready var NodeStoryTestButton: Button  = $StoryTestButton
 #---------------------------------------------------------------------------------------------------
 func _ready() -> void:
 	KsWorld.SetMainUIHud(self)
+	NodeStoryTestButton.pressed.connect(_OnStoryTestButtonPressed)
 #---------------------------------------------------------------------------------------------------
 func _process(_delta: float) -> void:
 	_UpdateSkillButtonLabel()
@@ -42,6 +44,14 @@ func _UpdateSkillButtonLabel() -> void:
 		0: NodeJumpButton.text   = RemainText
 		1: NodeSkillBButton.text = RemainText
 		2: NodeSkillCButton.text = RemainText
+#---------------------------------------------------------------------------------------------------
+# 剧情测试按钮：触发剧情1
+func _OnStoryTestButtonPressed() -> void:
+	if KsWorld.StoryManager == null:
+		return
+	if KsWorld.StoryManager.IsPlaying():
+		return
+	KsWorld.StoryManager.PlayStory(1, func(): print("KsUIHud: 剧情1播放完毕"))
 #---------------------------------------------------------------------------------------------------
 # 更新调试文本
 func UpdateDebugText(Text: String) -> void:
