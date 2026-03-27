@@ -29,12 +29,14 @@ var CurSkillId: int = -1
 var CurVerticalSpeed: float = 0.0
 # 是否可以跳跃
 var CurCanJump: bool = false
-# 技能叠加垂直速度（与基础速度分层）
+# 技能叠加/锁定垂直速度
 var CurSkillVelocityY: float = 0.0
-# 技能叠加水平速度
+# 技能叠加/锁定水平速度
 var CurSkillVelocityX: float = 0.0
-# 当前技能是否无视重力
-var CurSkillAntiGravity: bool = false
+# 当前技能是否锁定水平速度（true=最终X轴速度=CurSkillVelocityX）
+var CurSkillVelocityXLock: bool = false
+# 当前技能是否锁定垂直速度（true=最终Y轴速度=CurSkillVelocityY，且不受下落速度上限限制）
+var CurSkillVelocityYLock: bool = false
 #---------------------------------------------------------------------------------------------------
 # 子组件
 var CompSkill: KsActorCompSkill = null
@@ -56,19 +58,33 @@ func _physics_process(delta: float) -> void:
 	_UpdateJumpState()
 	_UpdateActorState()
 #---------------------------------------------------------------------------------------------------
-# 更新重力
+# 更新重力（Y轴被锁定时不受重力影响）
 func _UpdateGravity(delta: float) -> void:
-	# 技能期间无视重力时跳过
-	if CurSkillAntiGravity:
+	if CurSkillVelocityYLock:
 		return
 	if not is_on_floor():
 		CurVerticalSpeed -= ConfigGravity * delta
 #---------------------------------------------------------------------------------------------------
 # 更新移动（X轴前进，Y轴垂直，Z轴锁死为0）
 func _UpdateMove(delta: float) -> void:
-	# 限制下落速度上限（上升速度不限制）
-	CurVerticalSpeed = max(CurVerticalSpeed, ConfigMaxYSpeedValue)
-	velocity = Vector3(ConfigMoveSpeed + CurSkillVelocityX, CurVerticalSpeed + CurSkillVelocityY, 0.0)
+	# 计算最终X轴速度
+	var FinalVelocityX: float
+	if CurSkillVelocityXLock:
+		FinalVelocityX = CurSkillVelocityX
+	else:
+		FinalVelocityX = ConfigMoveSpeed + CurSkillVelocityX
+
+	# 计算最终Y轴速度
+	var FinalVelocityY: float
+	if CurSkillVelocityYLock:
+		# 锁定时直接取技能值，不受下落速度上限限制
+		FinalVelocityY = CurSkillVelocityY
+	else:
+		# 限制下落速度上限（上升速度不限制）
+		CurVerticalSpeed = max(CurVerticalSpeed, ConfigMaxYSpeedValue)
+		FinalVelocityY = CurVerticalSpeed + CurSkillVelocityY
+
+	velocity = Vector3(FinalVelocityX, FinalVelocityY, 0.0)
 	move_and_slide()
 	if is_on_floor():
 		CurVerticalSpeed = 0.0
@@ -134,11 +150,8 @@ func TryCastSkill(SkillId: int) -> bool:
 # 技能开始回调（由 KsActorCompSkill 调用）
 func OnSkillBegin(SkillData: KsTableSkill.SkillItem) -> void:
 	ChangeActorState(EActorState.ActorState_CastSkill, SkillData.SkillId)
-	# AntiGravity 技能：施放瞬间清零 Y 轴速度，避免惯性影响
-	if SkillData.AntiGravity:
-		CurVerticalSpeed = 0.0
-	# VelocityY > 0 技能：施放瞬间清零 Y 轴速度，确保向上速度干净叠加
-	if SkillData.VelocityY > 0.0:
+	# VelocityYClear=true：施放瞬间清零Y轴速度
+	if SkillData.VelocityYClear:
 		CurVerticalSpeed = 0.0
 	# 根据技能类型执行通用效果
 	match SkillData.SkillType:
@@ -155,28 +168,32 @@ func OnSkillEnd(SkillData: KsTableSkill.SkillItem) -> void:
 	CurSkillId = -1
 	CurSkillVelocityX = 0.0
 	CurSkillVelocityY = 0.0
-	CurSkillAntiGravity = false
+	CurSkillVelocityXLock = false
+	CurSkillVelocityYLock = false
 	# 恢复到物理驱动状态（_UpdateActorState 下一帧会自动接管）
 	ChangeActorState(EActorState.ActorState_Run)
 #---------------------------------------------------------------------------------------------------
 # A类技能通用逻辑（闪避无敌帧）
 func _ExecSkillA(SkillData: KsTableSkill.SkillItem) -> void:
-	CurSkillVelocityX = SkillData.VelocityX
-	CurSkillVelocityY = SkillData.VelocityY
-	CurSkillAntiGravity = SkillData.AntiGravity
+	CurSkillVelocityX     = SkillData.VelocityX
+	CurSkillVelocityXLock = SkillData.VelocityXLock
+	CurSkillVelocityY     = SkillData.VelocityY
+	CurSkillVelocityYLock = SkillData.VelocityYLock
 	# TODO: 关闭受击碰撞层（无敌帧）
 #---------------------------------------------------------------------------------------------------
 # B类技能通用逻辑（跳跃借力）
 func _ExecSkillB(SkillData: KsTableSkill.SkillItem) -> void:
-	CurSkillVelocityX = SkillData.VelocityX
-	CurSkillVelocityY = SkillData.VelocityY
-	CurSkillAntiGravity = SkillData.AntiGravity
+	CurSkillVelocityX     = SkillData.VelocityX
+	CurSkillVelocityXLock = SkillData.VelocityXLock
+	CurSkillVelocityY     = SkillData.VelocityY
+	CurSkillVelocityYLock = SkillData.VelocityYLock
 	CurCanJump = false
 #---------------------------------------------------------------------------------------------------
 # C类技能通用逻辑（功法BUFF）
 func _ExecSkillC(SkillData: KsTableSkill.SkillItem) -> void:
-	CurSkillVelocityX = SkillData.VelocityX
-	CurSkillVelocityY = SkillData.VelocityY
-	CurSkillAntiGravity = SkillData.AntiGravity
+	CurSkillVelocityX     = SkillData.VelocityX
+	CurSkillVelocityXLock = SkillData.VelocityXLock
+	CurSkillVelocityY     = SkillData.VelocityY
+	CurSkillVelocityYLock = SkillData.VelocityYLock
 	# TODO: 根据 SkillData.BuffType 添加对应BUFF
 #---------------------------------------------------------------------------------------------------

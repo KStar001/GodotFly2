@@ -10,21 +10,24 @@ class SkillItem:
 	var Duration: float          # 技能持续时长（逻辑时钟，不依赖动画）
 	var CdDuration: float        # 施放后触发的公共CD时长
 	var AnimName: String         # 动画名称（表现层，可为空）
+	# 水平速度
+	var VelocityX: float         # 技能叠加水平速度（0=无效，非0=叠加）
+	var VelocityXLock: bool      # true=最终水平速度锁定为 VelocityX（VelocityX可为0）
+	# 垂直速度
+	var VelocityY: float         # 技能叠加垂直速度（0=无效，非0=叠加）
+	var VelocityYLock: bool      # true=最终垂直速度锁定为 VelocityY，不受下落速度上限限制
+	var VelocityYClear: bool     # true=施放瞬间把Y轴速度清零
+	# 其他
+	var NeedTarget: bool         # 是否需要借力目标（如蜻蜓点水）
 	# A类专用
 	var InvincibleTime: float    # 无敌帧时长
-	# B类专用
-	var VelocityX: float         # 施放后叠加的水平速度（正值=向前加速，如突进）
-	var VelocityY: float         # 施放后叠加的垂直速度
-	var NeedTarget: bool         # 是否需要借力目标（如蜻蜓点水）
 	# C类专用
 	var BuffType: int            # BUFF类型（0=无 1=御风 ...）
 	var BuffDuration: float      # BUFF持续时长
-	# 通用
-	var AntiGravity: bool        # 技能期间是否无视重力（true=不受重力影响）
-	
+
 	static func CreateFromCsvLine(line: String) -> SkillItem:
 		var Parts = line.split(",")
-		if Parts.size() >= 13:
+		if Parts.size() >= 15:
 			var Data = SkillItem.new()
 			Data.SkillId        = int(Parts[0])
 			Data.SkillType      = int(Parts[1])
@@ -33,12 +36,14 @@ class SkillItem:
 			Data.CdDuration     = float(Parts[4])
 			Data.AnimName       = Parts[5].strip_edges()
 			Data.VelocityX      = float(Parts[6])
-			Data.VelocityY      = float(Parts[7])
-			Data.NeedTarget     = Parts[8].strip_edges().to_lower() == "true"
-			Data.InvincibleTime = float(Parts[9])
-			Data.BuffType       = int(Parts[10])
-			Data.BuffDuration   = float(Parts[11])
-			Data.AntiGravity    = Parts[12].strip_edges().to_lower() == "true"
+			Data.VelocityXLock  = Parts[7].strip_edges().to_lower() == "true"
+			Data.VelocityY      = float(Parts[8])
+			Data.VelocityYLock  = Parts[9].strip_edges().to_lower() == "true"
+			Data.VelocityYClear = Parts[10].strip_edges().to_lower() == "true"
+			Data.NeedTarget     = Parts[11].strip_edges().to_lower() == "true"
+			Data.InvincibleTime = float(Parts[12])
+			Data.BuffType       = int(Parts[13])
+			Data.BuffDuration   = float(Parts[14])
 			return Data
 		return null
 #---------------------------------------------------------------------------------------------------
