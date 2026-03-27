@@ -8,6 +8,7 @@ const ConfigJumpSpeed: float = 8.0         # 跳跃初速度
 const ConfigGravity: float = 10.0          # 重力加速度
 const ConfigBounceSpeed: float = 5.0       # 被动落地弹起速度
 const ConfigSpikeJumpSpeed: float = 12.0   # 突木桩击中后强制弹起速度
+const ConfigMaxYSpeedValue: float = -3.0   # Y轴速度下限（下落速度上限，负值=向下）
 #---------------------------------------------------------------------------------------------------
 # 角色状态枚举
 enum EActorState
@@ -65,6 +66,8 @@ func _UpdateGravity(delta: float) -> void:
 #---------------------------------------------------------------------------------------------------
 # 更新移动（X轴前进，Y轴垂直，Z轴锁死为0）
 func _UpdateMove(delta: float) -> void:
+	# 限制下落速度上限（上升速度不限制）
+	CurVerticalSpeed = max(CurVerticalSpeed, ConfigMaxYSpeedValue)
 	velocity = Vector3(ConfigMoveSpeed + CurSkillVelocityX, CurVerticalSpeed + CurSkillVelocityY, 0.0)
 	move_and_slide()
 	if is_on_floor():
