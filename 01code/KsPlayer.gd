@@ -131,6 +131,9 @@ func TryCastSkill(SkillId: int) -> bool:
 # 技能开始回调（由 KsActorCompSkill 调用）
 func OnSkillBegin(SkillData: KsTableSkill.SkillItem) -> void:
 	ChangeActorState(EActorState.ActorState_CastSkill, SkillData.SkillId)
+	# AntiGravity 技能：施放瞬间清零 Y 轴速度，避免惯性影响
+	if SkillData.AntiGravity:
+		CurVerticalSpeed = 0.0
 	# 根据技能类型执行通用效果
 	match SkillData.SkillType:
 		0: _ExecSkillA(SkillData)
