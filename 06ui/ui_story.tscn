@@ -1,0 +1,79 @@
+[gd_scene load_steps=2 format=3 uid="uid://gf2uistory"]
+
+[ext_resource type="Script" path="res://01code/KsUIStory.gd" id="1_uistory"]
+
+[node name="UIStory" type="CanvasLayer"]
+layer = 10
+script = ExtResource("1_uistory")
+
+[node name="NodeBg" type="ColorRect" parent="."]
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+color = Color(0, 0, 0, 0.6)
+
+[node name="NodeImage" type="TextureRect" parent="."]
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+expand_mode = 1
+stretch_mode = 6
+visible = false
+
+[node name="NodePortraitLeft" type="TextureRect" parent="."]
+anchors_preset = 4
+anchor_left = 0.0
+anchor_top = 0.5
+anchor_right = 0.0
+anchor_bottom = 0.5
+offset_left = 20.0
+offset_top = -280.0
+offset_right = 300.0
+offset_bottom = 280.0
+expand_mode = 1
+stretch_mode = 5
+visible = false
+
+[node name="NodePortraitRight" type="TextureRect" parent="."]
+anchors_preset = 5
+anchor_left = 1.0
+anchor_top = 0.5
+anchor_right = 1.0
+anchor_bottom = 0.5
+offset_left = -300.0
+offset_top = -280.0
+offset_right = -20.0
+offset_bottom = 280.0
+expand_mode = 1
+stretch_mode = 5
+visible = false
+
+[node name="NodeDialogBox" type="Panel" parent="."]
+anchors_preset = 12
+anchor_left = 0.0
+anchor_top = 1.0
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_left = 20.0
+offset_top = -200.0
+offset_right = -20.0
+offset_bottom = -20.0
+visible = false
+
+[node name="NodeSpeaker" type="Label" parent="NodeDialogBox"]
+offset_left = 20.0
+offset_top = 10.0
+offset_right = 300.0
+offset_bottom = 50.0
+theme_override_font_sizes/font_size = 22
+
+[node name="NodeText" type="Label" parent="NodeDialogBox"]
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_left = 20.0
+offset_top = 55.0
+offset_right = -20.0
+offset_bottom = -20.0
+theme_override_font_sizes/font_size = 20
+autowrap_mode = 2

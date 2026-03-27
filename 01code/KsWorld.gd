@@ -16,6 +16,8 @@ var CurPlayer: KsPlayer = null
 var CurCamera: KsCamera = null
 # 当前HUD
 var CurUIHud: KsUIHud = null
+# 当前剧情UI
+var CurUIStory: KsUIStory = null
 # 输入缓冲模块
 var CompInput: KsInput = null
 # 剧情管理器
@@ -86,4 +88,9 @@ func SetMainCamera(Camera: KsCamera) -> void:
 #---------------------------------------------------------------------------------------------------
 func SetMainUIHud(UIHud: KsUIHud) -> void:
 	CurUIHud = UIHud
+#---------------------------------------------------------------------------------------------------
+func SetMainUIStory(UIStory: KsUIStory) -> void:
+	CurUIStory = UIStory
+	if StoryManager != null:
+		StoryManager.RefUIStory = UIStory
 #---------------------------------------------------------------------------------------------------
