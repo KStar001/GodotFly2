@@ -28,6 +28,7 @@ func _ready() -> void:
 #---------------------------------------------------------------------------------------------------
 func _LoadAllTable() -> void:
 	KsTableSkill.LoadDataFile()
+	KsTableStory.LoadDataFile()
 #---------------------------------------------------------------------------------------------------
 func _InitInput() -> void:
 	CompInput = KsInput.new()

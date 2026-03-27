@@ -1,0 +1,8 @@
+story_id,step,type,image,text,speaker,min_time,max_time
+1,1,image,story1_1.png,,, 2,3
+1,2,image,story1_2.png,下山那天 师父叮嘱两人下山历练……,,2,3
+1,3,dialog,fengqiao_smile,榆树伯伯 我要下山啦～,风乔,0,0
+1,4,dialog,laoyushu,舍不得山 还是舍不得山上的人？,老榆树,1,0
+1,5,dialog,fengqiao_smile,哎呀你又乱说了～,风乔,0,0
+1,6,dialog,laoyushu,有些人说话很少 不是因为没有话 是因为只有一句话 不知道怎么开口。,老榆树,2,0
+1,7,dialog,fengqiao_smile,……,风乔,1,0
