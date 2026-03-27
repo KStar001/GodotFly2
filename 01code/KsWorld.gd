@@ -18,17 +18,24 @@ var CurCamera: KsCamera = null
 var CurUIHud: KsUIHud = null
 # 输入缓冲模块
 var CompInput: KsInput = null
+# 剧情管理器
+var StoryManager: KsStoryManager = null
 #---------------------------------------------------------------------------------------------------
 func _ready() -> void:
 	randomize()
 	_LoadAllTable()
 	_InitInput()
+	_InitStoryManager()
 	await get_tree().create_timer(0.5).timeout
 	ChangeGameStep(EGameStep.StepGaming)
 #---------------------------------------------------------------------------------------------------
 func _LoadAllTable() -> void:
 	KsTableSkill.LoadDataFile()
 	KsTableStory.LoadDataFile()
+#---------------------------------------------------------------------------------------------------
+func _InitStoryManager() -> void:
+	StoryManager = KsStoryManager.new()
+	add_child(StoryManager)
 #---------------------------------------------------------------------------------------------------
 func _InitInput() -> void:
 	CompInput = KsInput.new()
