@@ -7,9 +7,9 @@ class SkillItem:
 	var SkillId: int             # 技能ID
 	var SkillType: int           # 技能类型：0=A类闪避 1=B类跳跃 2=C类功法
 	var SkillName: String        # 技能名称
-	var Duration: float          # 技能持续时长（逻辑时钟，不依赖动画）
+	var Duration: float          # 技能持续时长
 	var CdDuration: float        # 施放后触发的公共CD时长
-	var AnimName: String         # 动画名称（表现层，可为空）
+	var SkillIcon: String        # 技能图标名（如 icon_tyz，完整路径 res://04skillimg/icon_xxx.png）
 	# 水平速度
 	var VelocityX: float         # 技能叠加水平速度（0=无效，非0=叠加）
 	var VelocityXLock: bool      # true=最终水平速度锁定为 VelocityX（VelocityX可为0）
@@ -40,7 +40,7 @@ class SkillItem:
 			Data.SkillName      = Parts[2].strip_edges()
 			Data.Duration       = float(Parts[3])
 			Data.CdDuration     = float(Parts[4])
-			Data.AnimName       = Parts[5].strip_edges()
+			Data.SkillIcon      = Parts[5].strip_edges()
 			Data.VelocityX      = float(Parts[6])
 			Data.VelocityXLock  = Parts[7].strip_edges().to_lower() == "true"
 			Data.VelocityY      = float(Parts[8])

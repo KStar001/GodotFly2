@@ -5,50 +5,14 @@
 [node name="UIHud" type="CanvasLayer"]
 script = ExtResource("1_uihud")
 
-[node name="JumpButton" type="Button" parent="."]
-anchors_preset = 3
-anchor_left = 1.0
-anchor_top = 1.0
-anchor_right = 1.0
-anchor_bottom = 1.0
-offset_left = -160.0
-offset_top = -120.0
-offset_right = -40.0
-offset_bottom = -40.0
-text = "跳跃"
-
-[node name="SkillBButton" type="Button" parent="."]
-anchors_preset = 3
-anchor_left = 1.0
-anchor_top = 1.0
-anchor_right = 1.0
-anchor_bottom = 1.0
-offset_left = -280.0
-offset_top = -120.0
-offset_right = -170.0
-offset_bottom = -40.0
-text = "梯云纵"
-
-[node name="SkillCButton" type="Button" parent="."]
-anchors_preset = 3
-anchor_left = 1.0
-anchor_top = 1.0
-anchor_right = 1.0
-anchor_bottom = 1.0
-offset_left = -400.0
-offset_top = -120.0
-offset_right = -290.0
-offset_bottom = -40.0
-text = "御风术"
-
 [node name="DebugLabel" type="Label" parent="."]
 anchors_preset = 1
 anchor_left = 1.0
 anchor_right = 1.0
-offset_left = -291.0
-offset_top = 26.0
-offset_right = -81.0
-offset_bottom = 136.0
+offset_left = -320.0
+offset_top = 20.0
+offset_right = -20.0
+offset_bottom = 200.0
 grow_horizontal = 0
 text = "[InputBuffer]"
 horizontal_alignment = 2
@@ -59,6 +23,6 @@ anchor_top = 1.0
 anchor_bottom = 1.0
 offset_left = 20.0
 offset_top = -80.0
-offset_right = 140.0
+offset_right = 160.0
 offset_bottom = -20.0
 text = "剧情测试"

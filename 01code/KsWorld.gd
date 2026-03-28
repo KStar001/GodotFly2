@@ -44,15 +44,7 @@ func _InitInput() -> void:
 	add_child(CompInput)
 #---------------------------------------------------------------------------------------------------
 func _process(_delta: float) -> void:
-	_UpdateDebugLabel()
-#---------------------------------------------------------------------------------------------------
-func _UpdateDebugLabel() -> void:
-	if CurUIHud == null or CompInput == null:
-		return
-	var Text: String = CompInput.GetDebugText()
-	if CurPlayer != null and CurPlayer.CompSkill != null:
-		Text += "\n" + CurPlayer.CompSkill.GetDebugText()
-	CurUIHud.UpdateDebugText(Text)
+	pass
 #---------------------------------------------------------------------------------------------------
 func ChangeGameStep(NewStep: EGameStep) -> void:
 	if CurGameStep == NewStep:
@@ -81,11 +73,6 @@ func SetMainCamera(Camera: KsCamera) -> void:
 #---------------------------------------------------------------------------------------------------
 func SetMainUIHud(UIHud: KsUIHud) -> void:
 	CurUIHud = UIHud
-	# UIHud 就绪时统一绑定按钮信号到输入模块
-	if CompInput != null:
-		CurUIHud.NodeJumpButton.pressed.connect(func(): CompInput.OnCmdPressed(KsInput.ECmdType.Jump))
-		CurUIHud.NodeSkillBButton.pressed.connect(func(): CompInput.OnCmdPressed(KsInput.ECmdType.SkillB))
-		CurUIHud.NodeSkillCButton.pressed.connect(func(): CompInput.OnCmdPressed(KsInput.ECmdType.SkillC))
 #---------------------------------------------------------------------------------------------------
 func SetMainUIStory(UIStory: KsUIStory) -> void:
 	CurUIStory = UIStory
