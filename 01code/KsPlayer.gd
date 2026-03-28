@@ -40,6 +40,7 @@ var CurSkillVelocityYLock: bool = false
 #---------------------------------------------------------------------------------------------------
 # 子组件
 var CompSkill: KsActorCompSkill = null
+var CompAnim: KsActorCompAnimation = null
 #---------------------------------------------------------------------------------------------------
 @onready var NodeAnim: AnimationPlayer = $AnimationPlayer
 #---------------------------------------------------------------------------------------------------
@@ -48,6 +49,11 @@ func _ready() -> void:
 	CompSkill = KsActorCompSkill.new()
 	CompSkill.RefPlayer = self
 	add_child(CompSkill)
+	# 初始化动画组件
+	CompAnim = KsActorCompAnimation.new()
+	CompAnim.RefPlayer = self
+	CompAnim.NodeAnim = NodeAnim
+	add_child(CompAnim)
 	KsWorld.SetMainPlayer(self)
 #---------------------------------------------------------------------------------------------------
 func _physics_process(delta: float) -> void:
@@ -118,8 +124,8 @@ func ChangeActorState(NewState: EActorState, SkillId: int = -1) -> void:
 		return
 	CurActorState = NewState
 	CurSkillId = SkillId
-	# TODO: 通知 KsActorCompAnimation（动画组件待实现）
-	# CompAnim.OnActorStateChanged(CurActorState, CurSkillId)
+	if CompAnim != null:
+		CompAnim.OnActorStateChanged(CurActorState, CurSkillId)
 #---------------------------------------------------------------------------------------------------
 # 执行跳跃
 func DoJump() -> void:
@@ -131,6 +137,8 @@ func DoJump() -> void:
 # 被动落地弹起
 func DoBounce() -> void:
 	CurVerticalSpeed = ConfigBounceSpeed
+	if CompAnim != null:
+		CompAnim.PlayLandAnim()
 	# TODO: 扣血逻辑
 #---------------------------------------------------------------------------------------------------
 # 突木桩击中后强制弹起
