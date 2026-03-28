@@ -23,20 +23,12 @@ enum EActorState
 #---------------------------------------------------------------------------------------------------
 # 当前角色状态
 var CurActorState: EActorState = EActorState.ActorState_Run
-# 当前正在施放的技能ID（-1=无技能）
+# 当前正在施放的技能ID（-1=无技能，多技能同时施放时取最新一个用于状态显示）
 var CurSkillId: int = -1
-# 当前垂直速度
+# 当前垂直速度（物理层，受重力影响）
 var CurVerticalSpeed: float = 0.0
 # 是否可以跳跃
 var CurCanJump: bool = false
-# 技能叠加/锁定垂直速度
-var CurSkillVelocityY: float = 0.0
-# 技能叠加/锁定水平速度
-var CurSkillVelocityX: float = 0.0
-# 当前技能是否锁定水平速度（true=最终X轴速度=CurSkillVelocityX）
-var CurSkillVelocityXLock: bool = false
-# 当前技能是否锁定垂直速度（true=最终Y轴速度=CurSkillVelocityY，且不受下落速度上限限制）
-var CurSkillVelocityYLock: bool = false
 #---------------------------------------------------------------------------------------------------
 # 子组件
 var CompSkill: KsActorCompSkill = null
@@ -68,37 +60,76 @@ func _physics_process(delta: float) -> void:
 	_UpdateJumpState()
 	_UpdateActorState()
 #---------------------------------------------------------------------------------------------------
-# 更新重力（Y轴被锁定时不受重力影响）
+# 更新重力
+# 只要没有任何技能锁定Y轴，就正常受重力
 func _UpdateGravity(delta: float) -> void:
-	if CurSkillVelocityYLock:
+	if _CalcVelocityYLock():
 		return
 	if not is_on_floor():
 		CurVerticalSpeed -= ConfigGravity * delta
 #---------------------------------------------------------------------------------------------------
+# 从三个技能槽合并计算最终X/Y速度
+# 优先级：lock > 叠加非零值 > 不影响（零值）
+func _CalcFinalVelocity() -> Vector2:
+	# --- X轴 ---
+	var FinalX: float
+	var LockX: bool = false
+	var LockXValue: float = 0.0
+	var AddX: float = 0.0
+	for SkillData in _GetActiveSkills():
+		if SkillData.VelocityXLock:
+			LockX = true
+			LockXValue = SkillData.VelocityX  # 多个lock时取最新（遍历顺序A→B→C，后者覆盖）
+		elif SkillData.VelocityX != 0.0:
+			AddX += SkillData.VelocityX
+	if LockX:
+		FinalX = LockXValue
+	else:
+		FinalX = ConfigMoveSpeed + AddX
+
+	# --- Y轴 ---
+	var FinalY: float
+	var LockY: bool = false
+	var LockYValue: float = 0.0
+	var AddY: float = 0.0
+	for SkillData in _GetActiveSkills():
+		if SkillData.VelocityYLock:
+			LockY = true
+			LockYValue = SkillData.VelocityY
+		elif SkillData.VelocityY != 0.0:
+			AddY += SkillData.VelocityY
+	if LockY:
+		FinalY = LockYValue
+	else:
+		CurVerticalSpeed = max(CurVerticalSpeed, ConfigMaxYSpeedValue)
+		FinalY = CurVerticalSpeed + AddY
+
+	return Vector2(FinalX, FinalY)
+#---------------------------------------------------------------------------------------------------
+# 是否有任意技能锁定Y轴
+func _CalcVelocityYLock() -> bool:
+	for SkillData in _GetActiveSkills():
+		if SkillData.VelocityYLock:
+			return true
+	return false
+#---------------------------------------------------------------------------------------------------
+# 获取当前所有激活中的技能数据列表（A/B/C顺序，null跳过）
+func _GetActiveSkills() -> Array:
+	var Result: Array = []
+	if CompSkill == null:
+		return Result
+	if CompSkill.CurSkillDataA != null: Result.append(CompSkill.CurSkillDataA)
+	if CompSkill.CurSkillDataB != null: Result.append(CompSkill.CurSkillDataB)
+	if CompSkill.CurSkillDataC != null: Result.append(CompSkill.CurSkillDataC)
+	return Result
+#---------------------------------------------------------------------------------------------------
 # 更新移动（X轴前进，Y轴垂直，Z轴锁死为0）
 func _UpdateMove(delta: float) -> void:
-	# 计算最终X轴速度
-	var FinalVelocityX: float
-	if CurSkillVelocityXLock:
-		FinalVelocityX = CurSkillVelocityX
-	else:
-		FinalVelocityX = ConfigMoveSpeed + CurSkillVelocityX
-
-	# 计算最终Y轴速度
-	var FinalVelocityY: float
-	if CurSkillVelocityYLock:
-		# 锁定时直接取技能值，不受下落速度上限限制
-		FinalVelocityY = CurSkillVelocityY
-	else:
-		# 限制下落速度上限（上升速度不限制）
-		CurVerticalSpeed = max(CurVerticalSpeed, ConfigMaxYSpeedValue)
-		FinalVelocityY = CurVerticalSpeed + CurSkillVelocityY
-
-	velocity = Vector3(FinalVelocityX, FinalVelocityY, 0.0)
+	var FinalVel: Vector2 = _CalcFinalVelocity()
+	velocity = Vector3(FinalVel.x, FinalVel.y, 0.0)
 	move_and_slide()
 	if is_on_floor():
 		CurVerticalSpeed = 0.0
-		CurSkillVelocityY = 0.0
 	if is_on_ceiling():
 		CurVerticalSpeed = 0.0
 #---------------------------------------------------------------------------------------------------
@@ -108,12 +139,13 @@ func _UpdateJumpState() -> void:
 #---------------------------------------------------------------------------------------------------
 # 每帧根据物理状态更新角色状态枚举
 func _UpdateActorState() -> void:
-	# 施放技能中或受击/死亡状态不被物理状态覆盖
-	if CurActorState == EActorState.ActorState_CastSkill:
-		return
 	if CurActorState == EActorState.ActorState_Hit:
 		return
 	if CurActorState == EActorState.ActorState_Dead:
+		return
+	# 有技能在执行中
+	if CompSkill != null and CompSkill.IsAnyCasting():
+		ChangeActorState(EActorState.ActorState_CastSkill, CurSkillId)
 		return
 	if is_on_floor():
 		ChangeActorState(EActorState.ActorState_Run)
@@ -161,18 +193,24 @@ func TryCastSkill(SkillId: int) -> bool:
 #---------------------------------------------------------------------------------------------------
 # 技能开始回调（由 KsActorCompSkill 调用）
 func OnSkillBegin(SkillData: KsTableSkill.SkillItem) -> void:
-	ChangeActorState(EActorState.ActorState_CastSkill, SkillData.SkillId)
-	# VelocityYClear=true：施放瞬间清零Y轴速度
+	CurSkillId = SkillData.SkillId
+	# VelocityYClear=true：施放瞬间清零Y轴物理速度
 	if SkillData.VelocityYClear:
 		CurVerticalSpeed = 0.0
 	# 播放序列帧特效
 	if CompSkillFx != null:
 		CompSkillFx.OnSkillBegin(SkillData)
-	# 根据技能类型执行通用效果
-	match SkillData.SkillType:
-		0: _ExecSkillA(SkillData)
-		1: _ExecSkillB(SkillData)
-		2: _ExecSkillC(SkillData)
+	# A类专用：无敌帧
+	if SkillData.SkillType == 0:
+		CurCanJump = false
+		# TODO: 关闭受击碰撞层
+	# B类专用
+	elif SkillData.SkillType == 1:
+		CurCanJump = false
+	# C类专用
+	elif SkillData.SkillType == 2:
+		pass
+		# TODO: 根据 BuffType 添加BUFF
 #---------------------------------------------------------------------------------------------------
 # 技能每帧更新回调（由 KsActorCompSkill 调用）
 func OnSkillUpdate(SkillData: KsTableSkill.SkillItem, Delta: float) -> void:
@@ -180,38 +218,10 @@ func OnSkillUpdate(SkillData: KsTableSkill.SkillItem, Delta: float) -> void:
 #---------------------------------------------------------------------------------------------------
 # 技能结束回调（由 KsActorCompSkill 调用）
 func OnSkillEnd(SkillData: KsTableSkill.SkillItem) -> void:
-	CurSkillId = -1
-	CurSkillVelocityX = 0.0
-	CurSkillVelocityY = 0.0
-	CurSkillVelocityXLock = false
-	CurSkillVelocityYLock = false
 	# 隐藏序列帧特效
 	if CompSkillFx != null:
 		CompSkillFx.OnSkillEnd()
-	# 恢复到物理驱动状态（_UpdateActorState 下一帧会自动接管）
-	ChangeActorState(EActorState.ActorState_Run)
-#---------------------------------------------------------------------------------------------------
-# A类技能通用逻辑（闪避无敌帧）
-func _ExecSkillA(SkillData: KsTableSkill.SkillItem) -> void:
-	CurSkillVelocityX     = SkillData.VelocityX
-	CurSkillVelocityXLock = SkillData.VelocityXLock
-	CurSkillVelocityY     = SkillData.VelocityY
-	CurSkillVelocityYLock = SkillData.VelocityYLock
-	# TODO: 关闭受击碰撞层（无敌帧）
-#---------------------------------------------------------------------------------------------------
-# B类技能通用逻辑（跳跃借力）
-func _ExecSkillB(SkillData: KsTableSkill.SkillItem) -> void:
-	CurSkillVelocityX     = SkillData.VelocityX
-	CurSkillVelocityXLock = SkillData.VelocityXLock
-	CurSkillVelocityY     = SkillData.VelocityY
-	CurSkillVelocityYLock = SkillData.VelocityYLock
-	CurCanJump = false
-#---------------------------------------------------------------------------------------------------
-# C类技能通用逻辑（功法BUFF）
-func _ExecSkillC(SkillData: KsTableSkill.SkillItem) -> void:
-	CurSkillVelocityX     = SkillData.VelocityX
-	CurSkillVelocityXLock = SkillData.VelocityXLock
-	CurSkillVelocityY     = SkillData.VelocityY
-	CurSkillVelocityYLock = SkillData.VelocityYLock
-	# TODO: 根据 SkillData.BuffType 添加对应BUFF
+	# 若已无任何技能，清空 CurSkillId
+	if CompSkill != null and not CompSkill.IsAnyCasting():
+		CurSkillId = -1
 #---------------------------------------------------------------------------------------------------
