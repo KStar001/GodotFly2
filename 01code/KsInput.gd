@@ -33,6 +33,12 @@ var _CurBufferExpire: Dictionary = {
 	ECmdType.SkillB: -1.0,
 	ECmdType.SkillC: -1.0,
 }
+# 缓冲槽记录的具体 SkillId（-1=未指定，走类型遍历）
+var _CurBufferSkillId: Dictionary = {
+	ECmdType.SkillA: -1,
+	ECmdType.SkillB: -1,
+	ECmdType.SkillC: -1,
+}
 #---------------------------------------------------------------------------------------------------
 # 外部引用（由 KsWorld 赋值）
 var RefPlayer: KsPlayer = null
@@ -60,17 +66,33 @@ func _UpdateBufferedCmds() -> void:
 		if _TryExecuteCmd(CmdType):
 			_ClearBuffer(CmdType)
 #---------------------------------------------------------------------------------------------------
-# 外部调用：玩家按下某个指令按钮
+# 外部调用：玩家按下某个指令按钮（Jump/SkillA/B/C 类型级别）
 # 实时优先：先尝试立即执行，失败再写入缓冲
 func OnCmdPressed(CmdType: ECmdType) -> void:
 	if KsWorld.CurGameStep != KsWorld.EGameStep.StepGaming:
 		return
-	# 实时输入，优先立即执行
 	if _TryExecuteCmd(CmdType):
-		_ClearBuffer(CmdType)  # 如果之前有缓冲也一并清掉
+		_ClearBuffer(CmdType)
 		return
-	# 执行失败，写入缓冲（同类覆盖，刷新计时）
 	_WriteBuffer(CmdType)
+#---------------------------------------------------------------------------------------------------
+# 外部调用：玩家按下具体技能按钮（按 SkillId 施放，不走类型遍历）
+func OnSkillIdPressed(SkillId: int) -> void:
+	if KsWorld.CurGameStep != KsWorld.EGameStep.StepGaming:
+		return
+	if RefPlayer == null:
+		return
+	var SkillData: KsTableSkill.SkillItem = KsTableSkill.GetSkillById(SkillId)
+	if SkillData == null:
+		return
+	# 实时优先：尝试立刻施放
+	if RefPlayer.TryCastSkill(SkillId):
+		# 清掉同类缓冲（防止之前缓存的同类技能干扰）
+		var CmdType: ECmdType = _SkillTypeToCmdType(SkillData.SkillType)
+		_ClearBuffer(CmdType)
+		return
+	# 施放失败（CD未好），写入缓冲，记录具体 SkillId
+	_WriteBufferSkillId(SkillData.SkillType, SkillId)
 #---------------------------------------------------------------------------------------------------
 # 外部调用：某个条件刚刚满足时（如进入可踩目标范围），立即检查对应缓冲
 func OnConditionMet(CmdType: ECmdType) -> void:
@@ -106,13 +128,21 @@ func _TryExecJump() -> bool:
 	return true
 #---------------------------------------------------------------------------------------------------
 func _TryExecSkillA() -> bool:
-	# 遍历所有A类技能，找到CD好了的第一个施放
+	var BufferedId: int = _CurBufferSkillId.get(ECmdType.SkillA, -1)
+	if BufferedId > 0:
+		return RefPlayer != null and RefPlayer.TryCastSkill(BufferedId)
 	return _TryCastFirstReadySkillByType(0)
 #---------------------------------------------------------------------------------------------------
 func _TryExecSkillB() -> bool:
+	var BufferedId: int = _CurBufferSkillId.get(ECmdType.SkillB, -1)
+	if BufferedId > 0:
+		return RefPlayer != null and RefPlayer.TryCastSkill(BufferedId)
 	return _TryCastFirstReadySkillByType(1)
 #---------------------------------------------------------------------------------------------------
 func _TryExecSkillC() -> bool:
+	var BufferedId: int = _CurBufferSkillId.get(ECmdType.SkillC, -1)
+	if BufferedId > 0:
+		return RefPlayer != null and RefPlayer.TryCastSkill(BufferedId)
 	return _TryCastFirstReadySkillByType(2)
 #---------------------------------------------------------------------------------------------------
 # 按技能类型找第一个CD就绪的技能施放
@@ -133,6 +163,22 @@ func _WriteBuffer(CmdType: ECmdType) -> void:
 # 清除缓冲
 func _ClearBuffer(CmdType: ECmdType) -> void:
 	_CurBufferExpire[CmdType] = -1.0
+	if _CurBufferSkillId.has(CmdType):
+		_CurBufferSkillId[CmdType] = -1
+#---------------------------------------------------------------------------------------------------
+# 写入具体 SkillId 的缓冲（覆盖同类旧指令）
+func _WriteBufferSkillId(SkillType: int, SkillId: int) -> void:
+	var CmdType: ECmdType = _SkillTypeToCmdType(SkillType)
+	_WriteBuffer(CmdType)
+	_CurBufferSkillId[CmdType] = SkillId
+#---------------------------------------------------------------------------------------------------
+# 技能类型转指令类型
+func _SkillTypeToCmdType(SkillType: int) -> ECmdType:
+	match SkillType:
+		0: return ECmdType.SkillA
+		1: return ECmdType.SkillB
+		2: return ECmdType.SkillC
+	return ECmdType.SkillA
 #---------------------------------------------------------------------------------------------------
 # 获取debug信息字符串（供HUD显示）
 func GetDebugText() -> String:

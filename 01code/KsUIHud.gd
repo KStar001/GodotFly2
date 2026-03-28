@@ -135,13 +135,7 @@ func _UpdateSkillButtons() -> void:
 func _OnSkillPressed(SkillId: int) -> void:
 	if KsWorld.CompInput == null:
 		return
-	var SkillData: KsTableSkill.SkillItem = KsTableSkill.GetSkillById(SkillId)
-	if SkillData == null:
-		return
-	match SkillData.SkillType:
-		0: KsWorld.CompInput.OnCmdPressed(KsInput.ECmdType.SkillA)
-		1: KsWorld.CompInput.OnCmdPressed(KsInput.ECmdType.SkillB)
-		2: KsWorld.CompInput.OnCmdPressed(KsInput.ECmdType.SkillC)
+	KsWorld.CompInput.OnSkillIdPressed(SkillId)
 #---------------------------------------------------------------------------------------------------
 # 剧情测试按钮
 func _OnStoryTestButtonPressed() -> void:
