@@ -69,7 +69,7 @@ func _RefreshNextButton() -> void:
 #---------------------------------------------------------------------------------------------------
 # 显示静态图
 func _ShowImage(Step: KsTableStory.StoryItem) -> void:
-	var ImgPath: String = "res://21otherres/story/" + Step.ImageRes
+	var ImgPath: String = "res://05storyimg/" + Step.ImageRes + ".png"
 	var Tex = load(ImgPath) as Texture2D
 	if Tex != null:
 		NodeImage.texture = Tex
@@ -93,7 +93,7 @@ func _ShowImage(Step: KsTableStory.StoryItem) -> void:
 func _ShowDialog(Step: KsTableStory.StoryItem) -> void:
 	# 立绘：有 image 字段时加载，放左侧
 	if not Step.ImageRes.is_empty():
-		var PortraitPath: String = "res://21otherres/portrait/" + Step.ImageRes + ".png"
+		var PortraitPath: String = "res://05storyimg/" + Step.ImageRes + ".png"
 		var Tex = load(PortraitPath) as Texture2D
 		if Tex != null:
 			NodePortraitLeft.texture = Tex
