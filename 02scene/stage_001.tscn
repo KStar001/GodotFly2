@@ -1,6 +1,5 @@
-[gd_scene load_steps=19 format=3 uid="uid://gf2stage001"]
+[gd_scene load_steps=18 format=3 uid="uid://gf2stage001"]
 
-[ext_resource type="Script" uid="uid://cxtlpxj6pnler" path="res://01code/KsWorld.gd" id="1_world"]
 [ext_resource type="Script" uid="uid://da3cs2dxwj1a6" path="res://01code/KsCamera.gd" id="2_camera"]
 [ext_resource type="PackedScene" uid="uid://gf2player001" path="res://02scene/player_001.tscn" id="3_player"]
 [ext_resource type="PackedScene" uid="uid://gf2spike001" path="res://02scene/spike_001.tscn" id="4_spike"]
@@ -48,7 +47,6 @@ material = SubResource("Mat_plat_narrow")
 size = Vector3(1.2, 0.2, 4)
 
 [node name="Stage001" type="Node3D"]
-script = ExtResource("1_world")
 
 [node name="MainPlayer" parent="." instance=ExtResource("3_player")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 1, 2, 0)

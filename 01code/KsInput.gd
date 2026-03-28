@@ -106,16 +106,24 @@ func _TryExecJump() -> bool:
 	return true
 #---------------------------------------------------------------------------------------------------
 func _TryExecSkillA() -> bool:
-	# TODO: A类技能施放条件（CD判断等）
-	return false
+	# 遍历所有A类技能，找到CD好了的第一个施放
+	return _TryCastFirstReadySkillByType(0)
 #---------------------------------------------------------------------------------------------------
 func _TryExecSkillB() -> bool:
-	# 梯云纵（1002）：无需借力目标，只判断CD
-	return RefPlayer.TryCastSkill(1002)
+	return _TryCastFirstReadySkillByType(1)
 #---------------------------------------------------------------------------------------------------
 func _TryExecSkillC() -> bool:
-	# 御风术（1004）：无需借力目标，只判断CD
-	return RefPlayer.TryCastSkill(1004)
+	return _TryCastFirstReadySkillByType(2)
+#---------------------------------------------------------------------------------------------------
+# 按技能类型找第一个CD就绪的技能施放
+func _TryCastFirstReadySkillByType(SkillType: int) -> bool:
+	if RefPlayer == null:
+		return false
+	var AllSkills: Array = KsTableSkill.GetAllSkillsByType(SkillType)
+	for SkillData in AllSkills:
+		if RefPlayer.TryCastSkill(SkillData.SkillId):
+			return true
+	return false
 #---------------------------------------------------------------------------------------------------
 # 写入缓冲（覆盖同类旧指令，刷新到期时间）
 func _WriteBuffer(CmdType: ECmdType) -> void:

@@ -89,3 +89,11 @@ static func GetSkillById(SkillId: int) -> SkillItem:
 	printerr("KsTableSkill: 找不到技能ID " + str(SkillId))
 	return null
 #---------------------------------------------------------------------------------------------------
+# 根据技能类型获取所有该类型技能列表
+static func GetAllSkillsByType(SkillType: int) -> Array:
+	var Result: Array = []
+	for SkillData in _DataMap.values():
+		if SkillData.SkillType == SkillType:
+			Result.append(SkillData)
+	return Result
+#---------------------------------------------------------------------------------------------------
