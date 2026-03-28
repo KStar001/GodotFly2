@@ -41,6 +41,7 @@ var CurSkillVelocityYLock: bool = false
 # 子组件
 var CompSkill: KsActorCompSkill = null
 var CompAnim: KsActorCompAnimation = null
+var CompSkillFx: KsActorCompSkillFx = null
 #---------------------------------------------------------------------------------------------------
 @onready var NodeAnim: AnimationPlayer = $AnimationPlayer
 #---------------------------------------------------------------------------------------------------
@@ -54,6 +55,9 @@ func _ready() -> void:
 	CompAnim.RefPlayer = self
 	CompAnim.NodeAnim = NodeAnim
 	add_child(CompAnim)
+	# 初始化技能特效组件
+	CompSkillFx = KsActorCompSkillFx.new()
+	add_child(CompSkillFx)
 	KsWorld.SetMainPlayer(self)
 #---------------------------------------------------------------------------------------------------
 func _physics_process(delta: float) -> void:
@@ -161,6 +165,9 @@ func OnSkillBegin(SkillData: KsTableSkill.SkillItem) -> void:
 	# VelocityYClear=true：施放瞬间清零Y轴速度
 	if SkillData.VelocityYClear:
 		CurVerticalSpeed = 0.0
+	# 播放序列帧特效
+	if CompSkillFx != null:
+		CompSkillFx.OnSkillBegin(SkillData)
 	# 根据技能类型执行通用效果
 	match SkillData.SkillType:
 		0: _ExecSkillA(SkillData)
@@ -178,6 +185,9 @@ func OnSkillEnd(SkillData: KsTableSkill.SkillItem) -> void:
 	CurSkillVelocityY = 0.0
 	CurSkillVelocityXLock = false
 	CurSkillVelocityYLock = false
+	# 隐藏序列帧特效
+	if CompSkillFx != null:
+		CompSkillFx.OnSkillEnd()
 	# 恢复到物理驱动状态（_UpdateActorState 下一帧会自动接管）
 	ChangeActorState(EActorState.ActorState_Run)
 #---------------------------------------------------------------------------------------------------
