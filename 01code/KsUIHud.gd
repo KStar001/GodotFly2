@@ -133,15 +133,15 @@ func _UpdateSkillButtons() -> void:
 #---------------------------------------------------------------------------------------------------
 # 技能按下回调
 func _OnSkillPressed(SkillId: int) -> void:
-	if KsWorld.CurInput == null:
+	if KsWorld.CompInput == null:
 		return
 	var SkillData: KsTableSkill.SkillItem = KsTableSkill.GetSkillById(SkillId)
 	if SkillData == null:
 		return
 	match SkillData.SkillType:
-		0: KsWorld.CurInput.OnCmdPressed(KsInput.ECmdType.SkillA)
-		1: KsWorld.CurInput.OnCmdPressed(KsInput.ECmdType.SkillB)
-		2: KsWorld.CurInput.OnCmdPressed(KsInput.ECmdType.SkillC)
+		0: KsWorld.CompInput.OnCmdPressed(KsInput.ECmdType.SkillA)
+		1: KsWorld.CompInput.OnCmdPressed(KsInput.ECmdType.SkillB)
+		2: KsWorld.CompInput.OnCmdPressed(KsInput.ECmdType.SkillC)
 #---------------------------------------------------------------------------------------------------
 # 剧情测试按钮
 func _OnStoryTestButtonPressed() -> void:
@@ -153,9 +153,9 @@ func _OnStoryTestButtonPressed() -> void:
 #---------------------------------------------------------------------------------------------------
 # 更新调试文本
 func _UpdateDebugLabel() -> void:
-	if KsWorld.CurInput == null:
+	if KsWorld.CompInput == null:
 		return
-	var Text: String = KsWorld.CurInput.GetDebugText()
+	var Text: String = KsWorld.CompInput.GetDebugText()
 	if KsWorld.CurPlayer != null and KsWorld.CurPlayer.CompSkill != null:
 		Text += "\n" + KsWorld.CurPlayer.CompSkill.GetDebugText()
 	NodeDebugLabel.text = Text
