@@ -42,13 +42,6 @@ func _InitStoryManager() -> void:
 func _InitInput() -> void:
 	CompInput = KsInput.new()
 	add_child(CompInput)
-	await get_tree().process_frame
-	if CurUIHud == null:
-		return
-	# 直接通过 KsUIHud 的节点引用连接按钮，不再 find_child 搜索
-	CurUIHud.NodeJumpButton.pressed.connect(func(): CompInput.OnCmdPressed(KsInput.ECmdType.Jump))
-	CurUIHud.NodeSkillBButton.pressed.connect(func(): CompInput.OnCmdPressed(KsInput.ECmdType.SkillB))
-	CurUIHud.NodeSkillCButton.pressed.connect(func(): CompInput.OnCmdPressed(KsInput.ECmdType.SkillC))
 #---------------------------------------------------------------------------------------------------
 func _process(_delta: float) -> void:
 	_UpdateDebugLabel()
@@ -88,6 +81,11 @@ func SetMainCamera(Camera: KsCamera) -> void:
 #---------------------------------------------------------------------------------------------------
 func SetMainUIHud(UIHud: KsUIHud) -> void:
 	CurUIHud = UIHud
+	# UIHud 就绪时统一绑定按钮信号到输入模块
+	if CompInput != null:
+		CurUIHud.NodeJumpButton.pressed.connect(func(): CompInput.OnCmdPressed(KsInput.ECmdType.Jump))
+		CurUIHud.NodeSkillBButton.pressed.connect(func(): CompInput.OnCmdPressed(KsInput.ECmdType.SkillB))
+		CurUIHud.NodeSkillCButton.pressed.connect(func(): CompInput.OnCmdPressed(KsInput.ECmdType.SkillC))
 #---------------------------------------------------------------------------------------------------
 func SetMainUIStory(UIStory: KsUIStory) -> void:
 	CurUIStory = UIStory
