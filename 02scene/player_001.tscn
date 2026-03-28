@@ -1,4 +1,4 @@
-[gd_scene load_steps=6 format=3 uid="uid://gf2player001"]
+[gd_scene load_steps=7 format=3 uid="uid://gf2player001"]
 
 [ext_resource type="Script" uid="uid://blewumheei0mv" path="res://01code/KsPlayer.gd" id="1_player"]
 [ext_resource type="PackedScene" uid="uid://76vhgaxstp3j" path="res://09anim/knight/Knight.glb" id="2_3jb0a"]
@@ -6,16 +6,24 @@
 [ext_resource type="AnimationLibrary" uid="uid://dn40f564603q4" path="res://09anim/Rig_Medium_MovementBasic.glb" id="4_4fhaf"]
 
 [sub_resource type="CapsuleShape3D" id="Shape_player"]
+height = 1.8
+
+[sub_resource type="BoxShape3D" id="BoxShape3D_ej5oq"]
+size = Vector3(0.2, 0.4, 0.2)
 
 [node name="Player001" type="CharacterBody3D"]
 script = ExtResource("1_player")
 
 [node name="Knight" parent="." instance=ExtResource("2_3jb0a")]
-transform = Transform3D(-4.37114e-08, 0, 1, 0, 1, 0, -1, 0, -4.37114e-08, 0, 0, 0)
+transform = Transform3D(-3.49691e-08, 0, 0.8, 0, 0.8, 0, -0.8, 0, -3.49691e-08, 0, 0, 0)
 
 [node name="CollisionShape3D" type="CollisionShape3D" parent="."]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1, 0)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.9, 0)
 shape = SubResource("Shape_player")
+
+[node name="CollisionShape3D2" type="CollisionShape3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.346599, 1.55621, 0)
+shape = SubResource("BoxShape3D_ej5oq")
 
 [node name="AnimationPlayer" type="AnimationPlayer" parent="."]
 root_node = NodePath("../Knight")

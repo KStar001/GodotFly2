@@ -3,7 +3,7 @@ extends CharacterBody3D
 class_name KsPlayer
 #---------------------------------------------------------------------------------------------------
 # 配置参数
-const ConfigMoveSpeed: float = 5.0         # 向前速度（米/秒）
+const ConfigMoveSpeed: float = 3.0         # 向前速度（米/秒）
 const ConfigJumpSpeed: float = 8.0         # 跳跃初速度
 const ConfigGravity: float = 10.0          # 重力加速度
 const ConfigBounceSpeed: float = 5.0       # 被动落地弹起速度
