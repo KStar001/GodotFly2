@@ -1,5 +1,6 @@
 skill_id,skill_type,skill_name,duration,cd_duration,anim_name,velocity_x,velocity_x_lock,velocity_y,velocity_y_lock,velocity_y_clear,need_target,invincible_time,buff_type,buff_duration,fx_res_path,fx_offset_x,fx_offset_y,fx_offset_z,fx_loop
-1001,0,金蝉脱壳,0.4,1.2,skill_a_jcty,0.0,false,0.0,false,false,false,0.4,0,0.0,res://04skillimg/fx_jcty.tres,0.0,0.0,0.3,false
-1002,1,梯云纵,0.6,1.5,skill_b_tyz,0.0,false,10.0,false,true,false,0.0,0,0.0,res://04skillimg/fx_tyz.tres,0.0,0.0,0.3,true
-1003,1,蜻蜓点水,0.5,1.8,skill_b_qtds,0.0,false,12.0,false,true,true,0.0,0,0.0,res://04skillimg/fx_qtds.tres,0.0,0.0,0.3,true
-1004,2,御风术,3.0,3.5,skill_c_yfs,0.0,false,0.0,true,true,false,0.0,0,0.0,res://04skillimg/fx_yfs.tres,0.0,-0.8,0.3,true
+1001,0,金蝉脱壳,0.4,1.2,skill_a_jcty,0.0,false,0.0,false,false,false,0.4,0,0.0,fx_jcty,0.0,0.0,0.3,false
+1002,1,梯云纵,0.6,1.5,skill_b_tyz,0.0,false,10.0,false,true,false,0.0,0,0.0,fx_tyz,0.0,0.0,0.3,true
+1003,1,蜻蜓点水,0.5,1.8,skill_b_qtds,0.0,false,12.0,false,true,true,0.0,0,0.0,fx_qtds,0.0,0.0,0.3,true
+1004,2,御风术,3.0,3.5,skill_c_yfs,0.0,false,0.0,true,true,false,0.0,0,0.0,fx_yfs,0.0,-0.8,0.3,true
+1005,0,突刺,1,2,skill_a_tu_ci,8.0,true,0.0,true,true,false,0.0,0,0.0,fx_tu_ci,0.0,0.0,0.3,false

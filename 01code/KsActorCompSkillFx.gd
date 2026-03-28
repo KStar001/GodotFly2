@@ -27,7 +27,8 @@ func OnSkillBegin(SkillData: KsTableSkill.SkillItem) -> void:
 		_SpriteNode.visible = false
 		return
 	# 加载 SpriteFrames 资源
-	var Frames = load(SkillData.FxResPath)
+	var FinalResPath = "res://04skillimg/" + SkillData.FxResPath + ".tres"
+	var Frames = load(FinalResPath)
 	if Frames == null:
 		printerr("KsActorCompSkillFx: 无法加载资源 " + SkillData.FxResPath)
 		_SpriteNode.visible = false
