@@ -87,13 +87,19 @@ func OnSkillIdPressed(SkillId: int) -> void:
 	var SkillData: KsTableSkill.SkillItem = KsTableSkill.GetSkillById(SkillId)
 	if SkillData == null:
 		return
-	# 实时优先：尝试立刻施放
+	# CD冷却中，什么都不做
+	if RefPlayer.CompSkill == null or not RefPlayer.CompSkill.IsSkillReady(SkillData.SkillType):
+		return
+	# 需要借力目标的技能（如蜻蜓点水）：不立即施放，只写缓冲，等踩到目标时触发
+	if SkillData.NeedTarget:
+		_WriteBufferSkillId(SkillData.SkillType, SkillId)
+		return
+	# 普通技能：实时优先，尝试立刻施放
 	if RefPlayer.TryCastSkill(SkillId):
-		# 清掉同类缓冲（防止之前缓存的同类技能干扰）
 		var CmdType: ECmdType = _SkillTypeToCmdType(SkillData.SkillType)
 		_ClearBuffer(CmdType)
 		return
-	# 施放失败（CD未好），写入缓冲，记录具体 SkillId
+	# 施放失败（条件不满足），写入缓冲
 	_WriteBufferSkillId(SkillData.SkillType, SkillId)
 #---------------------------------------------------------------------------------------------------
 # 外部调用：某个条件刚刚满足时（如进入可踩目标范围），立即检查对应缓冲
