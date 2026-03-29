@@ -87,11 +87,14 @@ func OnSkillIdPressed(SkillId: int) -> void:
 	var SkillData: KsTableSkill.SkillItem = KsTableSkill.GetSkillById(SkillId)
 	if SkillData == null:
 		return
+	print("[KsInput] OnSkillIdPressed SkillId=", SkillId, " NeedTarget=", SkillData.NeedTarget)
 	# CD冷却中，什么都不做
 	if RefPlayer.CompSkill == null or not RefPlayer.CompSkill.IsSkillReady(SkillData.SkillType):
+		print("[KsInput] CD冷却中，跳过")
 		return
 	# 需要借力目标的技能（如蜻蜓点水）：不立即施放，只写缓冲，等踩到目标时触发
 	if SkillData.NeedTarget:
+		print("[KsInput] NeedTarget=true，写入缓冲，等待踩踏目标")
 		_WriteBufferSkillId(SkillData.SkillType, SkillId)
 		return
 	# 普通技能：实时优先，尝试立刻施放
@@ -144,14 +147,18 @@ func _TryExecSkillA() -> bool:
 func _TryExecSkillB() -> bool:
 	var BufferedId: int = _CurBufferSkillId.get(ECmdType.SkillB, -1)
 	var SkillId: int = BufferedId if BufferedId > 0 else _GetFirstReadySkillIdByType(1)
+	print("[KsInput] _TryExecSkillB BufferedId=", BufferedId, " SkillId=", SkillId)
 	if SkillId <= 0:
+		print("[KsInput] _TryExecSkillB 无可用技能")
 		return false
 	var SkillData: KsTableSkill.SkillItem = KsTableSkill.GetSkillById(SkillId)
 	if SkillData == null:
 		return false
 	# 需要借力目标的技能（蜻蜓点水），检查脚底是否有可踩道具
 	if SkillData.NeedTarget:
-		if not _HasValidFlyTarget():
+		var HasTarget: bool = _HasValidFlyTarget()
+		print("[KsInput] _TryExecSkillB NeedTarget=true HasTarget=", HasTarget)
+		if not HasTarget:
 			return false
 		# 有目标，触发技能，消耗目标
 		if RefPlayer != null and RefPlayer.TryCastSkill(SkillId):
@@ -231,8 +238,10 @@ func GetDebugText() -> String:
 #---------------------------------------------------------------------------------------------------
 # FootBox 回调：飞行道具进入脚底范围
 func OnFlyTargetEntered(area: Area3D) -> void:
+	print("[KsInput] OnFlyTargetEntered area=", area.name)
 	if not _FlyTargetList.has(area):
 		_FlyTargetList.append(area)
+	print("[KsInput] FlyTargetList.size=", _FlyTargetList.size(), " SkillB缓冲=", _CurBufferExpire[ECmdType.SkillB])
 	# 立刻检查 SkillB 缓冲是否可以触发
 	OnConditionMet(ECmdType.SkillB)
 #---------------------------------------------------------------------------------------------------
