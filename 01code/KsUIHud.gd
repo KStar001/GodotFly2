@@ -27,7 +27,7 @@ var _BtnsC: Array[KsSkillButton] = []
 #---------------------------------------------------------------------------------------------------
 @onready var NodeDebugLabel: Label = $SafePanel/DebugLabel
 @onready var NodeStoryTestButton: Button = $SafePanel/StoryTestButton
-@onready var NodeSafePanel: MarginContainer = $SafePanel
+@onready var NodeSafePanel: Control = $SafePanel
 var NodeSkillName: KsUISkillName = null
 #---------------------------------------------------------------------------------------------------
 func _ready() -> void:
