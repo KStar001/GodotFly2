@@ -89,15 +89,6 @@ shape = SubResource("Shape_plat_mid")
 [node name="MeshInstance3D" type="MeshInstance3D" parent="Platforms/Platform02"]
 mesh = SubResource("Mesh_plat_mid")
 
-[node name="Platform03" type="StaticBody3D" parent="Platforms"]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 10.6852, 1.85018, 0.490047)
-
-[node name="CollisionShape3D" type="CollisionShape3D" parent="Platforms/Platform03"]
-shape = SubResource("Shape_plat_narrow")
-
-[node name="MeshInstance3D" type="MeshInstance3D" parent="Platforms/Platform03"]
-mesh = SubResource("Mesh_plat_narrow")
-
 [node name="Platform04" type="StaticBody3D" parent="Platforms"]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 13.3852, 3.55018, 0.490047)
 
@@ -125,15 +116,6 @@ shape = SubResource("Shape_plat_wide")
 [node name="MeshInstance3D" type="MeshInstance3D" parent="Platforms/Platform06"]
 mesh = SubResource("Mesh_plat_wide")
 
-[node name="Platform07" type="StaticBody3D" parent="Platforms"]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 23.8252, 1.95018, 0.490047)
-
-[node name="CollisionShape3D" type="CollisionShape3D" parent="Platforms/Platform07"]
-shape = SubResource("Shape_plat_mid")
-
-[node name="MeshInstance3D" type="MeshInstance3D" parent="Platforms/Platform07"]
-mesh = SubResource("Mesh_plat_mid")
-
 [node name="Platform08" type="StaticBody3D" parent="Platforms"]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 26.8252, 3.75018, 0.490047)
 
@@ -142,15 +124,6 @@ shape = SubResource("Shape_plat_narrow")
 
 [node name="MeshInstance3D" type="MeshInstance3D" parent="Platforms/Platform08"]
 mesh = SubResource("Mesh_plat_narrow")
-
-[node name="Platform09" type="StaticBody3D" parent="Platforms"]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 29.6252, 2.35018, 0.490047)
-
-[node name="CollisionShape3D" type="CollisionShape3D" parent="Platforms/Platform09"]
-shape = SubResource("Shape_plat_mid")
-
-[node name="MeshInstance3D" type="MeshInstance3D" parent="Platforms/Platform09"]
-mesh = SubResource("Mesh_plat_mid")
 
 [node name="Platform10" type="StaticBody3D" parent="Platforms"]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 32.6252, 3.35018, 0.490047)
@@ -178,15 +151,6 @@ shape = SubResource("Shape_plat_mid")
 
 [node name="MeshInstance3D" type="MeshInstance3D" parent="Platforms/Platform12"]
 mesh = SubResource("Mesh_plat_mid")
-
-[node name="Platform13" type="StaticBody3D" parent="Platforms"]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 41.6252, 1.55018, 0.490047)
-
-[node name="CollisionShape3D" type="CollisionShape3D" parent="Platforms/Platform13"]
-shape = SubResource("Shape_plat_wide")
-
-[node name="MeshInstance3D" type="MeshInstance3D" parent="Platforms/Platform13"]
-mesh = SubResource("Mesh_plat_wide")
 
 [node name="Platform14" type="StaticBody3D" parent="Platforms"]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 45.0252, 3.15018, 0.490047)
@@ -224,15 +188,6 @@ shape = SubResource("Shape_plat_narrow")
 [node name="MeshInstance3D" type="MeshInstance3D" parent="Platforms/Platform17"]
 mesh = SubResource("Mesh_plat_narrow")
 
-[node name="Platform18" type="StaticBody3D" parent="Platforms"]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 57.4198, 1.95018, 0.490047)
-
-[node name="CollisionShape3D" type="CollisionShape3D" parent="Platforms/Platform18"]
-shape = SubResource("Shape_plat_mid")
-
-[node name="MeshInstance3D" type="MeshInstance3D" parent="Platforms/Platform18"]
-mesh = SubResource("Mesh_plat_mid")
-
 [node name="Platform19" type="StaticBody3D" parent="Platforms"]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 60.4198, 3.55018, 0.490047)
 
@@ -241,15 +196,6 @@ shape = SubResource("Shape_plat_wide")
 
 [node name="MeshInstance3D" type="MeshInstance3D" parent="Platforms/Platform19"]
 mesh = SubResource("Mesh_plat_wide")
-
-[node name="Platform20" type="StaticBody3D" parent="Platforms"]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 67.2221, 2.35018, 0.490047)
-
-[node name="CollisionShape3D" type="CollisionShape3D" parent="Platforms/Platform20"]
-shape = SubResource("Shape_plat_mid")
-
-[node name="MeshInstance3D" type="MeshInstance3D" parent="Platforms/Platform20"]
-mesh = SubResource("Mesh_plat_mid")
 
 [node name="Platform21" type="StaticBody3D" parent="Platforms"]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 70.4221, 4.55018, 0.490047)
@@ -268,15 +214,6 @@ shape = SubResource("Shape_plat_wide")
 
 [node name="MeshInstance3D" type="MeshInstance3D" parent="Platforms/Platform22"]
 mesh = SubResource("Mesh_plat_wide")
-
-[node name="Platform23" type="StaticBody3D" parent="Platforms"]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 77.0221, 1.75018, 0.490047)
-
-[node name="CollisionShape3D" type="CollisionShape3D" parent="Platforms/Platform23"]
-shape = SubResource("Shape_plat_narrow")
-
-[node name="MeshInstance3D" type="MeshInstance3D" parent="Platforms/Platform23"]
-mesh = SubResource("Mesh_plat_narrow")
 
 [node name="Platform24" type="StaticBody3D" parent="Platforms"]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 80.0221, 3.35018, 0.490047)
