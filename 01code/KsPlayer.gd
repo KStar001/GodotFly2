@@ -273,9 +273,10 @@ func TakeHit() -> void:
 	# 无敌状态：什么惩罚都没有
 	if CompBuff != null and CompBuff.IsInvincible():
 		return
-	# 霸体状态：只扣血
+	# 霸体状态：扣血 + 无敌帧，无受击动画
 	if CompBuff != null and CompBuff.IsArmor():
 		_ApplyHpDamage()
+		_StartHitInvincible()
 		return
 	# 普通状态：扣血 + 受击动画 + 无敌帧
 	_ApplyHpDamage()
