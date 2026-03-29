@@ -218,9 +218,9 @@ func OnSkillUpdate(SkillData: KsTableSkill.SkillItem, Delta: float) -> void:
 #---------------------------------------------------------------------------------------------------
 # 技能结束回调（由 KsActorCompSkill 调用）
 func OnSkillEnd(SkillData: KsTableSkill.SkillItem) -> void:
-	# 隐藏序列帧特效
+	# 隐藏对应槽的序列帧特效
 	if CompSkillFx != null:
-		CompSkillFx.OnSkillEnd()
+		CompSkillFx.OnSkillEnd(SkillData)
 	# 若已无任何技能，清空 CurSkillId
 	if CompSkill != null and not CompSkill.IsAnyCasting():
 		CurSkillId = -1
