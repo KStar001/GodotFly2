@@ -43,10 +43,10 @@ func _process(delta: float) -> void:
 	_UpdateVisual(delta)
 #---------------------------------------------------------------------------------------------------
 # 递归收集所有 MeshInstance3D
-func _CollectMeshes(Node: Node3D) -> void:
-	if Node is MeshInstance3D:
-		_MeshList.append(Node as MeshInstance3D)
-	for Child in Node.get_children():
+func _CollectMeshes(TargetNode: Node3D) -> void:
+	if TargetNode is MeshInstance3D:
+		_MeshList.append(TargetNode as MeshInstance3D)
+	for Child in TargetNode.get_children():
 		_CollectMeshes(Child)
 #---------------------------------------------------------------------------------------------------
 # 把叠色材质覆盖到所有 mesh 的所有 surface
