@@ -25,8 +25,9 @@ var _BtnsA: Array[KsSkillButton] = []
 var _BtnsB: Array[KsSkillButton] = []
 var _BtnsC: Array[KsSkillButton] = []
 #---------------------------------------------------------------------------------------------------
-@onready var NodeDebugLabel: Label = $DebugLabel
-@onready var NodeStoryTestButton: Button = $StoryTestButton
+@onready var NodeDebugLabel: Label = $SafePanel/DebugLabel
+@onready var NodeStoryTestButton: Button = $SafePanel/StoryTestButton
+@onready var NodeSafePanel: MarginContainer = $SafePanel
 var NodeSkillName: KsUISkillName = null
 #---------------------------------------------------------------------------------------------------
 func _ready() -> void:
@@ -35,7 +36,7 @@ func _ready() -> void:
 	NodeStoryTestButton.pressed.connect(_OnStoryTestButtonPressed)
 	# 创建技能名显示控件
 	NodeSkillName = KsUISkillName.new()
-	add_child(NodeSkillName)
+	NodeSafePanel.add_child(NodeSkillName)
 #---------------------------------------------------------------------------------------------------
 func _process(_delta: float) -> void:
 	_UpdateSkillButtons()
@@ -52,7 +53,7 @@ func _CreateButtonGroup(SkillIds: Array[int], Positions: Array[Vector2]) -> Arra
 	var Result: Array[KsSkillButton] = []
 	for i in range(SkillIds.size()):
 		var Btn = KsSkillButton.new()
-		add_child(Btn)
+		NodeSafePanel.add_child(Btn)
 		Btn.position = Positions[i]
 		var SkillId: int = SkillIds[i]
 		if SkillId > 0:

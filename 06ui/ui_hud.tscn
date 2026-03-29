@@ -1,11 +1,20 @@
-[gd_scene load_steps=2 format=3 uid="uid://gf2uihud"]
+[gd_scene load_steps=3 format=3 uid="uid://gf2uihud"]
 
 [ext_resource type="Script" uid="uid://oenis7eoqg6q" path="res://01code/KsUIHud.gd" id="1_uihud"]
+[ext_resource type="Script" uid="uid://cx0s0v7pwqqh5" path="res://01code/KsUISafePanel.gd" id="2_safepanel"]
 
 [node name="UIHud" type="CanvasLayer"]
 script = ExtResource("1_uihud")
 
-[node name="DebugLabel" type="Label" parent="."]
+[node name="SafePanel" type="MarginContainer" parent="."]
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+script = ExtResource("2_safepanel")
+
+[node name="DebugLabel" type="Label" parent="SafePanel"]
 anchors_preset = 1
 anchor_left = 1.0
 anchor_right = 1.0
@@ -17,7 +26,7 @@ grow_horizontal = 0
 text = "[InputBuffer]"
 horizontal_alignment = 2
 
-[node name="StoryTestButton" type="Button" parent="."]
+[node name="StoryTestButton" type="Button" parent="SafePanel"]
 anchors_preset = 2
 anchor_top = 1.0
 anchor_bottom = 1.0
