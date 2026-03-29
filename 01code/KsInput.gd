@@ -92,10 +92,12 @@ func OnSkillIdPressed(SkillId: int) -> void:
 	if RefPlayer.CompSkill == null or not RefPlayer.CompSkill.IsSkillReady(SkillData.SkillType):
 		print("[KsInput] CD冷却中，跳过")
 		return
-	# 需要借力目标的技能（如蜻蜓点水）：不立即施放，只写缓冲，等踩到目标时触发
+	# 需要借力目标的技能（如蜻蜓点水）：写入缓冲，同时立即检查当前是否已有目标
 	if SkillData.NeedTarget:
 		print("[KsInput] NeedTarget=true，写入缓冲，等待踩踏目标")
 		_WriteBufferSkillId(SkillData.SkillType, SkillId)
+		# 写入缓冲后立即尝试一次（应对"先踩到道具再按按钮"的情况）
+		OnConditionMet(_SkillTypeToCmdType(SkillData.SkillType))
 		return
 	# 普通技能：实时优先，尝试立刻施放
 	if RefPlayer.TryCastSkill(SkillId):
