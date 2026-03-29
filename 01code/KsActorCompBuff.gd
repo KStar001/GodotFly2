@@ -38,7 +38,6 @@ func _process(delta: float) -> void:
 		_CollectMeshes(RefModelNode)
 		if _MeshList.is_empty():
 			return
-		_ApplyOverlayMat()
 	_UpdateVisual(delta)
 #---------------------------------------------------------------------------------------------------
 # 递归收集所有 MeshInstance3D
@@ -72,16 +71,18 @@ func _UpdateVisual(delta: float) -> void:
 			_FlickerVisible = not _FlickerVisible
 		_SetModelVisible(_FlickerVisible)
 		_OverlayMat.albedo_color = ConfigColorInvincible
+		_ApplyOverlayMat()
 	elif IsArmor():
 		# 霸体：红色，不闪烁
 		_ResetFlicker()
 		_SetModelVisible(true)
 		_OverlayMat.albedo_color = ConfigColorArmor
+		_ApplyOverlayMat()
 	else:
-		# 普通：恢复原色
+		# 普通：移除覆盖材质，恢复原始材质
 		_ResetFlicker()
 		_SetModelVisible(true)
-		_OverlayMat.albedo_color = ConfigColorNormal
+		_RemoveOverlayMat()
 #---------------------------------------------------------------------------------------------------
 func _SetModelVisible(Visible: bool) -> void:
 	if RefModelNode != null:
