@@ -12,49 +12,44 @@ const ConfigMaxCount: int = 3           # 最多同时显示条数
 const ConfigLineHeight: float = 64.0    # 每行高度
 const ConfigRightMargin: float = 24.0   # 距屏幕右边缘距离
 #---------------------------------------------------------------------------------------------------
-# 单条记录
-class SkillNameEntry:
-	var NodeLabel: Label = null
-	var CurTimer: float = 0.0           # 计时器（正值=停留中，负值=淡出中）
-#---------------------------------------------------------------------------------------------------
-var _Entries: Array = []  # Array[SkillNameEntry]
+# 用两个平行数组代替内嵌 class，避免编辑器解析崩溃
+var _LabelNodes: Array = []   # Array[Label]
+var _Timers: Array = []        # Array[float]，正值=停留中，负值=淡出中
 #---------------------------------------------------------------------------------------------------
 func _ready() -> void:
-	# 铺满全屏，自身不拦截鼠标
 	set_anchors_and_offsets_preset(Control.PRESET_FULL_RECT)
 	mouse_filter = Control.MOUSE_FILTER_IGNORE
 #---------------------------------------------------------------------------------------------------
 func _process(delta: float) -> void:
-	var ToRemove: Array = []
-	for Entry in _Entries:
-		Entry.CurTimer -= delta
-		if Entry.CurTimer >= 0.0:
-			# 停留阶段，完全不透明
-			Entry.NodeLabel.modulate.a = 1.0
+	var ToRemoveIdx: Array = []
+	for i in _Timers.size():
+		_Timers[i] -= delta
+		var Lbl: Label = _LabelNodes[i]
+		if _Timers[i] >= 0.0:
+			Lbl.modulate.a = 1.0
 		else:
-			# 淡出阶段
-			var FadeProgress: float = -Entry.CurTimer / ConfigFadeTime
-			Entry.NodeLabel.modulate.a = 1.0 - clampf(FadeProgress, 0.0, 1.0)
+			var FadeProgress: float = -_Timers[i] / ConfigFadeTime
+			Lbl.modulate.a = 1.0 - clampf(FadeProgress, 0.0, 1.0)
 			if FadeProgress >= 1.0:
-				ToRemove.append(Entry)
-	for Entry in ToRemove:
-		Entry.NodeLabel.queue_free()
-		_Entries.erase(Entry)
+				ToRemoveIdx.append(i)
+	# 从后往前删，避免索引偏移
+	for i in range(ToRemoveIdx.size() - 1, -1, -1):
+		var Idx: int = ToRemoveIdx[i]
+		_LabelNodes[Idx].queue_free()
+		_LabelNodes.remove_at(Idx)
+		_Timers.remove_at(Idx)
 	_UpdatePositions()
 #---------------------------------------------------------------------------------------------------
-# 外部调用：显示一个技能名
 func ShowSkillName(SkillName: String) -> void:
 	# 超出最大数量时移除最旧的
-	while _Entries.size() >= ConfigMaxCount:
-		var Oldest = _Entries[0]
-		Oldest.NodeLabel.queue_free()
-		_Entries.remove_at(0)
-	# 创建新条目
-	var Entry = SkillNameEntry.new()
-	Entry.CurTimer = ConfigStayTime
-	Entry.NodeLabel = _CreateLabel(SkillName)
-	add_child(Entry.NodeLabel)
-	_Entries.append(Entry)
+	while _LabelNodes.size() >= ConfigMaxCount:
+		_LabelNodes[0].queue_free()
+		_LabelNodes.remove_at(0)
+		_Timers.remove_at(0)
+	var Lbl: Label = _CreateLabel(SkillName)
+	add_child(Lbl)
+	_LabelNodes.append(Lbl)
+	_Timers.append(ConfigStayTime)
 	_UpdatePositions()
 #---------------------------------------------------------------------------------------------------
 func _CreateLabel(SkillName: String) -> Label:
@@ -69,16 +64,13 @@ func _CreateLabel(SkillName: String) -> Label:
 	Lbl.modulate.a = 1.0
 	return Lbl
 #---------------------------------------------------------------------------------------------------
-# 更新所有条目的位置（右侧中间，多条从下往上排列）
 func _UpdatePositions() -> void:
 	var ScreenH: float = get_viewport_rect().size.y
 	var ScreenW: float = get_viewport_rect().size.x
-	var TotalH: float = _Entries.size() * ConfigLineHeight
-	# 最底部条目的Y坐标（整体垂直居中）
+	var TotalH: float = _LabelNodes.size() * ConfigLineHeight
 	var StartY: float = (ScreenH - TotalH) / 2.0
-	for i in _Entries.size():
-		var Entry = _Entries[i]
-		var Lbl = Entry.NodeLabel
+	for i in _LabelNodes.size():
+		var Lbl: Label = _LabelNodes[i]
 		Lbl.size = Vector2(400.0, ConfigLineHeight)
 		Lbl.position = Vector2(ScreenW - 400.0 - ConfigRightMargin, StartY + i * ConfigLineHeight)
 #---------------------------------------------------------------------------------------------------
