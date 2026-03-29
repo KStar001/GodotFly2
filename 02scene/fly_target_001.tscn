@@ -3,7 +3,7 @@
 [ext_resource type="Script" uid="uid://cl560xmxs1aw7" path="res://01code/KsFlyTarget.gd" id="1_flytarget"]
 
 [sub_resource type="BoxMesh" id="BoxMesh_jk4ea"]
-size = Vector3(1, 0.2, 1)
+size = Vector3(1.5, 0.2, 3)
 
 [sub_resource type="StandardMaterial3D" id="Mat_flytarget"]
 albedo_color = Color(0.2, 0.8, 1, 1)

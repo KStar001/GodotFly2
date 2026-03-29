@@ -1,9 +1,8 @@
-[gd_scene load_steps=19 format=3 uid="uid://gf2stage001"]
+[gd_scene load_steps=18 format=3 uid="uid://gf2stage001"]
 
 [ext_resource type="Script" uid="uid://da3cs2dxwj1a6" path="res://01code/KsCamera.gd" id="2_camera"]
 [ext_resource type="PackedScene" uid="uid://gf2player001" path="res://02scene/player_001.tscn" id="3_player"]
 [ext_resource type="PackedScene" uid="uid://gr7hofhg05i6" path="res://02scene/fly_target_001.tscn" id="4_cumoh"]
-[ext_resource type="PackedScene" uid="uid://gf2spike001" path="res://02scene/spike_001.tscn" id="4_spike"]
 [ext_resource type="PackedScene" uid="uid://gf2uihud" path="res://06ui/ui_hud.tscn" id="5_uihud"]
 [ext_resource type="PackedScene" uid="uid://gf2uistory" path="res://06ui/ui_story.tscn" id="6_uistory"]
 
@@ -98,32 +97,14 @@ shape = SubResource("Shape_plat_mid")
 [node name="MeshInstance3D" type="MeshInstance3D" parent="Platforms/Platform04"]
 mesh = SubResource("Mesh_plat_mid")
 
-[node name="Platform05" type="StaticBody3D" parent="Platforms"]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 16.1852, 4.55018, 0.490047)
-
-[node name="CollisionShape3D" type="CollisionShape3D" parent="Platforms/Platform05"]
-shape = SubResource("Shape_plat_narrow")
-
-[node name="MeshInstance3D" type="MeshInstance3D" parent="Platforms/Platform05"]
-mesh = SubResource("Mesh_plat_narrow")
-
 [node name="Platform06" type="StaticBody3D" parent="Platforms"]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 18.9852, 2.75018, 0.490047)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 24.9263, 2.75018, 0.490047)
 
 [node name="CollisionShape3D" type="CollisionShape3D" parent="Platforms/Platform06"]
 shape = SubResource("Shape_plat_wide")
 
 [node name="MeshInstance3D" type="MeshInstance3D" parent="Platforms/Platform06"]
 mesh = SubResource("Mesh_plat_wide")
-
-[node name="Platform08" type="StaticBody3D" parent="Platforms"]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 26.8252, 3.75018, 0.490047)
-
-[node name="CollisionShape3D" type="CollisionShape3D" parent="Platforms/Platform08"]
-shape = SubResource("Shape_plat_narrow")
-
-[node name="MeshInstance3D" type="MeshInstance3D" parent="Platforms/Platform08"]
-mesh = SubResource("Mesh_plat_narrow")
 
 [node name="Platform10" type="StaticBody3D" parent="Platforms"]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 32.6252, 3.35018, 0.490047)
@@ -134,24 +115,6 @@ shape = SubResource("Shape_plat_wide")
 [node name="MeshInstance3D" type="MeshInstance3D" parent="Platforms/Platform10"]
 mesh = SubResource("Mesh_plat_wide")
 
-[node name="Platform11" type="StaticBody3D" parent="Platforms"]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 36.0252, 4.75018, 0.490047)
-
-[node name="CollisionShape3D" type="CollisionShape3D" parent="Platforms/Platform11"]
-shape = SubResource("Shape_plat_narrow")
-
-[node name="MeshInstance3D" type="MeshInstance3D" parent="Platforms/Platform11"]
-mesh = SubResource("Mesh_plat_narrow")
-
-[node name="Platform12" type="StaticBody3D" parent="Platforms"]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 38.8252, 2.75018, 0.490047)
-
-[node name="CollisionShape3D" type="CollisionShape3D" parent="Platforms/Platform12"]
-shape = SubResource("Shape_plat_mid")
-
-[node name="MeshInstance3D" type="MeshInstance3D" parent="Platforms/Platform12"]
-mesh = SubResource("Mesh_plat_mid")
-
 [node name="Platform14" type="StaticBody3D" parent="Platforms"]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 45.0252, 3.15018, 0.490047)
 
@@ -161,32 +124,14 @@ shape = SubResource("Shape_plat_narrow")
 [node name="MeshInstance3D" type="MeshInstance3D" parent="Platforms/Platform14"]
 mesh = SubResource("Mesh_plat_narrow")
 
-[node name="Platform15" type="StaticBody3D" parent="Platforms"]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 47.9198, 4.35018, 0.490047)
-
-[node name="CollisionShape3D" type="CollisionShape3D" parent="Platforms/Platform15"]
-shape = SubResource("Shape_plat_mid")
-
-[node name="MeshInstance3D" type="MeshInstance3D" parent="Platforms/Platform15"]
-mesh = SubResource("Mesh_plat_mid")
-
 [node name="Platform16" type="StaticBody3D" parent="Platforms"]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 50.9198, 2.55018, 0.490047)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 50.9198, 3.8371, 0.490047)
 
 [node name="CollisionShape3D" type="CollisionShape3D" parent="Platforms/Platform16"]
 shape = SubResource("Shape_plat_wide")
 
 [node name="MeshInstance3D" type="MeshInstance3D" parent="Platforms/Platform16"]
 mesh = SubResource("Mesh_plat_wide")
-
-[node name="Platform17" type="StaticBody3D" parent="Platforms"]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 54.4198, 3.95018, 0.490047)
-
-[node name="CollisionShape3D" type="CollisionShape3D" parent="Platforms/Platform17"]
-shape = SubResource("Shape_plat_narrow")
-
-[node name="MeshInstance3D" type="MeshInstance3D" parent="Platforms/Platform17"]
-mesh = SubResource("Mesh_plat_narrow")
 
 [node name="Platform19" type="StaticBody3D" parent="Platforms"]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 60.4198, 3.55018, 0.490047)
@@ -226,23 +171,29 @@ mesh = SubResource("Mesh_plat_mid")
 
 [node name="Spikes" type="Node3D" parent="."]
 
-[node name="Spike01" parent="Spikes" instance=ExtResource("4_spike")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 5.8, 0, 0)
-
-[node name="Spike02" parent="Spikes" instance=ExtResource("4_spike")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 11.5, 0, 0)
-
-[node name="Spike03" parent="Spikes" instance=ExtResource("4_spike")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 23.5, 0, 0)
-
-[node name="Spike04" parent="Spikes" instance=ExtResource("4_spike")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 36, 0, 0)
-
 [node name="FlyTarget001" parent="Spikes" instance=ExtResource("4_cumoh")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 2.60447, 1.40463, 0)
 
 [node name="FlyTarget002" parent="Spikes" instance=ExtResource("4_cumoh")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 13.98, 3.71716, 0)
+
+[node name="FlyTarget005" parent="Spikes" instance=ExtResource("4_cumoh")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 19.8822, 3.71716, 0)
+
+[node name="FlyTarget003" parent="Spikes" instance=ExtResource("4_cumoh")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 25.3775, 0.688944, 0)
+
+[node name="FlyTarget004" parent="Spikes" instance=ExtResource("4_cumoh")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 29.5939, 3.81459, 0)
+
+[node name="FlyTarget006" parent="Spikes" instance=ExtResource("4_cumoh")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 36.1862, 3.81459, 0)
+
+[node name="FlyTarget007" parent="Spikes" instance=ExtResource("4_cumoh")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 47.3693, 2.95557, 0)
+
+[node name="FlyTarget008" parent="Spikes" instance=ExtResource("4_cumoh")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 55.424, 3.69585, 0)
 
 [node name="UIHud" parent="." instance=ExtResource("5_uihud")]
 
