@@ -3,8 +3,8 @@
 importer="texture"
 type="CompressedTexture2D"
 uid="uid://bo04w555c5h4i"
-path.s3tc="res://.godot/imported/yfs.png-58fb49a610d5f30551c619b4e86c3920.s3tc.ctex"
-path.etc2="res://.godot/imported/yfs.png-58fb49a610d5f30551c619b4e86c3920.etc2.ctex"
+path.s3tc="res://.godot/imported/yfs.png-77bae6b5431debf09b6ec7df2113170d.s3tc.ctex"
+path.etc2="res://.godot/imported/yfs.png-77bae6b5431debf09b6ec7df2113170d.etc2.ctex"
 metadata={
 "imported_formats": ["s3tc_bptc", "etc2_astc"],
 "vram_texture": true
@@ -12,8 +12,8 @@ metadata={
 
 [deps]
 
-source_file="res://04skillimg/frames/yfs/yfs.png"
-dest_files=["res://.godot/imported/yfs.png-58fb49a610d5f30551c619b4e86c3920.s3tc.ctex", "res://.godot/imported/yfs.png-58fb49a610d5f30551c619b4e86c3920.etc2.ctex"]
+source_file="res://04skillimg/frames/yfs.png"
+dest_files=["res://.godot/imported/yfs.png-77bae6b5431debf09b6ec7df2113170d.s3tc.ctex", "res://.godot/imported/yfs.png-77bae6b5431debf09b6ec7df2113170d.etc2.ctex"]
 
 [params]
 

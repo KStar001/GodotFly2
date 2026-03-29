@@ -3,8 +3,8 @@
 importer="texture"
 type="CompressedTexture2D"
 uid="uid://6xv50uq4ud4e"
-path.s3tc="res://.godot/imported/tyz.png-984732e666d84af72579565800a86518.s3tc.ctex"
-path.etc2="res://.godot/imported/tyz.png-984732e666d84af72579565800a86518.etc2.ctex"
+path.s3tc="res://.godot/imported/tyz.png-0bc638e6379281458570ea9bf9949cf4.s3tc.ctex"
+path.etc2="res://.godot/imported/tyz.png-0bc638e6379281458570ea9bf9949cf4.etc2.ctex"
 metadata={
 "imported_formats": ["s3tc_bptc", "etc2_astc"],
 "vram_texture": true
@@ -12,8 +12,8 @@ metadata={
 
 [deps]
 
-source_file="res://04skillimg/frames/tyz/tyz.png"
-dest_files=["res://.godot/imported/tyz.png-984732e666d84af72579565800a86518.s3tc.ctex", "res://.godot/imported/tyz.png-984732e666d84af72579565800a86518.etc2.ctex"]
+source_file="res://04skillimg/frames/tyz.png"
+dest_files=["res://.godot/imported/tyz.png-0bc638e6379281458570ea9bf9949cf4.s3tc.ctex", "res://.godot/imported/tyz.png-0bc638e6379281458570ea9bf9949cf4.etc2.ctex"]
 
 [params]
 
