@@ -262,5 +262,9 @@ func _ConsumeFlyTarget() -> void:
 	if _FlyTargetList.size() > 0:
 		var Target = _FlyTargetList[0]
 		_FlyTargetList.remove_at(0)
-		Target.queue_free()
+		# Target 是 Area3D，销毁其父节点（整个飞行道具根节点）
+		if is_instance_valid(Target) and Target.get_parent() != null:
+			Target.get_parent().queue_free()
+		else:
+			Target.queue_free()
 #---------------------------------------------------------------------------------------------------
