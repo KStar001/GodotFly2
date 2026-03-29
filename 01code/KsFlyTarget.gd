@@ -12,7 +12,10 @@ const ConfigLifeTime: float = 20.0     # 最大存活时间（秒），超时自
 var CurLifeTimer: float = 0.0
 #---------------------------------------------------------------------------------------------------
 func _ready() -> void:
-	add_to_group("fly_target")
+	# 给 Area3D 子节点加组（FootBox 感知到的是 Area3D，不是根节点）
+	var AreaNode: Area3D = $Area3D
+	if AreaNode != null:
+		AreaNode.add_to_group("fly_target")
 #---------------------------------------------------------------------------------------------------
 func _process(delta: float) -> void:
 	# 向左飞行
