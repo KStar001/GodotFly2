@@ -154,8 +154,8 @@ func _UpdateDebugLabel() -> void:
 	if KsWorld.CompInput == null:
 		return
 	var Text: String = KsWorld.CompInput.GetDebugText()
-	if KsWorld.CurPlayer != null and KsWorld.CurPlayer.CompSkill != null:
-		Text += "\n" + KsWorld.CurPlayer.CompSkill.GetDebugText()
+	if KsWorld.CurPlayer != null:
+		Text += "\nHP: " + str(KsWorld.CurPlayer.CurHp) + " / " + str(KsWorld.CurPlayer.ConfigMaxHp)
 	NodeDebugLabel.text = Text
 #---------------------------------------------------------------------------------------------------
 # 供 KsWorld.SetMainUIHud 绑定跳跃按钮（跳跃不是技能，单独保留）
