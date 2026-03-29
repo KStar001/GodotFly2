@@ -312,11 +312,12 @@ func _DoDie() -> void:
 #---------------------------------------------------------------------------------------------------
 # HitBox 信号回调：有碰撞体进入受击区域
 func _OnHitBoxAreaEntered(area: Area3D) -> void:
-	# 飞行道具：无论任何状态都销毁
+	# 飞行道具：销毁 + 受击
 	if area.is_in_group("fly_target"):
 		var Root = area.get_parent()
 		if Root != null and Root.has_method("Consume"):
 			Root.Consume()
+		TakeHit()
 		return
 	# 敌方攻击：走受击逻辑
 	if area.is_in_group("enemy_attack"):
