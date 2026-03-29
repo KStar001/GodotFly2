@@ -202,6 +202,9 @@ func OnSkillBegin(SkillData: KsTableSkill.SkillItem) -> void:
 	# VelocityYClear=true：施放瞬间清零Y轴物理速度
 	if SkillData.VelocityYClear:
 		CurVerticalSpeed = 0.0
+	# 显示技能名
+	if KsWorld.CurUIHud != null and KsWorld.CurUIHud.NodeSkillName != null:
+		KsWorld.CurUIHud.NodeSkillName.ShowSkillName(SkillData.SkillName)
 	# 播放序列帧特效
 	if CompSkillFx != null:
 		CompSkillFx.OnSkillBegin(SkillData)

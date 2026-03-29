@@ -27,11 +27,15 @@ var _BtnsC: Array[KsSkillButton] = []
 #---------------------------------------------------------------------------------------------------
 @onready var NodeDebugLabel: Label = $DebugLabel
 @onready var NodeStoryTestButton: Button = $StoryTestButton
+var NodeSkillName: KsUISkillName = null
 #---------------------------------------------------------------------------------------------------
 func _ready() -> void:
 	KsWorld.SetMainUIHud(self)
 	_BuildSkillButtons()
 	NodeStoryTestButton.pressed.connect(_OnStoryTestButtonPressed)
+	# 创建技能名显示控件
+	NodeSkillName = KsUISkillName.new()
+	add_child(NodeSkillName)
 #---------------------------------------------------------------------------------------------------
 func _process(_delta: float) -> void:
 	_UpdateSkillButtons()
