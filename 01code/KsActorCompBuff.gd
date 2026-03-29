@@ -4,42 +4,87 @@ class_name KsActorCompBuff
 # Buff组件：维护无敌状态和霸体状态，并驱动对应的模型视觉效果
 # 使用来源数组记录状态，只要数组不为空就处于对应状态
 # 优先级：无敌（金黄色+闪烁）> 霸体（红色）> 普通（白色）
+# 颜色效果通过覆盖所有 MeshInstance3D 的 surface_material_override 实现
 #---------------------------------------------------------------------------------------------------
-const ConfigColorNormal: Color = Color(1.0, 1.0, 1.0, 1.0)     # 普通：白色（原色）
-const ConfigColorInvincible: Color = Color(1.0, 0.85, 0.1, 1.0) # 无敌：金黄色
-const ConfigColorArmor: Color = Color(1.0, 0.2, 0.2, 1.0)       # 霸体：红色
-const ConfigFlickerInterval: float = 0.08                        # 闪烁间隔（秒）
+const ConfigColorNormal: Color = Color(1.0, 1.0, 1.0, 1.0)      # 普通：白色（原色）
+const ConfigColorInvincible: Color = Color(1.0, 0.85, 0.1, 1.0)  # 无敌：金黄色
+const ConfigColorArmor: Color = Color(1.0, 0.2, 0.2, 1.0)        # 霸体：红色
+const ConfigFlickerInterval: float = 0.08                         # 闪烁间隔（秒）
 #---------------------------------------------------------------------------------------------------
 var _InvincibleSources: Array[String] = []  # 无敌来源列表
 var _ArmorSources: Array[String] = []       # 霸体来源列表
-# 外部赋值：模型根节点（用于修改 modulate）
+# 外部赋值：模型根节点（用于递归收集 MeshInstance3D）
 var RefModelNode: Node3D = null
+# 收集到的所有 MeshInstance3D
+var _MeshList: Array[MeshInstance3D] = []
+# 叠色材质（运行时创建，覆盖到所有 mesh surface）
+var _OverlayMat: StandardMaterial3D = null
 # 闪烁计时器
 var _FlickerTimer: float = 0.0
 var _FlickerVisible: bool = true
 #---------------------------------------------------------------------------------------------------
+func _ready() -> void:
+	# 创建叠色材质（半透明叠色，albedo 乘以底色）
+	_OverlayMat = StandardMaterial3D.new()
+	_OverlayMat.transparency = BaseMaterial3D.TRANSPARENCY_ALPHA
+	_OverlayMat.blend_mode = BaseMaterial3D.BLEND_MODE_MUL
+	_OverlayMat.shading_mode = BaseMaterial3D.SHADING_MODE_UNSHADED
+	_OverlayMat.albedo_color = ConfigColorNormal
+#---------------------------------------------------------------------------------------------------
 func _process(delta: float) -> void:
 	if RefModelNode == null:
 		return
+	# 延迟收集（等 RefModelNode 的子树都 ready 之后）
+	if _MeshList.is_empty():
+		_CollectMeshes(RefModelNode)
+		if _MeshList.is_empty():
+			return
+		_ApplyOverlayMat()
 	_UpdateVisual(delta)
 #---------------------------------------------------------------------------------------------------
-# 每帧更新模型视觉效果
+# 递归收集所有 MeshInstance3D
+func _CollectMeshes(Node: Node) -> void:
+	if Node is MeshInstance3D:
+		_MeshList.append(Node as MeshInstance3D)
+	for Child in Node.get_children():
+		_CollectMeshes(Child)
+#---------------------------------------------------------------------------------------------------
+# 把叠色材质覆盖到所有 mesh 的所有 surface
+func _ApplyOverlayMat() -> void:
+	for Mesh in _MeshList:
+		for i in Mesh.get_surface_override_material_count():
+			Mesh.set_surface_override_material(i, _OverlayMat)
+#---------------------------------------------------------------------------------------------------
+# 移除叠色材质覆盖（恢复原始材质）
+func _RemoveOverlayMat() -> void:
+	for Mesh in _MeshList:
+		for i in Mesh.get_surface_override_material_count():
+			Mesh.set_surface_override_material(i, null)
+#---------------------------------------------------------------------------------------------------
+# 每帧更新视觉效果
 func _UpdateVisual(delta: float) -> void:
 	if IsInvincible():
-		# 无敌：金黄色 + 闪烁
+		# 无敌：金黄色 + 闪烁（交替显示/隐藏）
 		_FlickerTimer -= delta
 		if _FlickerTimer <= 0.0:
 			_FlickerTimer = ConfigFlickerInterval
 			_FlickerVisible = not _FlickerVisible
-		RefModelNode.modulate = ConfigColorInvincible if _FlickerVisible else Color(0, 0, 0, 0)
+		_SetModelVisible(_FlickerVisible)
+		_OverlayMat.albedo_color = ConfigColorInvincible
 	elif IsArmor():
 		# 霸体：红色，不闪烁
 		_ResetFlicker()
-		RefModelNode.modulate = ConfigColorArmor
+		_SetModelVisible(true)
+		_OverlayMat.albedo_color = ConfigColorArmor
 	else:
 		# 普通：恢复原色
 		_ResetFlicker()
-		RefModelNode.modulate = ConfigColorNormal
+		_SetModelVisible(true)
+		_OverlayMat.albedo_color = ConfigColorNormal
+#---------------------------------------------------------------------------------------------------
+func _SetModelVisible(Visible: bool) -> void:
+	if RefModelNode != null:
+		RefModelNode.visible = Visible
 #---------------------------------------------------------------------------------------------------
 func _ResetFlicker() -> void:
 	_FlickerTimer = 0.0
@@ -52,10 +97,10 @@ func AddInvincible(Source: String) -> void:
 
 func RemoveInvincible(Source: String) -> void:
 	_InvincibleSources.erase(Source)
-	# 无敌结束时立即恢复可见（避免残留隐藏帧）
-	if not IsInvincible() and RefModelNode != null:
+	# 无敌结束时立即恢复可见
+	if not IsInvincible():
 		_ResetFlicker()
-		RefModelNode.modulate = ConfigColorArmor if IsArmor() else ConfigColorNormal
+		_SetModelVisible(true)
 
 func IsInvincible() -> bool:
 	return _InvincibleSources.size() > 0
@@ -76,6 +121,7 @@ func ClearAll() -> void:
 	_InvincibleSources.clear()
 	_ArmorSources.clear()
 	_ResetFlicker()
-	if RefModelNode != null:
-		RefModelNode.modulate = ConfigColorNormal
+	_SetModelVisible(true)
+	if _OverlayMat != null:
+		_OverlayMat.albedo_color = ConfigColorNormal
 #---------------------------------------------------------------------------------------------------
