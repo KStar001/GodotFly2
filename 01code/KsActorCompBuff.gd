@@ -11,12 +11,12 @@ const ConfigColorInvincible: Color = Color(1.0, 0.85, 0.1, 1.0)  # 无敌：金�
 const ConfigColorArmor: Color = Color(1.0, 0.2, 0.2, 1.0)        # 霸体：红色
 const ConfigFlickerInterval: float = 0.08                         # 闪烁间隔（秒）
 #---------------------------------------------------------------------------------------------------
-var _InvincibleSources: Array[String] = []  # 无敌来源列表
-var _ArmorSources: Array[String] = []       # 霸体来源列表
+var _InvincibleSources: Array = []  # 无敌来源列表（Array[String]）
+var _ArmorSources: Array = []       # 霸体来源列表（Array[String]）
 # 外部赋值：模型根节点（用于递归收集 MeshInstance3D）
 var RefModelNode: Node3D = null
-# 收集到的所有 MeshInstance3D
-var _MeshList: Array[MeshInstance3D] = []
+# 收集到的所有 MeshInstance3D（Array[MeshInstance3D]）
+var _MeshList: Array = []
 # 叠色材质（运行时创建，覆盖到所有 mesh surface）
 var _OverlayMat: StandardMaterial3D = null
 # 闪烁计时器
@@ -24,7 +24,6 @@ var _FlickerTimer: float = 0.0
 var _FlickerVisible: bool = true
 #---------------------------------------------------------------------------------------------------
 func _ready() -> void:
-	# 创建叠色材质（半透明叠色，albedo 乘以底色）
 	_OverlayMat = StandardMaterial3D.new()
 	_OverlayMat.transparency = BaseMaterial3D.TRANSPARENCY_ALPHA
 	_OverlayMat.blend_mode = BaseMaterial3D.BLEND_MODE_MUL
@@ -45,21 +44,23 @@ func _process(delta: float) -> void:
 # 递归收集所有 MeshInstance3D
 func _CollectMeshes(TargetNode: Node3D) -> void:
 	if TargetNode is MeshInstance3D:
-		_MeshList.append(TargetNode as MeshInstance3D)
+		_MeshList.append(TargetNode)
 	for Child in TargetNode.get_children():
 		_CollectMeshes(Child)
 #---------------------------------------------------------------------------------------------------
 # 把叠色材质覆盖到所有 mesh 的所有 surface
 func _ApplyOverlayMat() -> void:
 	for Mesh in _MeshList:
-		for i in Mesh.get_surface_override_material_count():
-			Mesh.set_surface_override_material(i, _OverlayMat)
+		var M: MeshInstance3D = Mesh as MeshInstance3D
+		for i in M.get_surface_override_material_count():
+			M.set_surface_override_material(i, _OverlayMat)
 #---------------------------------------------------------------------------------------------------
 # 移除叠色材质覆盖（恢复原始材质）
 func _RemoveOverlayMat() -> void:
 	for Mesh in _MeshList:
-		for i in Mesh.get_surface_override_material_count():
-			Mesh.set_surface_override_material(i, null)
+		var M: MeshInstance3D = Mesh as MeshInstance3D
+		for i in M.get_surface_override_material_count():
+			M.set_surface_override_material(i, null)
 #---------------------------------------------------------------------------------------------------
 # 每帧更新视觉效果
 func _UpdateVisual(delta: float) -> void:
