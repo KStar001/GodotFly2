@@ -43,7 +43,7 @@ func _process(delta: float) -> void:
 	_UpdateVisual(delta)
 #---------------------------------------------------------------------------------------------------
 # 递归收集所有 MeshInstance3D
-func _CollectMeshes(Node: Node) -> void:
+func _CollectMeshes(Node: Node3D) -> void:
 	if Node is MeshInstance3D:
 		_MeshList.append(Node as MeshInstance3D)
 	for Child in Node.get_children():
