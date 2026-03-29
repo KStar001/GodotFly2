@@ -2,11 +2,11 @@
 extends Node3D
 class_name KsFlyTarget
 # 飞行道具：从右往左匀速飞行，供蜻蜓点水借力使用
-# 加入 fly_target 组，FootBox 检测到后通知 KsInput
-# 不与玩家物理碰撞，命中后由 KsInput._ConsumeFlyTarget() 销毁
+# Area3D 子节点加入 fly_target 组，FootBox 检测到后通知 KsInput
+# 不与玩家物理碰撞，命中后由外部调用 Consume() 销毁
 #---------------------------------------------------------------------------------------------------
 # 配置参数
-const ConfigFlySpeed: float = 0.0 #4.0      # 飞行速度（米/秒，向左为负X）
+const ConfigFlySpeed: float = 0.0      # 飞行速度（米/秒，向左为负X）调试中暂设为0
 const ConfigLifeTime: float = 20.0     # 最大存活时间（秒），超时自动销毁
 #---------------------------------------------------------------------------------------------------
 var CurLifeTimer: float = 0.0
@@ -24,4 +24,8 @@ func _process(delta: float) -> void:
 	CurLifeTimer += delta
 	if CurLifeTimer >= ConfigLifeTime:
 		queue_free()
+#---------------------------------------------------------------------------------------------------
+# 外部调用：被蜻蜓点水借力后销毁整个道具
+func Consume() -> void:
+	queue_free()
 #---------------------------------------------------------------------------------------------------

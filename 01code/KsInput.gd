@@ -87,14 +87,11 @@ func OnSkillIdPressed(SkillId: int) -> void:
 	var SkillData: KsTableSkill.SkillItem = KsTableSkill.GetSkillById(SkillId)
 	if SkillData == null:
 		return
-	print("[KsInput] OnSkillIdPressed SkillId=", SkillId, " NeedTarget=", SkillData.NeedTarget)
 	# CD冷却中，什么都不做
 	if RefPlayer.CompSkill == null or not RefPlayer.CompSkill.IsSkillReady(SkillData.SkillType):
-		print("[KsInput] CD冷却中，跳过")
 		return
 	# 需要借力目标的技能（如蜻蜓点水）：写入缓冲，同时立即检查当前是否已有目标
 	if SkillData.NeedTarget:
-		print("[KsInput] NeedTarget=true，写入缓冲，等待踩踏目标")
 		_WriteBufferSkillId(SkillData.SkillType, SkillId)
 		# 写入缓冲后立即尝试一次（应对"先踩到道具再按按钮"的情况）
 		OnConditionMet(_SkillTypeToCmdType(SkillData.SkillType))
@@ -149,20 +146,15 @@ func _TryExecSkillA() -> bool:
 func _TryExecSkillB() -> bool:
 	var BufferedId: int = _CurBufferSkillId.get(ECmdType.SkillB, -1)
 	var SkillId: int = BufferedId if BufferedId > 0 else _GetFirstReadySkillIdByType(1)
-	print("[KsInput] _TryExecSkillB BufferedId=", BufferedId, " SkillId=", SkillId)
 	if SkillId <= 0:
-		print("[KsInput] _TryExecSkillB 无可用技能")
 		return false
 	var SkillData: KsTableSkill.SkillItem = KsTableSkill.GetSkillById(SkillId)
 	if SkillData == null:
 		return false
 	# 需要借力目标的技能（蜻蜓点水），检查脚底是否有可踩道具
 	if SkillData.NeedTarget:
-		var HasTarget: bool = _HasValidFlyTarget()
-		print("[KsInput] _TryExecSkillB NeedTarget=true HasTarget=", HasTarget)
-		if not HasTarget:
+		if not _HasValidFlyTarget():
 			return false
-		# 有目标，触发技能，消耗目标
 		if RefPlayer != null and RefPlayer.TryCastSkill(SkillId):
 			_ConsumeFlyTarget()
 			return true
@@ -240,10 +232,8 @@ func GetDebugText() -> String:
 #---------------------------------------------------------------------------------------------------
 # FootBox 回调：飞行道具进入脚底范围
 func OnFlyTargetEntered(area: Area3D) -> void:
-	print("[KsInput] OnFlyTargetEntered area=", area.name)
 	if not _FlyTargetList.has(area):
 		_FlyTargetList.append(area)
-	print("[KsInput] FlyTargetList.size=", _FlyTargetList.size(), " SkillB缓冲=", _CurBufferExpire[ECmdType.SkillB])
 	# 立刻检查 SkillB 缓冲是否可以触发
 	OnConditionMet(ECmdType.SkillB)
 #---------------------------------------------------------------------------------------------------
@@ -260,11 +250,12 @@ func _HasValidFlyTarget() -> bool:
 func _ConsumeFlyTarget() -> void:
 	_FlyTargetList = _FlyTargetList.filter(func(a): return is_instance_valid(a))
 	if _FlyTargetList.size() > 0:
-		var Target = _FlyTargetList[0]
+		var AreaNode = _FlyTargetList[0]
 		_FlyTargetList.remove_at(0)
-		# Target 是 Area3D，销毁其父节点（整个飞行道具根节点）
-		if is_instance_valid(Target) and Target.get_parent() != null:
-			Target.get_parent().queue_free()
-		else:
-			Target.queue_free()
+		# 调用根节点的 Consume() 销毁整个道具
+		var Root = AreaNode.get_parent()
+		if Root != null and Root.has_method("Consume"):
+			Root.Consume()
+		elif is_instance_valid(AreaNode):
+			AreaNode.queue_free()
 #---------------------------------------------------------------------------------------------------

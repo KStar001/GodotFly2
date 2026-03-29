@@ -199,7 +199,6 @@ func TryCastSkill(SkillId: int) -> bool:
 # 技能开始回调（由 KsActorCompSkill 调用）
 func OnSkillBegin(SkillData: KsTableSkill.SkillItem) -> void:
 	CurSkillId = SkillData.SkillId
-	print("KsPlayer:OnSkillBegin:{0}".format([CurSkillId]))
 	# VelocityYClear=true：施放瞬间清零Y轴物理速度
 	if SkillData.VelocityYClear:
 		CurVerticalSpeed = 0.0
@@ -233,16 +232,11 @@ func OnSkillEnd(SkillData: KsTableSkill.SkillItem) -> void:
 #---------------------------------------------------------------------------------------------------
 # FootBox 信号回调：飞行道具进入脚底区域
 func _OnFootBoxAreaEntered(area: Area3D) -> void:
-	print("[FootBox] area_entered: ", area.name, " groups=", area.get_groups())
 	if not area.is_in_group("fly_target"):
-		print("[FootBox] 不在 fly_target 组，忽略")
 		return
-	print("[FootBox] 命中飞行道具，通知 KsInput")
 	var Input: KsInput = KsWorld.GetInput()
 	if Input != null:
 		Input.OnFlyTargetEntered(area)
-	else:
-		print("[FootBox] KsInput 为 null！")
 #---------------------------------------------------------------------------------------------------
 # FootBox 信号回调：飞行道具离开脚底区域
 func _OnFootBoxAreaExited(area: Area3D) -> void:
