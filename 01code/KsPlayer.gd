@@ -65,6 +65,7 @@ func _ready() -> void:
 	# 初始化Buff组件
 	CompBuff = KsActorCompBuff.new()
 	add_child(CompBuff)
+	CompBuff.RefModelNode = $Knight
 	# 连接 FootBox / HitBox 信号
 	NodeFootBox.area_entered.connect(_OnFootBoxAreaEntered)
 	NodeFootBox.area_exited.connect(_OnFootBoxAreaExited)
