@@ -68,6 +68,9 @@ func _GameStepEnd_Gaming() -> void:
 func SetMainPlayer(Player: KsPlayer) -> void:
 	CurPlayer = Player
 #---------------------------------------------------------------------------------------------------
+func GetInput() -> KsInput:
+	return CompInput
+#---------------------------------------------------------------------------------------------------
 func SetMainCamera(Camera: KsCamera) -> void:
 	CurCamera = Camera
 #---------------------------------------------------------------------------------------------------

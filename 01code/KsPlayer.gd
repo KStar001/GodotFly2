@@ -36,6 +36,8 @@ var CompAnim: KsActorCompAnimation = null
 var CompSkillFx: KsActorCompSkillFx = null
 #---------------------------------------------------------------------------------------------------
 @onready var NodeAnim: AnimationPlayer = $AnimationPlayer
+@onready var NodeFootBox: Area3D = $FootBox
+@onready var NodeHitBox: Area3D = $HitBox
 #---------------------------------------------------------------------------------------------------
 func _ready() -> void:
 	# 初始化技能组件
@@ -50,6 +52,9 @@ func _ready() -> void:
 	# 初始化技能特效组件
 	CompSkillFx = KsActorCompSkillFx.new()
 	add_child(CompSkillFx)
+	# 连接 FootBox 信号
+	NodeFootBox.area_entered.connect(_OnFootBoxAreaEntered)
+	NodeFootBox.area_exited.connect(_OnFootBoxAreaExited)
 	KsWorld.SetMainPlayer(self)
 #---------------------------------------------------------------------------------------------------
 func _physics_process(delta: float) -> void:
@@ -224,4 +229,20 @@ func OnSkillEnd(SkillData: KsTableSkill.SkillItem) -> void:
 	# 若已无任何技能，清空 CurSkillId
 	if CompSkill != null and not CompSkill.IsAnyCasting():
 		CurSkillId = -1
+#---------------------------------------------------------------------------------------------------
+# FootBox 信号回调：飞行道具进入脚底区域
+func _OnFootBoxAreaEntered(area: Area3D) -> void:
+	if not area.is_in_group("fly_target"):
+		return
+	var Input: KsInput = KsWorld.GetInput()
+	if Input != null:
+		Input.OnFlyTargetEntered(area)
+#---------------------------------------------------------------------------------------------------
+# FootBox 信号回调：飞行道具离开脚底区域
+func _OnFootBoxAreaExited(area: Area3D) -> void:
+	if not area.is_in_group("fly_target"):
+		return
+	var Input: KsInput = KsWorld.GetInput()
+	if Input != null:
+		Input.OnFlyTargetExited(area)
 #---------------------------------------------------------------------------------------------------

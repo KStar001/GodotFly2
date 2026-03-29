@@ -42,6 +42,8 @@ var _CurBufferSkillId: Dictionary = {
 #---------------------------------------------------------------------------------------------------
 # 外部引用（由 KsWorld 赋值）
 var RefPlayer: KsPlayer = null
+# 脚底可踩飞行道具列表（FootBox 信号驱动，蜻蜓点水借力用）
+var _FlyTargetList: Array = []
 #---------------------------------------------------------------------------------------------------
 func _ready() -> void:
 	pass
@@ -135,9 +137,25 @@ func _TryExecSkillA() -> bool:
 #---------------------------------------------------------------------------------------------------
 func _TryExecSkillB() -> bool:
 	var BufferedId: int = _CurBufferSkillId.get(ECmdType.SkillB, -1)
-	if BufferedId > 0:
-		return RefPlayer != null and RefPlayer.TryCastSkill(BufferedId)
-	return _TryCastFirstReadySkillByType(1)
+	var SkillId: int = BufferedId if BufferedId > 0 else _GetFirstReadySkillIdByType(1)
+	if SkillId <= 0:
+		return false
+	var SkillData: KsTableSkill.SkillItem = KsTableSkill.GetSkillById(SkillId)
+	if SkillData == null:
+		return false
+	# 需要借力目标的技能（蜻蜓点水），检查脚底是否有可踩道具
+	if SkillData.NeedTarget:
+		if not _HasValidFlyTarget():
+			return false
+		# 有目标，触发技能，消耗目标
+		if RefPlayer != null and RefPlayer.TryCastSkill(SkillId):
+			_ConsumeFlyTarget()
+			return true
+		return false
+	# 普通B类技能（梯云纵等），直接施放
+	if RefPlayer != null:
+		return RefPlayer.TryCastSkill(SkillId)
+	return false
 #---------------------------------------------------------------------------------------------------
 func _TryExecSkillC() -> bool:
 	var BufferedId: int = _CurBufferSkillId.get(ECmdType.SkillC, -1)
@@ -154,6 +172,16 @@ func _TryCastFirstReadySkillByType(SkillType: int) -> bool:
 		if RefPlayer.TryCastSkill(SkillData.SkillId):
 			return true
 	return false
+#---------------------------------------------------------------------------------------------------
+# 按技能类型找第一个CD就绪的技能ID（只查询，不施放）
+func _GetFirstReadySkillIdByType(SkillType: int) -> int:
+	if RefPlayer == null:
+		return -1
+	var AllSkills: Array = KsTableSkill.GetAllSkillsByType(SkillType)
+	for SkillData in AllSkills:
+		if RefPlayer.CompSkill != null and RefPlayer.CompSkill.IsSkillReady(SkillData.SkillType):
+			return SkillData.SkillId
+	return -1
 #---------------------------------------------------------------------------------------------------
 # 写入缓冲（覆盖同类旧指令，刷新到期时间）
 func _WriteBuffer(CmdType: ECmdType) -> void:
@@ -194,4 +222,28 @@ func GetDebugText() -> String:
 			var Remain: float = snappedf(ExpireTime - NowSec, 0.01)
 			Lines.append("  %s: %.2fs" % [CmdName, Remain])
 	return "\n".join(Lines)
+#---------------------------------------------------------------------------------------------------
+# FootBox 回调：飞行道具进入脚底范围
+func OnFlyTargetEntered(area: Area3D) -> void:
+	if not _FlyTargetList.has(area):
+		_FlyTargetList.append(area)
+	# 立刻检查 SkillB 缓冲是否可以触发
+	OnConditionMet(ECmdType.SkillB)
+#---------------------------------------------------------------------------------------------------
+# FootBox 回调：飞行道具离开脚底范围
+func OnFlyTargetExited(area: Area3D) -> void:
+	_FlyTargetList.erase(area)
+#---------------------------------------------------------------------------------------------------
+# 是否有有效的飞行目标（过滤已销毁节点）
+func _HasValidFlyTarget() -> bool:
+	_FlyTargetList = _FlyTargetList.filter(func(a): return is_instance_valid(a))
+	return _FlyTargetList.size() > 0
+#---------------------------------------------------------------------------------------------------
+# 消耗第一个飞行目标（触发蜻蜓点水时销毁道具）
+func _ConsumeFlyTarget() -> void:
+	_FlyTargetList = _FlyTargetList.filter(func(a): return is_instance_valid(a))
+	if _FlyTargetList.size() > 0:
+		var Target = _FlyTargetList[0]
+		_FlyTargetList.remove_at(0)
+		Target.queue_free()
 #---------------------------------------------------------------------------------------------------
