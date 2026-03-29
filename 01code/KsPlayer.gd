@@ -199,6 +199,7 @@ func TryCastSkill(SkillId: int) -> bool:
 # 技能开始回调（由 KsActorCompSkill 调用）
 func OnSkillBegin(SkillData: KsTableSkill.SkillItem) -> void:
 	CurSkillId = SkillData.SkillId
+	print("KsPlayer:OnSkillBegin:{0}".format([CurSkillId]))
 	# VelocityYClear=true：施放瞬间清零Y轴物理速度
 	if SkillData.VelocityYClear:
 		CurVerticalSpeed = 0.0
