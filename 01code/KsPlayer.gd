@@ -88,9 +88,12 @@ func _UpdateTimers(delta: float) -> void:
 		_CurHitAnimTimer -= delta
 		if _CurHitAnimTimer <= 0.0:
 			_CurHitAnimTimer = 0.0
-			# 受击动画结束，恢复正常状态（强制清除Hit状态）
+			# 受击动画结束，强制清除Hit状态，让 _UpdateActorState 下一帧修正为正确状态
 			if CurActorState == EActorState.ActorState_Hit:
-				CurActorState = EActorState.ActorState_Run  # 下一帧 _UpdateActorState 会修正为正确状态
+				CurActorState = EActorState.ActorState_Run
+				if CompAnim != null:
+					CompAnim.CurAnimName = ""  # 强制让动画组件重新刷新
+					CompAnim.OnActorStateChanged(CurActorState, CurSkillId)
 	# 受击无敌帧计时
 	if _CurHitInvincibleTimer > 0.0:
 		_CurHitInvincibleTimer -= delta
