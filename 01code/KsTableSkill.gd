@@ -25,10 +25,14 @@ class SkillItem:
 	var FxOffsetY: float         # 特效本地Y偏移（负值=脚底）
 	var FxOffsetZ: float         # 特效本地Z偏移（正值=靠近摄像机）
 	var FxLoop: bool             # 特效是否循环播放
+	var FxScale: float           # 特效缩放比例（默认1.0）
+	# 状态
+	var IsWuDi: bool             # 技能有效期间是否无敌
+	var IsBaTi: bool             # 技能有效期间是否霸体
 
 	static func CreateFromCsvLine(line: String) -> SkillItem:
 		var Parts = line.split(",")
-		if Parts.size() >= 17:
+		if Parts.size() >= 20:
 			var Data = SkillItem.new()
 			Data.SkillId        = int(Parts[0])
 			Data.SkillType      = int(Parts[1])
@@ -47,6 +51,9 @@ class SkillItem:
 			Data.FxOffsetY      = float(Parts[14])
 			Data.FxOffsetZ      = float(Parts[15])
 			Data.FxLoop         = Parts[16].strip_edges().to_lower() == "true"
+			Data.FxScale        = float(Parts[17])
+			Data.IsWuDi         = Parts[18].strip_edges().to_lower() == "true"
+			Data.IsBaTi         = Parts[19].strip_edges().to_lower() == "true"
 			return Data
 		return null
 #---------------------------------------------------------------------------------------------------
