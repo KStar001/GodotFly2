@@ -1,6 +1,7 @@
-[gd_scene load_steps=18 format=3 uid="uid://gf2stage001"]
+[gd_scene load_steps=19 format=3 uid="uid://gf2stage001"]
 
 [ext_resource type="Script" uid="uid://da3cs2dxwj1a6" path="res://01code/KsCamera.gd" id="2_camera"]
+[ext_resource type="PackedScene" uid="uid://gf2bg001" path="res://02scene/bg_001.tscn" id="3_cumoh"]
 [ext_resource type="PackedScene" uid="uid://gf2player001" path="res://02scene/player_001.tscn" id="3_player"]
 [ext_resource type="PackedScene" uid="uid://gr7hofhg05i6" path="res://02scene/fly_target_001.tscn" id="4_cumoh"]
 [ext_resource type="PackedScene" uid="uid://gf2uihud" path="res://06ui/ui_hud.tscn" id="5_uihud"]
@@ -58,6 +59,8 @@ script = ExtResource("2_camera")
 transform = Transform3D(1, 0, 0, 0, 0.707107, 0.707107, 0, -0.707107, 0.707107, 0, 10, 5)
 light_energy = 1.2
 shadow_enabled = true
+
+[node name="Bg001" parent="." instance=ExtResource("3_cumoh")]
 
 [node name="Platforms" type="Node3D" parent="."]
 
