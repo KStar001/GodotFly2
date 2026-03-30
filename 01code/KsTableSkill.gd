@@ -19,11 +19,6 @@ class SkillItem:
 	var VelocityYClear: bool     # true=施放瞬间把Y轴速度清零
 	# 其他
 	var NeedTarget: bool         # 是否需要借力目标（如蜻蜓点水）
-	# A类专用
-	var InvincibleTime: float    # 无敌帧时长
-	# C类专用
-	var BuffType: int            # BUFF类型（0=无 1=御风 ...）
-	var BuffDuration: float      # BUFF持续时长
 	# 序列帧特效
 	var FxResPath: String        # SpriteFrames 资源路径（空=无特效）
 	var FxOffsetX: float         # 特效本地X偏移
@@ -33,7 +28,7 @@ class SkillItem:
 
 	static func CreateFromCsvLine(line: String) -> SkillItem:
 		var Parts = line.split(",")
-		if Parts.size() >= 20:
+		if Parts.size() >= 17:
 			var Data = SkillItem.new()
 			Data.SkillId        = int(Parts[0])
 			Data.SkillType      = int(Parts[1])
@@ -47,14 +42,11 @@ class SkillItem:
 			Data.VelocityYLock  = Parts[9].strip_edges().to_lower() == "true"
 			Data.VelocityYClear = Parts[10].strip_edges().to_lower() == "true"
 			Data.NeedTarget     = Parts[11].strip_edges().to_lower() == "true"
-			Data.InvincibleTime = float(Parts[12])
-			Data.BuffType       = int(Parts[13])
-			Data.BuffDuration   = float(Parts[14])
-			Data.FxResPath      = Parts[15].strip_edges()
-			Data.FxOffsetX      = float(Parts[16])
-			Data.FxOffsetY      = float(Parts[17])
-			Data.FxOffsetZ      = float(Parts[18])
-			Data.FxLoop         = Parts[19].strip_edges().to_lower() == "true"
+			Data.FxResPath      = Parts[12].strip_edges()
+			Data.FxOffsetX      = float(Parts[13])
+			Data.FxOffsetY      = float(Parts[14])
+			Data.FxOffsetZ      = float(Parts[15])
+			Data.FxLoop         = Parts[16].strip_edges().to_lower() == "true"
 			return Data
 		return null
 #---------------------------------------------------------------------------------------------------
