@@ -34,6 +34,7 @@ func _ready() -> void:
 func _LoadAllTable() -> void:
 	KsTableSkill.LoadDataFile()
 	KsTableStory.LoadDataFile()
+	KsTableEnemy.LoadDataFile()
 #---------------------------------------------------------------------------------------------------
 func _InitStoryManager() -> void:
 	StoryManager = KsStoryManager.new()
