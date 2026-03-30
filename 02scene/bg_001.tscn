@@ -1,0 +1,28 @@
+[gd_scene load_steps=3 format=3 uid="uid://gf2bg001"]
+
+[ext_resource type="Script" path="res://01code/KsBg.gd" id="1_ksbg"]
+
+[sub_resource type="PlaneMesh" id="Mesh_bg"]
+size = Vector2(400, 60)
+orientation = Vector3(0, 0, 1)
+
+[node name="Bg001" type="Node3D"]
+script = ExtResource("1_ksbg")
+
+[node name="LayerBottom" type="Node3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 5, -10)
+
+[node name="Mesh" type="MeshInstance3D" parent="LayerBottom"]
+mesh = SubResource("Mesh_bg")
+
+[node name="LayerMid" type="Node3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 5, -20)
+
+[node name="Mesh" type="MeshInstance3D" parent="LayerMid"]
+mesh = SubResource("Mesh_bg")
+
+[node name="LayerTop" type="Node3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 5, -30)
+
+[node name="Mesh" type="MeshInstance3D" parent="LayerTop"]
+mesh = SubResource("Mesh_bg")
