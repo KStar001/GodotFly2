@@ -244,6 +244,11 @@ func OnSkillBegin(SkillData: KsTableSkill.SkillItem) -> void:
 	# 播放序列帧特效
 	if CompSkillFx != null:
 		CompSkillFx.OnSkillBegin(SkillData)
+	# 无敌/霸体状态
+	if SkillData.IsWuDi and CompBuff != null:
+		CompBuff.AddInvincible("skill_" + str(SkillData.SkillId))
+	if SkillData.IsBaTi and CompBuff != null:
+		CompBuff.AddArmor("skill_" + str(SkillData.SkillId))
 	# A类专用：无敌帧
 	if SkillData.SkillType == 0:
 		CurCanJump = false
@@ -265,6 +270,11 @@ func OnSkillEnd(SkillData: KsTableSkill.SkillItem) -> void:
 	# 隐藏对应槽的序列帧特效
 	if CompSkillFx != null:
 		CompSkillFx.OnSkillEnd(SkillData)
+	# 移除无敌/霸体状态
+	if SkillData.IsWuDi and CompBuff != null:
+		CompBuff.RemoveInvincible("skill_" + str(SkillData.SkillId))
+	if SkillData.IsBaTi and CompBuff != null:
+		CompBuff.RemoveArmor("skill_" + str(SkillData.SkillId))
 	# 若已无任何技能，清空 CurSkillId
 	if CompSkill != null and not CompSkill.IsAnyCasting():
 		CurSkillId = -1

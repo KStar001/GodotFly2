@@ -52,8 +52,9 @@ func OnSkillBegin(SkillData: KsTableSkill.SkillItem) -> void:
 		printerr("KsActorCompSkillFx: 无法加载资源 " + SkillData.FxResPath)
 		SpriteNode.visible = false
 		return
-	# 设置偏移
+	# 设置偏移和缩放
 	SpriteNode.position = Vector3(SkillData.FxOffsetX, SkillData.FxOffsetY, SkillData.FxOffsetZ)
+	SpriteNode.scale = Vector3(SkillData.FxScale, SkillData.FxScale, SkillData.FxScale)
 	# 设置帧资源并播放
 	SpriteNode.sprite_frames = Frames
 	SpriteNode.visible = true
