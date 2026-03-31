@@ -1,6 +1,6 @@
-[gd_scene format=3 uid="uid://gf2enemyfly001"]
+[gd_scene load_steps=2 format=3 uid="uid://bddnjlcs32q3q"]
 
-[ext_resource type="Script" path="res://01code/KsEnemyFly.gd" id="1_script"]
+[ext_resource type="Script" uid="uid://dtpcmb4fqxpl5" path="res://01code/KsEnemyFly.gd" id="1_script"]
 
 [node name="EnemyFly001" type="Node3D"]
 script = ExtResource("1_script")
