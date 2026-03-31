@@ -70,6 +70,8 @@ func _ready() -> void:
 	NodeFootBox.area_entered.connect(_OnFootBoxAreaEntered)
 	NodeFootBox.area_exited.connect(_OnFootBoxAreaExited)
 	NodeHitBox.area_entered.connect(_OnHitBoxAreaEntered)
+	# 供机关陷阱通过 Area3D 检测玩家受击区域
+	NodeHitBox.add_to_group("player_hitbox")
 	KsWorld.SetMainPlayer(self)
 #---------------------------------------------------------------------------------------------------
 func _physics_process(delta: float) -> void:
@@ -281,25 +283,28 @@ func OnSkillEnd(SkillData: KsTableSkill.SkillItem) -> void:
 #---------------------------------------------------------------------------------------------------
 # 受击处理（由 HitBox 碰撞回调调用）
 # 根据当前 Buff 状态决定惩罚程度
-func TakeHit() -> void:
+func TakeHit(Damage: int = 1) -> void:
 	if CurActorState == EActorState.ActorState_Dead:
+		return
+	var FinalDamage: int = max(Damage, 0)
+	if FinalDamage <= 0:
 		return
 	# 无敌状态：什么惩罚都没有
 	if CompBuff != null and CompBuff.IsInvincible():
 		return
 	# 霸体状态：扣血 + 无敌帧，无受击动画
 	if CompBuff != null and CompBuff.IsArmor():
-		_ApplyHpDamage()
+		_ApplyHpDamage(FinalDamage)
 		_StartHitInvincible()
 		return
 	# 普通状态：扣血 + 受击动画 + 无敌帧
-	_ApplyHpDamage()
+	_ApplyHpDamage(FinalDamage)
 	_StartHitAnim()
 	_StartHitInvincible()
 #---------------------------------------------------------------------------------------------------
 # 扣血并检查死亡
-func _ApplyHpDamage() -> void:
-	CurHp -= 1
+func _ApplyHpDamage(Damage: int = 1) -> void:
+	CurHp -= max(Damage, 0)
 	# TODO: 通知 HUD 更新血量显示
 	if CurHp <= 0:
 		CurHp = 0
@@ -327,11 +332,14 @@ func _DoDie() -> void:
 func _OnHitBoxAreaEntered(area: Area3D) -> void:
 	if not area.is_in_group("enemy_attack"):
 		return
-	# EnemyFly：命中玩家后立即销毁自身（同时在 fly_target 组，但此处通过 Consume 统一处理）
+	var Damage: int = 1
 	var Root = area.get_parent()
+	if Root != null and Root.has_method("GetDamage"):
+		Damage = Root.GetDamage()
+	# EnemyFly：命中玩家后立即销毁自身（同时在 fly_target 组，但此处通过 Consume 统一处理）
 	if Root != null and Root.has_method("Consume"):
 		Root.Consume()
-	TakeHit()
+	TakeHit(Damage)
 #---------------------------------------------------------------------------------------------------
 # FootBox 信号回调：飞行道具进入脚底区域
 func _OnFootBoxAreaEntered(area: Area3D) -> void:

@@ -21,8 +21,8 @@ func _ready() -> void:
 		return
 	_InitVisual()
 	_InitCollision()
-	# 仅加入 enemy_attack 组，不加 fly_target 组（不能作为蜻蜓点水的垫脚石）
-	NodeArea.add_to_group("enemy_attack")
+	# 不加入 enemy_attack 组，避免与 KsPlayer 的通用受击通道重复触发
+	# 仅由本脚本根据 TrapTriggerType 控制伤害时机
 	# TrapTriggerType=1：靠 area_entered 事件驱动
 	if _EnemyData.TrapTriggerType == 1:
 		NodeArea.area_entered.connect(_OnAreaEntered)
@@ -72,5 +72,10 @@ func _OnAreaEntered(area: Area3D) -> void:
 #---------------------------------------------------------------------------------------------------
 func _DealDamage() -> void:
 	if KsWorld.CurPlayer != null:
-		KsWorld.CurPlayer.TakeHit()
+		KsWorld.CurPlayer.TakeHit(GetDamage())
+#---------------------------------------------------------------------------------------------------
+func GetDamage() -> int:
+	if _EnemyData == null:
+		return 1
+	return max(_EnemyData.Damage, 1)
 #---------------------------------------------------------------------------------------------------

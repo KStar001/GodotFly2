@@ -1,9 +1,9 @@
-[gd_scene load_steps=19 format=3 uid="uid://gf2stage001"]
+[gd_scene load_steps=18 format=3 uid="uid://gf2stage001"]
 
 [ext_resource type="Script" uid="uid://da3cs2dxwj1a6" path="res://01code/KsCamera.gd" id="2_camera"]
 [ext_resource type="PackedScene" uid="uid://gf2bg001" path="res://02scene/bg_001.tscn" id="3_cumoh"]
 [ext_resource type="PackedScene" uid="uid://gf2player001" path="res://02scene/player_001.tscn" id="3_player"]
-[ext_resource type="PackedScene" uid="uid://gr7hofhg05i6" path="res://02scene/fly_target_001.tscn" id="4_cumoh"]
+
 [ext_resource type="PackedScene" uid="uid://gf2uihud" path="res://06ui/ui_hud.tscn" id="5_uihud"]
 [ext_resource type="PackedScene" uid="uid://gf2uistory" path="res://06ui/ui_story.tscn" id="6_uistory"]
 
@@ -174,29 +174,6 @@ mesh = SubResource("Mesh_plat_mid")
 
 [node name="Spikes" type="Node3D" parent="."]
 
-[node name="FlyTarget001" parent="Spikes" instance=ExtResource("4_cumoh")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 2.60447, 1.40463, 0)
-
-[node name="FlyTarget002" parent="Spikes" instance=ExtResource("4_cumoh")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 13.98, 3.71716, 0)
-
-[node name="FlyTarget005" parent="Spikes" instance=ExtResource("4_cumoh")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 19.8822, 3.71716, 0)
-
-[node name="FlyTarget003" parent="Spikes" instance=ExtResource("4_cumoh")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 25.3775, 0.688944, 0)
-
-[node name="FlyTarget004" parent="Spikes" instance=ExtResource("4_cumoh")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 29.5939, 3.81459, 0)
-
-[node name="FlyTarget006" parent="Spikes" instance=ExtResource("4_cumoh")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 36.1862, 3.81459, 0)
-
-[node name="FlyTarget007" parent="Spikes" instance=ExtResource("4_cumoh")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 47.3693, 2.95557, 0)
-
-[node name="FlyTarget008" parent="Spikes" instance=ExtResource("4_cumoh")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 55.424, 3.69585, 0)
 
 [node name="UIHud" parent="." instance=ExtResource("5_uihud")]
 
