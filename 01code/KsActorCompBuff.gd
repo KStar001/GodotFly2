@@ -49,15 +49,15 @@ func _CollectMeshes(TargetNode: Node3D) -> void:
 #---------------------------------------------------------------------------------------------------
 # 把叠色材质覆盖到所有 mesh 的所有 surface
 func _ApplyOverlayMat() -> void:
-	for Mesh in _MeshList:
-		var M: MeshInstance3D = Mesh as MeshInstance3D
+	for _Mesh in _MeshList:
+		var M: MeshInstance3D = _Mesh as MeshInstance3D
 		for i in M.get_surface_override_material_count():
 			M.set_surface_override_material(i, _OverlayMat)
 #---------------------------------------------------------------------------------------------------
 # 移除叠色材质覆盖（恢复原始材质）
 func _RemoveOverlayMat() -> void:
-	for Mesh in _MeshList:
-		var M: MeshInstance3D = Mesh as MeshInstance3D
+	for _Mesh in _MeshList:
+		var M: MeshInstance3D = _Mesh as MeshInstance3D
 		for i in M.get_surface_override_material_count():
 			M.set_surface_override_material(i, null)
 #---------------------------------------------------------------------------------------------------

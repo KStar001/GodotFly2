@@ -167,7 +167,7 @@ func _GetActiveSkills() -> Array:
 	return Result
 #---------------------------------------------------------------------------------------------------
 # 更新移动（X轴前进，Y轴垂直，Z轴锁死为0）
-func _UpdateMove(delta: float) -> void:
+func _UpdateMove(_delta: float) -> void:
 	var FinalVel: Vector2 = _CalcFinalVelocity()
 	velocity = Vector3(FinalVel.x, FinalVel.y, 0.0)
 	move_and_slide()
@@ -264,7 +264,7 @@ func OnSkillBegin(SkillData: KsTableSkill.SkillItem) -> void:
 		# TODO: 根据 BuffType 添加BUFF
 #---------------------------------------------------------------------------------------------------
 # 技能每帧更新回调（由 KsActorCompSkill 调用）
-func OnSkillUpdate(SkillData: KsTableSkill.SkillItem, Delta: float) -> void:
+func OnSkillUpdate(_SkillData: KsTableSkill.SkillItem, _Delta: float) -> void:
 	pass
 #---------------------------------------------------------------------------------------------------
 # 技能结束回调（由 KsActorCompSkill 调用）
@@ -345,15 +345,15 @@ func _OnHitBoxAreaEntered(area: Area3D) -> void:
 func _OnFootBoxAreaEntered(area: Area3D) -> void:
 	if not area.is_in_group("fly_target"):
 		return
-	var Input: KsInput = KsWorld.GetInput()
-	if Input != null:
-		Input.OnFlyTargetEntered(area)
+	var _Input: KsInput = KsWorld.GetInput()
+	if _Input != null:
+		_Input.OnFlyTargetEntered(area)
 #---------------------------------------------------------------------------------------------------
 # FootBox 信号回调：飞行道具离开脚底区域
 func _OnFootBoxAreaExited(area: Area3D) -> void:
 	if not area.is_in_group("fly_target"):
 		return
-	var Input: KsInput = KsWorld.GetInput()
-	if Input != null:
-		Input.OnFlyTargetExited(area)
+	var _Input: KsInput = KsWorld.GetInput()
+	if _Input != null:
+		_Input.OnFlyTargetExited(area)
 #---------------------------------------------------------------------------------------------------

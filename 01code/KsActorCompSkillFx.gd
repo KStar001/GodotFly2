@@ -21,12 +21,12 @@ func _ready() -> void:
 #---------------------------------------------------------------------------------------------------
 # 创建一个 AnimatedSprite3D 子节点并挂到 KsPlayer 下
 func _CreateSpriteNode(NodeName: String) -> AnimatedSprite3D:
-	var Node = AnimatedSprite3D.new()
-	Node.name = NodeName
-	Node.billboard = BaseMaterial3D.BILLBOARD_ENABLED
-	Node.visible = false
-	get_parent().add_child(Node)
-	return Node
+	var newNode = AnimatedSprite3D.new()
+	newNode.name = NodeName
+	newNode.billboard = BaseMaterial3D.BILLBOARD_ENABLED
+	newNode.visible = false
+	get_parent().add_child(newNode)
+	return newNode
 #---------------------------------------------------------------------------------------------------
 # 根据技能类型（SkillType）返回对应的 Sprite 节点
 # SkillType: 0=A类, 1=B类, 2=C类

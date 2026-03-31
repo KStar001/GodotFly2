@@ -151,8 +151,8 @@ func UpdateState() -> void:
 	var CurSkillSlot: KsTableSkill.SkillItem = CompSkill._GetCurSkillData(SkillType)
 	var IsActive: bool = (CurSkillSlot != null and CurSkillSlot.SkillId == CurSkillId)
 	if IsActive:
-		var Timer: float = CompSkill._GetCurSkillTimer(SkillType)
-		var DurRatio: float = 1.0 - clampf(Timer / CurSkillData.Duration, 0.0, 1.0)
+		var _Timer: float = CompSkill._GetCurSkillTimer(SkillType)
+		var DurRatio: float = 1.0 - clampf(_Timer / CurSkillData.Duration, 0.0, 1.0)
 		_NodeDurBar.size = Vector2(BtnSize.x * DurRatio, 8)
 		_NodeDurBar.visible = true
 	else:
