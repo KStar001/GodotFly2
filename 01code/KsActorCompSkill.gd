@@ -21,6 +21,8 @@ var CurSkillTimerC: float = 0.0
 var RefPlayer: KsPlayer = null
 #---------------------------------------------------------------------------------------------------
 func _process(delta: float) -> void:
+	if KsWorld.CurGameStep != KsWorld.EGameStep.StepGaming:
+		return
 	_UpdateCd(delta)
 	_UpdateSkill(delta)
 #---------------------------------------------------------------------------------------------------

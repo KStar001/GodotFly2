@@ -11,6 +11,8 @@ extends Node
 var _SpriteNodeA: AnimatedSprite3D = null
 var _SpriteNodeB: AnimatedSprite3D = null
 var _SpriteNodeC: AnimatedSprite3D = null
+# 序列帧资源缓存：key=FxResPath, value=SpriteFrames
+var _FramesCache: Dictionary = {}
 #---------------------------------------------------------------------------------------------------
 func _ready() -> void:
 	_SpriteNodeA = _CreateSpriteNode("SkillFxA")
@@ -45,11 +47,9 @@ func OnSkillBegin(SkillData: KsTableSkill.SkillItem) -> void:
 	if SkillData.FxResPath.is_empty():
 		SpriteNode.visible = false
 		return
-	# 加载 SpriteFrames 资源
-	var FinalResPath = "res://04skillimg/" + SkillData.FxResPath + ".tres"
-	var Frames = load(FinalResPath)
+	# 加载 SpriteFrames 资源（带缓存）
+	var Frames: SpriteFrames = _GetFramesByPath(SkillData.FxResPath)
 	if Frames == null:
-		printerr("KsActorCompSkillFx: 无法加载资源 " + SkillData.FxResPath)
 		SpriteNode.visible = false
 		return
 	# 设置偏移和缩放
@@ -79,6 +79,18 @@ func OnSkillEnd(SkillData: KsTableSkill.SkillItem) -> void:
 	_DisconnectFinishSignal(SkillData.SkillType)
 	SpriteNode.stop()
 	SpriteNode.visible = false
+#---------------------------------------------------------------------------------------------------
+# 按 FxResPath 获取 SpriteFrames（优先走缓存）
+func _GetFramesByPath(FxResPath: String) -> SpriteFrames:
+	if _FramesCache.has(FxResPath):
+		return _FramesCache[FxResPath]
+	var FinalResPath = "res://04skillimg/" + FxResPath + ".tres"
+	var Frames = load(FinalResPath) as SpriteFrames
+	if Frames == null:
+		printerr("KsActorCompSkillFx: 无法加载资源 " + FinalResPath)
+		return null
+	_FramesCache[FxResPath] = Frames
+	return Frames
 #---------------------------------------------------------------------------------------------------
 # 断开指定槽的 animation_finished 信号
 func _DisconnectFinishSignal(SkillType: int) -> void:

@@ -94,5 +94,7 @@ static func GetAllSkillsByType(SkillType: int) -> Array:
 	for SkillData in _DataMap.values():
 		if SkillData.SkillType == SkillType:
 			Result.append(SkillData)
+	# 固定顺序：按 SkillId 升序，确保同类型技能选择稳定可预期
+	Result.sort_custom(func(a, b): return a.SkillId < b.SkillId)
 	return Result
 #---------------------------------------------------------------------------------------------------
