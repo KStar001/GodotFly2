@@ -325,16 +325,13 @@ func _DoDie() -> void:
 #---------------------------------------------------------------------------------------------------
 # HitBox 信号回调：有碰撞体进入受击区域
 func _OnHitBoxAreaEntered(area: Area3D) -> void:
-	# 飞行道具：销毁 + 受击
-	if area.is_in_group("fly_target"):
-		var Root = area.get_parent()
-		if Root != null and Root.has_method("Consume"):
-			Root.Consume()
-		TakeHit()
+	if not area.is_in_group("enemy_attack"):
 		return
-	# 敌方攻击：走受击逻辑
-	if area.is_in_group("enemy_attack"):
-		TakeHit()
+	# EnemyFly：命中玩家后立即销毁自身（同时在 fly_target 组，但此处通过 Consume 统一处理）
+	var Root = area.get_parent()
+	if Root != null and Root.has_method("Consume"):
+		Root.Consume()
+	TakeHit()
 #---------------------------------------------------------------------------------------------------
 # FootBox 信号回调：飞行道具进入脚底区域
 func _OnFootBoxAreaEntered(area: Area3D) -> void:

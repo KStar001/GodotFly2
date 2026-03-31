@@ -1,7 +1,9 @@
 #---------------------------------------------------------------------------------------------------
 extends Node3D
 class_name KsEnemyTrap
-# 机关陷阱：位置固定，通过 EnemyId 读取配置表初始化外观和碰撞区域
+# 机关陷阱：位置固定，不能作为蜻蜓点水的垫脚石，命中玩家后不销毁
+# - TrapTriggerType=0：持续伤害，每隔 TrapInterval 秒造成一次伤害（每帧检测重叠）
+# - TrapTriggerType=1：接触触发一次，之后不再触发（area_entered 信号驱动）
 #---------------------------------------------------------------------------------------------------
 @export var EnemyId: int = 2001
 #---------------------------------------------------------------------------------------------------
@@ -10,8 +12,8 @@ class_name KsEnemyTrap
 @onready var NodeShape: CollisionShape3D = $Area3D/CollisionShape3D
 #---------------------------------------------------------------------------------------------------
 var _EnemyData: KsTableEnemy.EnemyItem = null
-var _DamageTimer: float = 0.0     # 持续伤害计时器
-var _HasTriggered: bool = false   # 接触触发类型是否已触发
+var _DamageTimer: float = 0.0   # 持续伤害冷却计时器（>0时不能再触发伤害）
+var _HasTriggered: bool = false # TrapTriggerType=1：是否已触发过
 #---------------------------------------------------------------------------------------------------
 func _ready() -> void:
 	_EnemyData = KsTableEnemy.GetEnemyById(EnemyId)
@@ -19,7 +21,11 @@ func _ready() -> void:
 		return
 	_InitVisual()
 	_InitCollision()
-	NodeArea.area_entered.connect(_OnAreaEntered)
+	# 仅加入 enemy_attack 组，不加 fly_target 组（不能作为蜻蜓点水的垫脚石）
+	NodeArea.add_to_group("enemy_attack")
+	# TrapTriggerType=1：靠 area_entered 事件驱动
+	if _EnemyData.TrapTriggerType == 1:
+		NodeArea.area_entered.connect(_OnAreaEntered)
 #---------------------------------------------------------------------------------------------------
 func _InitVisual() -> void:
 	var FinalResPath = "res://03actorimg/" + _EnemyData.FxResPath + ".tres"
@@ -37,31 +43,32 @@ func _InitCollision() -> void:
 	Shape.size = Vector3(_EnemyData.AreaWidth, _EnemyData.AreaHeight, 4.0)
 	NodeShape.shape = Shape
 #---------------------------------------------------------------------------------------------------
-func _process(delta: float) -> void:
+func _physics_process(delta: float) -> void:
 	if _EnemyData == null:
 		return
+	# TrapTriggerType=0（持续伤害）：每帧检测重叠 + CD倒计时
 	if _EnemyData.TrapTriggerType == 0:
-		_UpdateDamageInterval(delta)
+		if _DamageTimer > 0.0:
+			_DamageTimer -= delta
+		else:
+			_CheckContinuousDamage()
 #---------------------------------------------------------------------------------------------------
-func _UpdateDamageInterval(delta: float) -> void:
-	if _DamageTimer > 0.0:
-		_DamageTimer -= delta
-#---------------------------------------------------------------------------------------------------
-func _OnAreaEntered(area: Area3D) -> void:
-	if _EnemyData == null:
-		return
-	if not area.is_in_group("player_hitbox"):
-		return
-	if _EnemyData.TrapTriggerType == 0:
-		# 持续伤害：间隔到了才触发
-		if _DamageTimer <= 0.0:
+# 持续伤害：检测当前帧是否与 player_hitbox 重叠，重叠则触发一次伤害并重置CD
+func _CheckContinuousDamage() -> void:
+	var Overlaps = NodeArea.get_overlapping_areas()
+	for Area in Overlaps:
+		if Area.is_in_group("player_hitbox"):
 			_DamageTimer = _EnemyData.TrapInterval
 			_DealDamage()
-	elif _EnemyData.TrapTriggerType == 1:
-		# 接触触发一次
-		if not _HasTriggered:
-			_HasTriggered = true
-			_DealDamage()
+			return
+#---------------------------------------------------------------------------------------------------
+# TrapTriggerType=1：area_entered 回调，接触一次后不再触发
+func _OnAreaEntered(area: Area3D) -> void:
+	if not area.is_in_group("player_hitbox"):
+		return
+	if not _HasTriggered:
+		_HasTriggered = true
+		_DealDamage()
 #---------------------------------------------------------------------------------------------------
 func _DealDamage() -> void:
 	if KsWorld.CurPlayer != null:
