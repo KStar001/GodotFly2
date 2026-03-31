@@ -2,16 +2,8 @@
 extends CanvasLayer
 class_name KsUIHud
 #---------------------------------------------------------------------------------------------------
-# 屏幕基准尺寸
-const ScreenW: float = 1920.0
-const ScreenH: float = 1080.0
-# 按钮尺寸与间距
-const BtnSize: float = 160.0
-const BtnGap: float = 10.0
-# 底部安全区留白
-const PadBottom: float = 40.0
-# 左右边距
-const PadSide: float = 20.0
+# UI槽位尺寸（与 KsSkillButton 默认尺寸一致）
+const ConfigSlotSize: Vector2 = Vector2(160.0, 160.0)
 #---------------------------------------------------------------------------------------------------
 # A类技能ID列表（左下角，上2下3）
 const SkillIdsA: Array[int] = [1001, 1005, 0, 0, 0]
@@ -25,9 +17,15 @@ var _BtnsA: Array[KsSkillButton] = []
 var _BtnsB: Array[KsSkillButton] = []
 var _BtnsC: Array[KsSkillButton] = []
 #---------------------------------------------------------------------------------------------------
-@onready var NodeDebugLabel: Label = $SafePanel/DebugLabel
-@onready var NodeStoryTestButton: Button = $SafePanel/StoryTestButton
 @onready var NodeSafePanel: Control = $SafePanel
+@onready var NodeContentRoot: Control = $SafePanel/ContentRoot
+@onready var NodeDebugLabel: Label = $SafePanel/ContentRoot/TopRight/DebugLabel
+@onready var NodeStoryTestButton: Button = $SafePanel/ContentRoot/BottomLeft/LeftLayout/StoryTestButton
+@onready var NodeA_RowTop: HBoxContainer = $SafePanel/ContentRoot/BottomLeft/LeftLayout/SkillGroupA/RowTop
+@onready var NodeA_RowBottom: HBoxContainer = $SafePanel/ContentRoot/BottomLeft/LeftLayout/SkillGroupA/RowBottom
+@onready var NodeB_RowTop: HBoxContainer = $SafePanel/ContentRoot/BottomRight/RightLayout/SkillGroupB/RowTop
+@onready var NodeB_RowBottom: HBoxContainer = $SafePanel/ContentRoot/BottomRight/RightLayout/SkillGroupB/RowBottom
+@onready var NodeC_Row: HBoxContainer = $SafePanel/ContentRoot/BottomRight/RightLayout/SkillGroupC/Row
 var NodeSkillName: KsUISkillName = null
 #---------------------------------------------------------------------------------------------------
 func _ready() -> void:
@@ -36,96 +34,40 @@ func _ready() -> void:
 	NodeStoryTestButton.pressed.connect(_OnStoryTestButtonPressed)
 	# 创建技能名显示控件
 	NodeSkillName = KsUISkillName.new()
-	NodeSafePanel.add_child(NodeSkillName)
+	NodeContentRoot.add_child(NodeSkillName)
 #---------------------------------------------------------------------------------------------------
 func _process(_delta: float) -> void:
 	_UpdateSkillButtons()
 	_UpdateDebugLabel()
 #---------------------------------------------------------------------------------------------------
-# 构建所有技能按钮
+# 构建所有技能按钮（容器化，相对布局）
 func _BuildSkillButtons() -> void:
-	_BtnsA = _CreateButtonGroup(SkillIdsA, _CalcPositionsLeft())
-	_BtnsB = _CreateButtonGroup(SkillIdsB, _CalcPositionsRight())
-	_BtnsC = _CreateButtonGroup(SkillIdsC, _CalcPositionsC())
+	_BtnsA = []
+	_BtnsB = []
+	_BtnsC = []
+	_BtnsA.append_array(_CreateButtonsInRow(NodeA_RowTop, [SkillIdsA[0], SkillIdsA[1]]))
+	_BtnsA.append_array(_CreateButtonsInRow(NodeA_RowBottom, [SkillIdsA[2], SkillIdsA[3], SkillIdsA[4]]))
+	_BtnsB.append_array(_CreateButtonsInRow(NodeB_RowTop, [SkillIdsB[0], SkillIdsB[1]]))
+	_BtnsB.append_array(_CreateButtonsInRow(NodeB_RowBottom, [SkillIdsB[2], SkillIdsB[3], SkillIdsB[4]]))
+	_BtnsC.append_array(_CreateButtonsInRow(NodeC_Row, [SkillIdsC[0], SkillIdsC[1], SkillIdsC[2]]))
 #---------------------------------------------------------------------------------------------------
-# 批量创建按钮组，positions 对应每个槽位的左上角坐标
-func _CreateButtonGroup(SkillIds: Array[int], Positions: Array[Vector2]) -> Array[KsSkillButton]:
+# 在指定行容器中按顺序创建技能按钮（保留空槽）
+func _CreateButtonsInRow(RowNode: HBoxContainer, SkillIds: Array[int]) -> Array[KsSkillButton]:
 	var Result: Array[KsSkillButton] = []
-	for i in range(SkillIds.size()):
-		var Btn = KsSkillButton.new()
-		NodeSafePanel.add_child(Btn)
-		Btn.position = Positions[i]
-		var SkillId: int = SkillIds[i]
+	for SkillId in SkillIds:
+		var Btn: KsSkillButton = KsSkillButton.new()
+		Btn.custom_minimum_size = ConfigSlotSize
+		Btn.size_flags_horizontal = Control.SIZE_SHRINK_CENTER
+		Btn.size_flags_vertical = Control.SIZE_SHRINK_CENTER
+		RowNode.add_child(Btn)
 		if SkillId > 0:
 			Btn.Setup(SkillId)
-			# 捕获 SkillId 到闭包
 			var CapturedId: int = SkillId
 			Btn.OnPressed = func(): _OnSkillPressed(CapturedId)
 		else:
-			Btn.visible = false  # 空槽隐藏
+			Btn.visible = false
 		Result.append(Btn)
 	return Result
-#---------------------------------------------------------------------------------------------------
-# A类（左下角）：上2下3，上排居中对齐下排
-# 下排3个：最左起，上排2个居中
-func _CalcPositionsLeft() -> Array[Vector2]:
-	var Positions: Array[Vector2] = []
-	var BaseY_Bottom: float = ScreenH - PadBottom - BtnSize               # 下排Y
-	var BaseY_Top: float    = BaseY_Bottom - BtnGap - BtnSize             # 上排Y
-	# 下排3个 X坐标
-	var Row2StartX: float = PadSide
-	for i in range(3):
-		Positions.append(Vector2(Row2StartX + i * (BtnSize + BtnGap), BaseY_Bottom))
-	# 上排2个 X坐标（与下排3个居中对齐：下排总宽 = 3*160+2*10=500，上排总宽=2*160+1*10=330，偏移=(500-330)/2=85）
-	var Row1OffsetX: float = (3 * BtnSize + 2 * BtnGap - (2 * BtnSize + BtnGap)) / 2.0
-	for i in range(2):
-		Positions.append(Vector2(Row2StartX + Row1OffsetX + i * (BtnSize + BtnGap), BaseY_Top))
-	# 返回顺序：上2在前，下3在后（对应 SkillIdsA[0~4]）
-	var Reordered: Array[Vector2] = []
-	Reordered.append(Positions[3])  # 上左
-	Reordered.append(Positions[4])  # 上右
-	Reordered.append(Positions[0])  # 下左
-	Reordered.append(Positions[1])  # 下中
-	Reordered.append(Positions[2])  # 下右
-	return Reordered
-#---------------------------------------------------------------------------------------------------
-# B类（右下角）：上2下3，镜像A类
-func _CalcPositionsRight() -> Array[Vector2]:
-	var Positions: Array[Vector2] = []
-	var BaseY_Bottom: float = ScreenH - PadBottom - BtnSize
-	var BaseY_Top: float    = BaseY_Bottom - BtnGap - BtnSize
-	# 下排3个 X坐标（从右边算起）
-	var Row2EndX: float = ScreenW - PadSide - BtnSize
-	for i in range(3):
-		Positions.append(Vector2(Row2EndX - i * (BtnSize + BtnGap), BaseY_Bottom))
-	# 上排2个 X坐标
-	var Row1OffsetX: float = (3 * BtnSize + 2 * BtnGap - (2 * BtnSize + BtnGap)) / 2.0
-	for i in range(2):
-		Positions.append(Vector2(Row2EndX - BtnSize - BtnGap - Row1OffsetX - i * (BtnSize + BtnGap) + BtnGap, BaseY_Top))
-	# 返回顺序：上2在前，下3在后
-	var Reordered: Array[Vector2] = []
-	Reordered.append(Positions[4])  # 上右
-	Reordered.append(Positions[3])  # 上左
-	Reordered.append(Positions[2])  # 下右
-	Reordered.append(Positions[1])  # 下中
-	Reordered.append(Positions[0])  # 下左
-	return Reordered
-#---------------------------------------------------------------------------------------------------
-# C类（B类上方）：一排3个，右对齐
-func _CalcPositionsC() -> Array[Vector2]:
-	var Positions: Array[Vector2] = []
-	# B类上排的Y坐标
-	var BBaseY_Bottom: float = ScreenH - PadBottom - BtnSize
-	var BBaseY_Top: float    = BBaseY_Bottom - BtnGap - BtnSize
-	var CBaseY: float        = BBaseY_Top - BtnGap - BtnSize
-	# 右对齐：最右按钮右边缘与B类下排最右按钮对齐
-	var RightEdge: float = ScreenW - PadSide
-	for i in range(3):
-		var X: float = RightEdge - (i + 1) * BtnSize - i * BtnGap
-		Positions.append(Vector2(X, CBaseY))
-	# 翻转为从左到右
-	Positions.reverse()
-	return Positions
 #---------------------------------------------------------------------------------------------------
 # 每帧刷新所有按钮状态
 func _UpdateSkillButtons() -> void:

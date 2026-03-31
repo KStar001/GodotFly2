@@ -1,27 +1,50 @@
-[gd_scene load_steps=2 format=3 uid="uid://gf2uistory"]
+[gd_scene load_steps=3 format=3 uid="uid://gf2uistory"]
 
 [ext_resource type="Script" uid="uid://brhfb1j0mtjn4" path="res://01code/KsUIStory.gd" id="1_uistory"]
+[ext_resource type="Script" uid="uid://cx0s0v7pwqqh5" path="res://01code/KsUISafePanel.gd" id="2_safepanel"]
 
 [node name="UIStory" type="CanvasLayer"]
 layer = 10
 script = ExtResource("1_uistory")
 
-[node name="NodeBg" type="ColorRect" parent="."]
+[node name="SafePanel" type="MarginContainer" parent="."]
 anchors_preset = 15
 anchor_right = 1.0
 anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+mouse_filter = 2
+script = ExtResource("2_safepanel")
+
+[node name="ContentRoot" type="Control" parent="SafePanel"]
+layout_mode = 2
+size_flags_horizontal = 3
+size_flags_vertical = 3
+mouse_filter = 2
+
+[node name="NodeBg" type="ColorRect" parent="SafePanel/ContentRoot"]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
 color = Color(0, 0, 0, 0.6)
 
-[node name="NodeImage" type="TextureRect" parent="."]
+[node name="NodeImage" type="TextureRect" parent="SafePanel/ContentRoot"]
 visible = false
+layout_mode = 1
 anchors_preset = 15
 anchor_right = 1.0
 anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
 expand_mode = 1
 stretch_mode = 6
 
-[node name="NodePortraitLeft" type="TextureRect" parent="."]
+[node name="NodePortraitLeft" type="TextureRect" parent="SafePanel/ContentRoot"]
 visible = false
+layout_mode = 1
 anchors_preset = 4
 anchor_top = 0.5
 anchor_bottom = 0.5
@@ -32,8 +55,9 @@ offset_bottom = 280.0
 expand_mode = 1
 stretch_mode = 5
 
-[node name="NodePortraitRight" type="TextureRect" parent="."]
+[node name="NodePortraitRight" type="TextureRect" parent="SafePanel/ContentRoot"]
 visible = false
+layout_mode = 1
 anchors_preset = 6
 anchor_left = 1.0
 anchor_top = 0.5
@@ -43,21 +67,24 @@ offset_left = -300.0
 offset_top = -280.0
 offset_right = -20.0
 offset_bottom = 280.0
+grow_horizontal = 0
 expand_mode = 1
 stretch_mode = 5
 
-[node name="NodeDialogBox" type="Panel" parent="."]
+[node name="NodeDialogBox" type="Panel" parent="SafePanel/ContentRoot"]
 visible = false
+layout_mode = 1
 anchors_preset = 12
 anchor_top = 1.0
 anchor_right = 1.0
 anchor_bottom = 1.0
 offset_left = 20.0
-offset_top = -200.0
+offset_top = -220.0
 offset_right = -20.0
 offset_bottom = -20.0
+grow_vertical = 0
 
-[node name="NodeSpeaker" type="Label" parent="NodeDialogBox"]
+[node name="NodeSpeaker" type="Label" parent="SafePanel/ContentRoot/NodeDialogBox"]
 layout_mode = 0
 offset_left = 20.0
 offset_top = 10.0
@@ -65,26 +92,26 @@ offset_right = 300.0
 offset_bottom = 50.0
 theme_override_font_sizes/font_size = 22
 
-[node name="NodeText" type="Label" parent="NodeDialogBox"]
+[node name="NodeText" type="Label" parent="SafePanel/ContentRoot/NodeDialogBox"]
 layout_mode = 0
 anchor_right = 1.0
 anchor_bottom = 1.0
 offset_left = 20.0
 offset_top = 55.0
-offset_right = -20.0
+offset_right = -180.0
 offset_bottom = -20.0
 theme_override_font_sizes/font_size = 20
 autowrap_mode = 2
 
-[node name="NextButton" type="Button" parent="."]
+[node name="NextButton" type="Button" parent="SafePanel/ContentRoot/NodeDialogBox"]
 visible = false
-anchors_preset = 3
+layout_mode = 0
 anchor_left = 1.0
 anchor_top = 1.0
 anchor_right = 1.0
 anchor_bottom = 1.0
 offset_left = -160.0
-offset_top = -220.0
+offset_top = -56.0
 offset_right = -20.0
-offset_bottom = -160.0
+offset_bottom = -16.0
 text = "下一步"

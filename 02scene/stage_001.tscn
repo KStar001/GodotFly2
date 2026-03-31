@@ -3,7 +3,6 @@
 [ext_resource type="Script" uid="uid://da3cs2dxwj1a6" path="res://01code/KsCamera.gd" id="2_camera"]
 [ext_resource type="PackedScene" uid="uid://gf2bg001" path="res://02scene/bg_001.tscn" id="3_cumoh"]
 [ext_resource type="PackedScene" uid="uid://gf2player001" path="res://02scene/player_001.tscn" id="3_player"]
-
 [ext_resource type="PackedScene" uid="uid://gf2uihud" path="res://06ui/ui_hud.tscn" id="5_uihud"]
 [ext_resource type="PackedScene" uid="uid://gf2uistory" path="res://06ui/ui_story.tscn" id="6_uistory"]
 
@@ -173,7 +172,6 @@ shape = SubResource("Shape_plat_mid")
 mesh = SubResource("Mesh_plat_mid")
 
 [node name="Spikes" type="Node3D" parent="."]
-
 
 [node name="UIHud" parent="." instance=ExtResource("5_uihud")]
 

@@ -6,14 +6,15 @@ class_name KsUIStory
 # 可跳过时显示"下一步"按钮，由玩家主动点击推进
 #---------------------------------------------------------------------------------------------------
 # 节点引用
-@onready var NodeBg: ColorRect              = $NodeBg
-@onready var NodeImage: TextureRect         = $NodeImage
-@onready var NodeDialogBox: Panel           = $NodeDialogBox
-@onready var NodeSpeaker: Label             = $NodeDialogBox/NodeSpeaker
-@onready var NodeText: Label                = $NodeDialogBox/NodeText
-@onready var NodePortraitLeft: TextureRect  = $NodePortraitLeft
-@onready var NodePortraitRight: TextureRect = $NodePortraitRight
-@onready var NodeNextButton: Button         = $NextButton
+@onready var NodeContentRoot: Control       = $SafePanel/ContentRoot
+@onready var NodeBg: ColorRect              = $SafePanel/ContentRoot/NodeBg
+@onready var NodeImage: TextureRect         = $SafePanel/ContentRoot/NodeImage
+@onready var NodeDialogBox: Panel           = $SafePanel/ContentRoot/NodeDialogBox
+@onready var NodeSpeaker: Label             = $SafePanel/ContentRoot/NodeDialogBox/NodeSpeaker
+@onready var NodeText: Label                = $SafePanel/ContentRoot/NodeDialogBox/NodeText
+@onready var NodePortraitLeft: TextureRect  = $SafePanel/ContentRoot/NodePortraitLeft
+@onready var NodePortraitRight: TextureRect = $SafePanel/ContentRoot/NodePortraitRight
+@onready var NodeNextButton: Button         = $SafePanel/ContentRoot/NodeDialogBox/NextButton
 #---------------------------------------------------------------------------------------------------
 # 逐字显示相关
 const ConfigTextSpeed: float = 0.04        # 每个字的显示间隔（秒）

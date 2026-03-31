@@ -1,37 +1,133 @@
-[gd_scene load_steps=2 format=3 uid="uid://gf2uihud"]
+[gd_scene load_steps=3 format=3 uid="uid://gf2uihud"]
 
 [ext_resource type="Script" uid="uid://oenis7eoqg6q" path="res://01code/KsUIHud.gd" id="1_uihud"]
+[ext_resource type="Script" uid="uid://cx0s0v7pwqqh5" path="res://01code/KsUISafePanel.gd" id="2_safepanel"]
 
 [node name="UIHud" type="CanvasLayer"]
 script = ExtResource("1_uihud")
 
-[node name="SafePanel" type="Control" parent="."]
-layout_mode = 3
+[node name="SafePanel" type="MarginContainer" parent="."]
 anchors_preset = 15
 anchor_right = 1.0
 anchor_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 2
 mouse_filter = 2
+script = ExtResource("2_safepanel")
 
-[node name="DebugLabel" type="Label" parent="SafePanel"]
-layout_mode = 0
+[node name="ContentRoot" type="Control" parent="SafePanel"]
+layout_mode = 2
+size_flags_horizontal = 3
+size_flags_vertical = 3
+mouse_filter = 2
+
+[node name="TopRight" type="Control" parent="SafePanel/ContentRoot"]
+layout_mode = 1
+anchors_preset = 1
 anchor_left = 1.0
 anchor_right = 1.0
-offset_left = -320.0
+offset_left = -520.0
 offset_top = 20.0
 offset_right = -20.0
-offset_bottom = 200.0
+offset_bottom = 220.0
 grow_horizontal = 0
+mouse_filter = 2
+
+[node name="DebugLabel" type="Label" parent="SafePanel/ContentRoot/TopRight"]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
 text = "[InputBuffer]"
 horizontal_alignment = 2
+vertical_alignment = 2
 
-[node name="StoryTestButton" type="Button" parent="SafePanel"]
-layout_mode = 0
+[node name="BottomLeft" type="Control" parent="SafePanel/ContentRoot"]
+layout_mode = 1
+anchors_preset = 2
 anchor_top = 1.0
 anchor_bottom = 1.0
 offset_left = 20.0
-offset_top = -80.0
-offset_right = 160.0
+offset_top = -420.0
+offset_right = 560.0
 offset_bottom = -20.0
+grow_vertical = 0
+mouse_filter = 2
+
+[node name="LeftLayout" type="VBoxContainer" parent="SafePanel/ContentRoot/BottomLeft"]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+theme_override_constants/separation = 12
+
+[node name="StoryTestButton" type="Button" parent="SafePanel/ContentRoot/BottomLeft/LeftLayout"]
+layout_mode = 2
+size_flags_horizontal = 0
 text = "剧情测试"
+
+[node name="SkillGroupA" type="VBoxContainer" parent="SafePanel/ContentRoot/BottomLeft/LeftLayout"]
+layout_mode = 2
+theme_override_constants/separation = 10
+
+[node name="RowTop" type="HBoxContainer" parent="SafePanel/ContentRoot/BottomLeft/LeftLayout/SkillGroupA"]
+layout_mode = 2
+theme_override_constants/separation = 10
+alignment = 1
+
+[node name="RowBottom" type="HBoxContainer" parent="SafePanel/ContentRoot/BottomLeft/LeftLayout/SkillGroupA"]
+layout_mode = 2
+theme_override_constants/separation = 10
+
+[node name="BottomRight" type="Control" parent="SafePanel/ContentRoot"]
+layout_mode = 1
+anchors_preset = 3
+anchor_left = 1.0
+anchor_top = 1.0
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_left = -560.0
+offset_top = -640.0
+offset_right = -20.0
+offset_bottom = -20.0
+grow_horizontal = 0
+grow_vertical = 0
+mouse_filter = 2
+
+[node name="RightLayout" type="VBoxContainer" parent="SafePanel/ContentRoot/BottomRight"]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+theme_override_constants/separation = 10
+alignment = 2
+
+[node name="SkillGroupC" type="VBoxContainer" parent="SafePanel/ContentRoot/BottomRight/RightLayout"]
+layout_mode = 2
+alignment = 2
+
+[node name="Row" type="HBoxContainer" parent="SafePanel/ContentRoot/BottomRight/RightLayout/SkillGroupC"]
+layout_mode = 2
+theme_override_constants/separation = 10
+alignment = 2
+
+[node name="SkillGroupB" type="VBoxContainer" parent="SafePanel/ContentRoot/BottomRight/RightLayout"]
+layout_mode = 2
+theme_override_constants/separation = 10
+alignment = 2
+
+[node name="RowTop" type="HBoxContainer" parent="SafePanel/ContentRoot/BottomRight/RightLayout/SkillGroupB"]
+layout_mode = 2
+theme_override_constants/separation = 10
+alignment = 2
+
+[node name="RowBottom" type="HBoxContainer" parent="SafePanel/ContentRoot/BottomRight/RightLayout/SkillGroupB"]
+layout_mode = 2
+theme_override_constants/separation = 10
+alignment = 2
